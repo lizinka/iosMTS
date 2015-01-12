@@ -20,6 +20,7 @@
     Password = [[NSString alloc] init];
     LoginType = [[NSString alloc] init];
     m_sChartSetting = [[NSString alloc] init];
+    m_sReqData = [[NSString alloc] init];
     trTransHashMap = [NSMutableDictionary dictionary];
     trDataMoreHashMap = [NSMutableDictionary dictionary];
     trTransHashMapReal = [NSMutableDictionary dictionary];
@@ -125,10 +126,36 @@
         }
         else if([sTrCodeKey isEqualToString:@"#LOGIN"])
         {
-            
+            m_sReqData = arg;
+            [self Request:4 gtr:@"mibo1000" tr:@"mibo1030"];
+            return;
+        }
+        else
+        {
+            if([trTransHashMap objectForKey:sTrCodeKey] == nil)
+            {
+                if ([sTrCodeKey isEqualToString:@"#CHART_CLOSE"]) {
+                    if (m_bIsChartShow)
+                    {
+                        [self ChartDestroy];
+                    }
+                }
+            }
+            else
+            {
+                sTrCode = [trTransHashMap objectForKey:sTrCodeKey];
+            }
         }
     }
-
+    
+    m_sReqData = arg;
+    
+    if (m_bIsChartShow)
+    {
+        [self ChartDestroy];
+    }
+    
+    [self Request:5 gtr:@"mobile" tr:sTrCode];
 }
 
 -(void)ReqLogin:(NSString*) arg
@@ -164,6 +191,11 @@
     }
 }
 
+-(void) ReqRealCancel:(NSString*)arg
+{
+    [self Request:5 gtr:@"mobile" tr:@"m9999"];
+}
+
 - (int) OnConnected {
     
     NSLog(@"Connected...");
@@ -189,10 +221,7 @@
     NSString *sendData;
     NSString *userid;
     
-    
-    
     iusetrheader = 0;
-    
     @try {
         switch (gubun) {
             case 1:
@@ -260,6 +289,18 @@
                 [self sendHBeatCheck];
             }
                 return;
+            case 4:
+            {
+                iusetrheader = 1;
+                char sID[8];
+                memset(sID, 0x00, 8);
+                sendData = [[NSString alloc] initWithBytes:sID length:8 encoding:0x80000000 + kCFStringEncodingDOSKorean];
+            }
+            case 5:
+            {
+                data = [m_sReqData dataUsingEncoding:0x80000000 + kCFStringEncodingDOSKorean];//NSUTF8StringEncoding
+                sendData = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:0x80000000 + kCFStringEncodingDOSKorean];
+            }
             default:
                 break;
         }
@@ -327,6 +368,11 @@
         
         //NSLog(@"%d", htonl(commheader.msgl));
         commheader.func = '1';
+        NSString *sTrCode = [[NSString alloc] initWithBytes:queryStruc->trcode length:sizeof(queryStruc->trcode) encoding: 0x80000000 + kCFStringEncodingEUC_KR];
+        sTrCode = [global trim:sTrCode];
+        if ([sTrCode isEqualToString:@"m9999"]) {
+            commheader.func = '5';
+        }
         commheader.wmid = queryStruc->xywin;
         
         memset(&trCommheader, 0x20, sizeof(TrCommheader));
@@ -617,7 +663,8 @@
             //if (commheader.wmid == 0x01) {        //Login or acctlist
             NSString *strcode = [[NSString alloc] initWithBytes:trCommheader.svcc length:sizeof(trCommheader.svcc) encoding:0x80000000 + kCFStringEncodingDOSKorean ];
             char *bdata = (char *)[recvData bytes];
-            if ([strcode hasPrefix:@"usrlogon"]) {
+            if ([strcode hasPrefix:@"usrlogon"])
+            {
                 
                 //memcpy(&loginOUT, &bdata[sizeof(CommOutheader) + sizeof(TrCommheader)], sizeof(LoginOUT)); //header 추가된 상황
                 memcpy(&loginOUT, &bdata[0], sizeof(LoginOUT));
@@ -625,7 +672,8 @@
                 
                 //calf = 1; 조건에 따라서 공인인증 안하고 넘어가기(hts인경우)
                 
-                if (loginOUT.sign == 3) {  //로그인 실패시
+                if (loginOUT.sign == 3)
+                {  //로그인 실패시
                     NSString *rmsg = [[NSString alloc] initWithBytes:&loginOUT.rmsg[0] length:sizeof(loginOUT.rmsg) encoding:0x80000000 + kCFStringEncodingDOSKorean];
                     
                     NSError* error;
@@ -658,7 +706,8 @@
                     
                     [self csendWData:kJson];
                 }
-                else {
+                else
+                {
                     timerHBeat = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(settimerHBeat) userInfo:nil repeats:YES];
                     
                     NSError* error;
@@ -696,18 +745,59 @@
                     [self csendWData:kJson];
                 }
             }
-            else{
-                NSMutableDictionary *toReturn = [NSMutableDictionary dictionary];
-                [toReturn removeObjectForKey:@"id"];
-                [toReturn removeObjectForKey:@"pass"];
-                [toReturn setValue:@"true" forKey:@"state"];
-                [toReturn setValue:@"123-456-7890" forKey:@"tel"];
-                [toReturn setValue:@"" forKey:@"msg"];
+            else
+            {
+                if([strcode hasPrefix:@"mibo1030"])
+                {
+                    [recvData replaceBytesInRange:NSMakeRange(0, sizeof(TrLedgeheader)) withBytes:NULL length:0];
+//                    [recvData resetBytesInRange:NSMakeRange(0, sizeof(TrLedgeheader))];
+                }
                 
-                NSData* kData = [NSJSONSerialization dataWithJSONObject:toReturn options:NSJSONWritingPrettyPrinted error:nil];
-                NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
-                [self csendWData:kJson];
-                
+                if ([strcode hasPrefix:@"m3005"] || [strcode hasPrefix:@"m3004"] || [strcode hasPrefix:@"m3003"] || [strcode hasPrefix:@"m3002"] || [strcode hasPrefix:@"m3001"])
+                {
+                    //차트데이터 처리.
+                }
+                else if ([strcode hasPrefix:@"mibo1030"])
+                {
+                    NSError* error;
+                    NSDictionary* jsonOrigin = [NSJSONSerialization JSONObjectWithData:[m_sReqData dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+                    NSMutableDictionary *json = [jsonOrigin mutableCopy];
+                    if (json == nil) {
+                        return -1;
+                    }
+                    if (error) {
+                        NSLog(@"error : %@", error.localizedDescription);
+                        return -1;
+                    }
+                    
+                    NSString* sData = [[NSString alloc] initWithData:recvData encoding:NSUTF8StringEncoding];
+                    [json setObject:sData forKey:@"data"];
+                    
+                    NSData* kData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                    NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
+                    kJson = [kJson stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                    m_sReqData = kJson;
+                    [self Request:5 gtr:@"mobile" tr:@"m0000"];
+                }
+                else
+                {
+                    NSString* sData = [[NSString alloc] initWithData:recvData encoding:NSUTF8StringEncoding];
+                    NSError* error;
+                    NSDictionary* json = [NSJSONSerialization JSONObjectWithData:[sData dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+                    if (json == nil)
+                    {
+                        return -1;
+                    }
+                    if (error)
+                    {
+                        NSLog(@"error : %@", error.localizedDescription);
+                        return -1;
+                    }
+                    
+                    NSData* kData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                    NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
+                    [self csendWData:kJson];
+                }
             }
             /*
              else if ([strcode hasPrefix:@"xo015101"]) {
@@ -957,7 +1047,7 @@
             }
             else if (nIndex == 2)
             {
-                [trTransHashMap setObject:sValue forKey:sKey];
+                [trTransHashMapReal setObject:sValue forKey:sKey];
             }
         }
     }

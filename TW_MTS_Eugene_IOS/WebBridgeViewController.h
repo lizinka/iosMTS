@@ -56,8 +56,8 @@
     NSString *m_sChartSetting;
     uint16_t rwmid[10];
     NSMutableData *recvd[10];
+    NSString *m_sReqData;
     int m_nChartHeight;
-    BOOL m_bIsChartShow;
     bool m_bisReconnMode;
 }
 

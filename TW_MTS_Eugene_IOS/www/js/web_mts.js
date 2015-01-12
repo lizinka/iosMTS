@@ -8,7 +8,7 @@ var mts_prefix='web_mts'
 var item_catagory_caption={'currency':'통화','interest':'채권','index':'지수','commodity':'농산물','metals':'금속','energy':'에너지','single stock':'지수옵션','etc comodity':'기타 농산물', 'other':'기타'}
 var month_code={'01':'F','02':'G','03':'H','04':'J','05':'K','06':'M','07':'N','08':'Q','09':'U','10':'V','11':'X','12':'Z'};
 var month_number={'F':1,'G':2,'H':3,'J':4,'K':5,'M':6,'N':7,'Q':8,'U':9,'V':10,'X':11,'Z':12};
-var android=false;
+var app_type='web';
 var page_height='100%';
 var all_menu_height=500;
 var option_tr_cnt=10;
@@ -17,20 +17,18 @@ var dialog_height='90%';
 var dialog_article='70%';
 var chart_Hight='70%';
 var header_height=48;
+var PixelRatio=1;
 /*앱 초기화 실행*/
 function ini_app(){
+	//app 플랫폼 체크
+	if (navigator.userAgent.match('Android') != null){ 
+		app_type='android';
+	}else if(navigator.userAgent.match('iPhone') != null){ 
+		app_type='ios';	
+	}
 	
-	//웹
-	if (navigator.userAgent.match('Android') != null || navigator.userAgent.match('iPhone') != null){
-	//if (navigator.userAgent.match('Android') != null){
-		android=true;
-        alert(android);
-	 }
-	
-	if(android){
-		//console.log=function(msg){jQuery('#console div').append('<p class="send">'+msg+'</p>');}
-		/*
-        alert=function(msg){
+	if(app_type=='android'){ //실행 환경이 안드로이드일 경우 
+		alert=function(msg){
 			var page_id=jQuery.mobile.activePage.attr('id');
 			msg_json={pageId:'#'+page_id,type:'alert',msg:msg}
 			var send_meg=JSON.stringify(msg_json);
@@ -42,16 +40,23 @@ function ini_app(){
 			msg_json={pageId:'#'+page_id,type:'confirm',msg:msg}
 			var send_meg=JSON.stringify(msg_json);
 			window.android_os.reqAlert(send_meg);	
-		}
-         */
-	}else{
+		}	
+		PixelRatio=window.devicePixelRatio;
+	}//End of if(app_type=='android')
+	
+	
+	if(app_type=='ios'){// 실생 환경이 ios인 경우
+		PixelRatio=1;
+	}//End of if(app_type=='ios')
+	
+		
+	if(app_type=='web'){ //실행 환경이 웹 일경우 
 		ini_websockt();
 		window.android_os={};
-		window.android_os.setMessage=function(msg){	console.log('msg to android : '+msg);};
-		window.android_os.ReqLogin=function(msg){console.log('login to android : '+msg);};
+		window.android_os.setMessage=function(msg){	console.log('msg to native : '+msg);};
+		window.android_os.ReqLogin=function(msg){console.log('login to native : '+msg);};
 		window.android_os.ReqRealCancel=function(){return false;}
-		web_check=true;
-	}
+	}//End of if(app_type=='web');
 	
 		
 	ini_test();
@@ -106,7 +111,7 @@ function ini_app(){
 	all_menu_height=page_height-(header_height+footer_height);	
 	dialog_height=page_height-header_height;
 	dialog_article=dialog_height-dialog_header;
-	chart_Hight=(page_height-(header_height+55))*window.devicePixelRatio;
+	chart_Hight=(page_height-(header_height+55))*PixelRatio;
 	option_tr_cnt=parseInt(tbody_height/tr_height);
 	dialog_option_tr_cnt=parseInt((dialog_article-thead_height)/tr_height);
 	
@@ -196,7 +201,7 @@ function ini_test(){
 			break;
 		}
 		console.log(msg);
-		send_android(msg)
+		send_native(msg)
 		msg=JSON.stringify(msg);
 		jQuery('#recive_data_div').append('<p class="send">'+msg+'</p>');
 		
@@ -215,36 +220,59 @@ function ini_test(){
 		jQuery('#preview_notification_data').html('{pageId:#'+page_id+',type:'+type+',msg:'+msg+'}');
 	}//End of test_notification_test();
 	
-/*안드로이드로 메세지 전달*/
-function send_android(msg, no_loading_icon){
-	console.log('==send_android(msg)==');
+/*네이티브로 메세지 전달*/
+function send_native(msg, no_loading_icon){
+	console.log('==send_native(msg)==/'+app_type);
 	console.log(msg);
 	if(!no_loading_icon){
 		jQuery.mobile.loading('show');
 	}
 	msg=JSON.stringify(msg);
-    window.location = "jscall://" + "setMessage//" + msg;
-	//window.android_os.setMessage(msg);
-	if(!android){
-		wait_websoket(socket, function(){socket.send(msg)});
+	
+	switch (app_type){
+		case 'android':
+			window.android_os.setMessage(msg);
+		break;
+		case 'ios':
+			window.location = "jscall://" + "setMessage//" + msg
+		break;
+		case 'web':
+			wait_websoket(socket, function(){socket.send(msg)});
+		break
 	}
-}/*send_android(msg)*/
+}/*send_native(msg)*/
 
 /*리얼타임 취소*/
 function cancel_real_data(){
 	console.log('==cancel_real_data()==');
-	window.android_os.ReqRealCancel('---');
-	
+	switch (app_type){
+		case 'android':
+			window.android_os.ReqRealCancel('---');
+		break;
+		case 'ios':
+			window.location = "jscall://" + "ReqRealCancel//" + "---";
+		break;
+		case 'web':
+			return false;
+		break
+	}
 }/*cancel_real_data()*/
 
 //로그인
 function before_login(msg){
 	console.log('==before_login==');
 	msg=JSON.stringify(msg);
-    window.location = "jscall://" + "ReqLogin//" + msg;
-	//window.android_os.ReqLogin(msg);
-	if(!android){
-		wait_websoket(socket, function(){socket.send(msg)});
+	
+	switch (app_type){
+		case 'android':
+			window.android_os.ReqLogin(msg);
+		break;
+		case 'ios':
+			window.location = "jscall://" + "ReqLogin//" + msg;
+		break;
+		case 'web':
+			wait_websoket(socket, function(){socket.send(msg)});
+		break
 	}
 }
 
@@ -252,17 +280,17 @@ function before_login(msg){
 /*안드로이드로 부터 받은 메세지 처리*/
 function from_android(msg){
 	console.log('==form_android==');
-    alert(msg);
 	/*테스트 코드 적용*/
-	if(!android){
+	if(app_type=="web"){
 		console.log('웹소켓 데이터 수신 : ['+msg.origin+':'+msg.timeStamp+']');
 		msg=msg.data
 	}
-	//console.log(msg.length);
-	console.log(msg);
+	console.log(msg.length);
+	console.log(msg);	
 	data=jQuery.parseJSON(msg);
-	console.log(data);	
+	console.log(data);
 	var page_id=jQuery.mobile.activePage.attr('id');
+	
 	if(page_id=='TEST'){
 		jQuery('#recive_data_div').append('<p class="recive">'+msg+'</p>');
 		return false;
@@ -277,15 +305,10 @@ function from_android(msg){
 			}
 		break;
 		case '#LOGIN':
-            alert(3);
 			if(data.type=='login'){
-                alert(4);
-				longin_process(data);
-                alert(4-1);
+				longin_process(data); 
 			}else if(data.type=='existing'){
-                alert(5);
 				ini_item_code(data)
-                alert(5-1);
 			}
 		break;
 		case'#ITEM_LIST':
@@ -399,9 +422,20 @@ function ini_login(){
 	jQuery('#app').on('submit','#login_form',function(){return ini_login_process(this)});
 	set_login_type()
 }
+
 	function close_app(){
 		console.log('==close_app()==')
-		window.android_os.closeApp('app_close');
+		switch (app_type){
+			case 'android':
+				window.android_os.closeApp('app_close');
+			break;
+			case 'ios':
+				window.location = "jscall://" + "closeApp//" + "msg";
+			break;
+			case 'web':
+				alert('app_close');
+			break
+		}
 	}//End of close_app()
 	
 	function toggle_real_time(input){
@@ -502,7 +536,7 @@ function ini_login(){
 			jQuery('#app').attr('data-realtime',real_time);
 			var check_exchange_data=check_exchange();
 			var login_data={pageId:"#LOGIN",exchage:check_exchange_data,type:'existing'}
-			send_android(login_data, true);
+			send_native(login_data, true);
 		}
 	}//End of login_process(data)
 
@@ -690,7 +724,7 @@ function ini_page(triger, callback){
 				var msg={pageId:page_id,itemCd:code,itemType:item_type,serverCode:code,type:'existing'};
 			break
 		}
-		send_android(msg);
+		send_native(msg);
 		return false;
 	}else{
 		callback(navi_data,true);
@@ -915,7 +949,7 @@ function ini_item_select(){
 					var page_id="#ITEM_OPTION";
 				}
 				var msg={pageId:page_id,itemCd:item_code,itemType:item_type,serverCode:item_code,cnt:option_tr_cnt,type:'existing'};
-				send_android(msg);
+				send_native(msg);
 			break;
 			
 			case '#ITEM_LIST': //관심그룹 리스트 
@@ -943,7 +977,7 @@ function ini_item_select(){
 					local.save(save_obj);
 				}else{
 					var msg={pageId:'#ITEM_OPTION',itemCd:item_code,itemType:'option',serverCode:item_code,cnt:dialog_option_tr_cnt,type:'existing'};
-					send_android(msg);
+					send_native(msg);
 				}
 			break;
 			
@@ -956,7 +990,7 @@ function ini_item_select(){
 					var page_id="#ITEM_OPTION";
 				}
 				var msg={pageId:page_id,itemCd:item_code,itemType:item_type,serverCode:item_code,cnt:option_tr_cnt,type:'existing'};
-				send_android(msg);
+				send_native(msg);
 				jQuery(page_id+' .btn_dialog').removeClass('open');
 				jQuery(page_id+' .page_dialog').remove();
 			break;
@@ -1132,7 +1166,7 @@ function ini_item_search(){
 				
 			}
 			console.log(send_msg);
-			send_android(send_msg);
+			send_native(send_msg);
 			jQuery('#item_search_div').addClass('complate');
 		}
 	}//End of search_result(catgory,code)
@@ -1446,7 +1480,7 @@ function ini_item_list(){
 				
 			}//End of for(item_code in item_data);
 			var send_msg={pageId:'#ITEM_LIST',type:'existing',data:data_body};
-			send_android(send_msg);
+			send_native(send_msg);
 			item_list_real_request();
 		}
 		
@@ -1473,7 +1507,7 @@ function ini_item_list(){
 			}
 		}
 		var real_msg={pageId:'#ITEM_LIST',type:'real',data:data_real};
-		send_android(real_msg,true);
+		send_native(real_msg,true);
 	}//End of item_list_real_request();
 	
 	//아이템 리스트 항목 처리
@@ -1525,7 +1559,7 @@ function ini_item_list(){
 				}else{
 					send_msg={pageId:'#ITEM_LIST',itemCd:code,serverCode:item_serverCode,itemType:item_type,type:'more'}
 			}
-			send_android(send_msg);
+			send_native(send_msg);
 		}
 	
 	}//End of item_card_extend_before
@@ -1584,7 +1618,7 @@ function ini_item_list(){
 		}else{
 			send_msg={pageId:'#ITEM_LIST',itemCd:code,serverCode:item_serverCode,itemType:item_type,type:'more'}
 		}
-		send_android(send_msg);
+		send_native(send_msg);
 	}//End of item_panel_extend(item_label)
 	
 	function item_panel_extend_data(data){
@@ -1662,7 +1696,7 @@ function ini_item(){
 	jQuery('#ITEM_CONCLUDE').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_CONCLUDE')});
 	jQuery('#ITEM_DAILY').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_DAILY')});
 	*/
-	jQuery('#ITEM_CHART').on('pagebeforehide',function(){send_android({pageId:'#CHART_CLOSE',type:'close'},true);});
+	jQuery('#ITEM_CHART').on('pagebeforehide',function(){send_native({pageId:'#CHART_CLOSE',type:'close'},true);});
 	
 	jQuery('#ITEM_ASKING, #ITEM_CONCLUDE, #ITEM_DAILY, #ITEM_CHART').on('pageshow',function(){request_item_real_data()});
 	
@@ -1755,7 +1789,7 @@ function ini_item(){
 		}else{
 			chart_data.newDraw=true;
 		}
-		send_android(chart_data,true);	
+		send_native(chart_data,true);	
 	}//End of draw_chart()
 	
 	function set_chart_data(){
@@ -1862,7 +1896,7 @@ function ini_item(){
 			jQuery('#'+page_id+' .item_desc_div').slideToggle(300);
 		}else{
 			var dec_msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:server_code,type:'more'};
-			send_android(dec_msg);
+			send_native(dec_msg);
 		}
 	}//End of toggle_item_info();
 	
@@ -1909,7 +1943,7 @@ function ini_item(){
 			var request_message={pageId:active_id,itemCd:code,itemType:item_type,serverCode:code,quote:quote_check,depth:depth_check,type:'real'};
 		}
 		console.log(request_message);		
-		send_android(request_message,true);
+		send_native(request_message,true);
 	}//End of request_item_real_data(code)
 	
 	function cancel_item_real_data(page_id){
@@ -2417,7 +2451,7 @@ function ini_item(){
 			
 			more_msg={pageId:"#ITEM_OPTION",itemCd:item_code,itemType:"option",serverCode:item_server_code,strk:item_strk,direction:dir,cnt:option_tr_cnt,type:"more"};
 		}
-		send_android(more_msg);
+		send_native(more_msg);
 	
 	}//End of option_price_more(dir)
 	
@@ -2566,7 +2600,7 @@ function ini_item(){
 		
 		var more_msg={pageId:page_id[list_type],itemType:list_type,subg:board_subg,gubn:board_gubn,seqn:board_seqn,kymd:board_kymd,khms:board_khms,nrec:10,type:"more"};
 		
-		send_android(more_msg);
+		send_native(more_msg);
 	}//End of board_more()
 
 
@@ -2706,7 +2740,7 @@ function ini_layer(){
 		
 		send_msg={pageId:'#ITEM_CHART',itemCd:item_code,serverCode:server_code,itemType:item_type,chartType:chart_type,chartValue:chart_value,type:'chart'}
 		//console.log(send_msg);
-		send_android(send_msg);
+		send_native(send_msg);
 	}//End of send_chart_msg()
 	
 			
@@ -2798,12 +2832,12 @@ function ini_layer(){
 		var page_id=jQuery.mobile.activePage.attr('id');
 		
 		var msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:item_serverCode,type:'existing'};
-		send_android(msg);
+		send_native(msg);
 		
 		var real=jQuery('#app').attr('data-real');
 		if(real=='true'){
 			var msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:item_serverCode,type:'real'};
-			send_android(msg);
+			send_native(msg);
 		}
 		
 		item_layer_remove();
@@ -3012,13 +3046,13 @@ function ini_layer(){
 				
 				var msg={pageId:'#'+page_id,itemCd:search_code,itemType:item_type,serverCode:search_code,type:'existing'};
 				console.log(msg);
-				send_android(msg);
+				send_native(msg);
 			
 				var real=jQuery('#app').attr('data-real');
 				if(real=='true'){
 					var msg={pageId:'#'+page_id,itemCd:search_code,itemType:item_type,serverCode:search_code,type:'real'};
 					console.log(msg);
-					send_android(msg);
+					send_native(msg);
 				}
 				
 				item_layer_remove();
@@ -3076,7 +3110,7 @@ function ini_dialog(){
 						var item_type=jQuery(this).attr('data-type');
 						var page_id=jQuery.mobile.activePage.attr('id');
 						var msg={'pageId':'#'+page_id,'itemCd':item_code,'serverCode':server_code,'itemType':item_type,'type':'existing'}
-						send_android(msg);
+						send_native(msg);
 						jQuery('#'+page_id+' .btn_dialog').removeClass('open');
 						jQuery('#'+page_id+' .page_dialog').remove();
 					});
@@ -3279,7 +3313,7 @@ function ini_dialog_item_info(button){
 		}
 		var server_code=item_code.substr(0,item_code.length-3);
 		var dec_msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:server_code,type:'more'};
-		send_android(dec_msg);	
+		send_native(dec_msg);	
 		jQuery(button).addClass('open');
 	}
 }//End of ini_dialog_item_info(button)
@@ -3323,7 +3357,7 @@ function ini_dialog_chart(button){
 		jQuery('#dialog_chart_setting').slideUp(300,function(){this.remove();});
 		 draw_chart(true);
 	}else{
-		send_android({pageId:'#CHART_CLOSE',type:'close'},true);
+		send_native({pageId:'#CHART_CLOSE',type:'close'},true);
 		jQuery('#'+page_id+' .btn_dialog').removeClass('open');
 		jQuery('#'+page_id+' .page_dialog').remove();
 		var dialog_code=template_dialog_chart_setting();
