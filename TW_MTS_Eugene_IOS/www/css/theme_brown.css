@@ -1,0 +1,51 @@
+
+/*기본 색상*/
+#app[data-theme="brown"] header[data-role="header"],
+#app[data-theme="brown"] header .ui-select div,
+#app[data-theme="brown"] #item_select_table div.ui-select,
+#app[data-theme="brown"] #dialog_item_select_table div.ui-select,
+#app[data-theme="brown"] #item_select_table span.exchange,
+#app[data-theme="brown"] #dialog_item_select_table span.exchange,
+#app[data-theme="brown"] #board_list .board_tite span.category,
+#app[data-theme="brown"] footer .shortcut_menu_div{background-color:#CC4811;}
+
+/*강조색*/
+#app[data-theme="brown"] header a[data-rel="back"]:after,
+#app[data-theme="brown"] #SETTING button#save_setting,
+#app[data-theme="brown"] #ITEM_LIST #item_type_select button.active,
+#app[data-theme="brown"] #ITEM_CHART div.ui-radio label.ui-radio-on,
+#app[data-theme="brown"] #ITEM_CHART .ui-select.active #chart_set_min_number-button,
+#app[data-theme="brown"] footer .shortcut_menu_div a.act,
+#app[data-theme="brown"] .page_dialog header button,
+#app[data-theme="brown"] #dialog_item_group h3 button,
+#app[data-theme="brown"] #dialog_item_group li button,
+#app[data-theme="brown"] #dialog_chart_setting ul button,
+#app[data-theme="brown"] header a[data-rel="back"]:active,
+#app[data-theme="brown"] header button.btn_header_right:active{background-color:#4C1B06;}
+
+/*정보창*/
+#app[data-theme="brown"] .page_dialog header,
+#app[data-theme="brown"] header button.btn_dialog.open{background-color:#4C1B06;}
+#app[data-theme="brown"] .page_dialog{border-color:#4C1B06;}
+
+/* 종목별 메뉴
+#app .item_commen_navi li a.active{background-color:rgb(94,85,86);}
+#app #edit_group_div button{background-color:rgb(94,85,86);}
+#app .item_commen_navi ul{border-color:rgb(94,85,86);}
+*/
+
+
+/*전체메뉴 영역*/
+#app[data-theme="brown"] footer .footer_menu_area .ui-checkbox,
+#app[data-theme="brown"] footer .all_menu_group h1,
+#app[data-theme="brown"] footer .all_menu>h1 a{background-color:#D48665;}
+#app[data-theme="brown"] footer .all_menu_group{border-color:#D48665;}
+
+/*
+#app footer .all_menu a.ui-draggable-dragging{background-image:linear-gradient(270deg, #ffff00 -15%,  #9e080d 30%);
+											  background-image:-webkit-linear-gradient(270deg, #ffff00 -15%,  #9e080d 30%);
+											  }
+*/
+
+
+

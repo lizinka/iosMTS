@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+/*overflow 를 적용 시킬 div의 class*/
+.faContents { 
+	position:absolute; 
+	text-align:left; 
+	font-size:14px; 
+	font-family:돋움; 
+	width:180px;  
+	height:340px; 
+	background-color:red;
+} 
+ 
+.overthrow { 
+    overflow: hidden; 
+    -webkit-overflow-scrolling: touch; 
+} 

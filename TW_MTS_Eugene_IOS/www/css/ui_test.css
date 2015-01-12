@@ -1,0 +1,450 @@
+@charset "utf-8";
+/* CSS Document */
+
+#HOME .ui-listview span{position:relative; display:inline-block; width:50px; text-align:center; margin-right:10px;}
+#HOME .ui-listview span:before{content:"[";position:absolute;left:0;}
+#HOME .ui-listview span:after{content:"]";position:absolute;right:0;}
+
+/*공통처리*/
+.hidden{display:none;}
+#app .ui-shadow{box-shadow:none;}
+#app .ui-corner-all{border-radius:0px;}
+
+.table_type01{border-collapse:collapse}
+.table_type01 td, .table_type01 th{border:#666 solid 1px; letter-spacing:-1px;} 
+.table_type01 td{font-size:14px;}
+
+.desc_div{
+	text-align:center;
+	font-size:16px;
+	padding:10px;
+	border:#ddd solid 1px;
+}
+
+/*console*/
+#app .ui-page{
+	top:50px;
+}
+#console{
+	height:50px;
+	width:100%;
+	box-sizing:border-box;
+	border:#666 solid 1px;
+	overflow:scroll;
+	font-size:12px;
+	text-shadow:none;
+	background:#000;
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:100;
+	color:#FFF;
+	resize:vertical;
+}
+#console div{
+	width:100%;
+	position:absolute;
+	bottom:0px;
+}
+
+/*테스트페이지*/
+#TEST .ui-controlgroup-controls{width:100%;} 
+#TEST .ui-select{width:50%}
+#TEST .ui-input-text{box-sizing:border-box;height:44px; width:70%; border-radius:0;}
+#TEST .ui-input-text input{height:100%;}
+#TEST button#btn_test{box-sizing:border-box; height:44px; width:30%;}
+
+#TEST #recive_data_div{
+	border:#ccc solid 1px;
+	height:450px;
+	overflow-y:scroll;
+	font-size:12px;
+	text-shadow:none;
+}
+
+#TEST #recive_data_div p.send{background:#000;color:#FFF;}
+#TEST #recive_data_div p.recive{padding-bottom:4px;border-bottom:#CCC solid 1px;margin-bottom:5px;}
+
+
+
+/* 종목검색기 */
+#search_type_div .ui-controlgroup-controls{width:100%;}
+#search_type_div .ui-select{box-sizing:border-box; width:50%;border-radius:0px;}
+
+#item_search_div{
+	position:relative;
+	border:#F00 solid 1px;
+	white-space:nowrap;
+	letter-spacing: -.3em;
+	/*font-size:0;*/
+	text-align:center;
+	height:200px;
+	overflow:hidden;
+	display:none;
+	transition:0.3s height;
+}
+#item_search_div.complate{height:65px; transition:0.3s height;}
+#item_search_div h1{display:none;}
+#item_search_div ul .step_01 li{display:none;}
+
+
+#item_search_div a{
+	display:block;
+	background:rgba(255,0,0,0.5);
+	width:calc(100%);
+	height:100%;
+	text-decoration:none;
+}
+
+#item_search_div div{
+	box-sizing:border-box;
+	display:inline-block;
+	vertical-align:top;
+	letter-spacing:normal;
+	height:100%;
+}
+
+#item_search_div div ul{
+	height:calc(100% - 28px);
+	overflow-y:scroll;
+	-webkit-overflow-scrolling: touch; 
+}
+
+#item_search_div h2{
+	box-sizing:border-box;
+	padding:0 10px;
+	width:100%;
+	height:28px;
+	line-height:28px;
+	background:#069;
+	text-align:center;
+	text-shadow:none;
+	color:#CCC;
+	border-bottom:#FFF double 3px;
+}
+
+#item_search_div .step_01{
+	background:#999;
+	width:100%;
+	transition:all 0.3s;
+}
+
+#item_search_div .step_01.selected{width:30%;}
+#item_search_div .step_02{background:#9F0;width:70%;}
+#item_search_div .step_02.selected{width:40%;transition:all 0.3s;}
+#item_search_div .step_03{width:30%;}
+
+#item_search_div li{padding:0 10px; position:relative; height:35px; margin-bottom:5px;}
+#item_search_div li>div{width:100%; height:100%; margin:0; padding:0;border-radius:none;}
+#item_search_div label{
+	box-sizing:border-box;
+	background:none; 
+	border:none; 
+	width:100%; 
+	height:100%;
+	line-height:35px;
+	background:rgba(255,0,0,0.5);
+	display:block; 
+	padding:0px;
+	padding-left:40px; 
+	border-radius:0;
+	text-shadow:none;
+}
+#item_search_div li label:after{display:none;}
+#item_search_div li label span {font-size:12px; margin-left:10px;}
+
+#item_search_div .selected li{padding:0 10px; position:relative;}
+#item_search_div .selected li input{display:none;}
+#item_search_div .selected li label{padding:0px;text-align:center;}
+
+#item_search_div .selected li label span{display:block; font-size:10px;}
+#item_search_div .step_02.selected li label,
+#item_search_div .step_03.selected li label{box-sizing:border-box; padding-top:3px; line-height:100%;}
+
+#search_result_article{display:none;}
+
+#ITEM_SEARCH .layer_type_div{display:none;}
+#ITEM_SEARCH .layer_content type_02{display:none;}
+/* End of 종목검색기 */
+
+
+
+/*관심그룹 리스트*/
+#ITEM_LIST .interest_select_div{position:relative}
+#ITEM_LIST .interest_select_div .ui-controlgroup-controls{position:relative;width:100%; border-radius:0;} 
+#ITEM_LIST .interest_select_div .ui-select{box-sizing:border-box;width:60%;}
+#ITEM_LIST .interest_select_div .btn_interest_table{box-sizing:border-box;width:20%;padding-left:0;padding-right:0;}
+#ITEM_LIST .interest_select_div .btn_interest_card{box-sizing:border-box;width:20%;padding-left:0;padding-right:0;}
+
+#ITEM_LIST item_more_info{
+}
+
+
+/* - 테이블 형식*/
+.item_list_holder[data-type="table"]{border-collapse:collapse;}
+.item_list_holder[data-type="table"] th{height:36px; background:#CCC; text-shadow:none; font-weight:bold}
+.item_list_holder[data-type="table"] th,
+.item_list_holder[data-type="table"] td{border:#999 solid 1px; vertical-align:middle; width:25%; position:relative;}
+.item_list_holder[data-type="table"] .itemCd{text-align:center; font-weight:bold;}
+.item_list_holder[data-type="table"] .curr{text-align:right; padding-right:3px;}
+.item_list_holder[data-type="table"] .Diff{display:block; text-align:right; padding-right:3px; position:relative;}
+	.item_list_holder[data-type="table"] .Diff:before{position:absolute; left:2px;}
+	.item_list_holder[data-type="table"] .up .Diff:before{content:"▲"; color:#f00;}
+	.item_list_holder[data-type="table"] .down .Diff:before{content:"▼"; color:#00f;}
+.item_list_holder[data-type="table"] .UpDwnRatio{display:block; text-align:right; padding-right:3px;}
+	.item_list_holder .UpDwnRatio:after{content:"%"; padding-left:3px;}
+.item_list_holder .vol_chart_div{width:100%; position:relative; box-sizing:border-box; padding:5px; margin:3px; overflow:hidden;}
+.item_list_holder .vol_chart_div .vol_chart_bar{width:100%; height:2px;}
+.item_list_holder .vol_chart_div .vol_chart_vol{position:absolute; top:0; left:40%; height:100%; width:30%;}
+	.item_list_holder .up .vol_chart_div .vol_chart_bar,
+	.item_list_holder .up .vol_chart_div .vol_chart_vol{background-color:#F00;}
+	.item_list_holder .down .vol_chart_div .vol_chart_bar,
+	.item_list_holder .down .vol_chart_div .vol_chart_vol{background-color:#00F;}
+.item_list_holder[data-type="table"] .Volume{display:block; text-align:right; padding-right:3px;}
+.item_list_holder .item_more_info{display:none;}
+
+/* End of - 테이블 형식*/
+
+/* - 카드형식*/
+.item_list_holder[data-type="card"]>thead{display:none;}
+.item_list_holder[data-type="card"]>tbody>tr>td{display:block;}
+.item_list_holder[data-type="card"]>tbody>tr{position:relative;display:block; height:100px; border:#999 solid 2px;overflow:hidden;transition:all 0.3s}
+.item_list_holder[data-type="card"] .itemCd{display:block; font-weight:bold;padding:2px 10px;text-shadow:none;color:#fff;font-size:16px;}
+.item_list_holder[data-type="card"] .itemCd .item_caption{margin-left:20px;}
+	.item_list_holder[data-type="card"] .up .itemCd{background:#F00}
+	.item_list_holder[data-type="card"] .down .itemCd{background:#00f;}
+.item_list_holder[data-type="card"] .curr{display:block; width:60%;background-color:#CCC;text-align:right; padding-bottom:4px;font-size:40px;font-weight:bold;}
+.item_list_holder[data-type="card"] .Diff{display:block; width:25%; text-align:right; left:6%; position:absolute; top:80px;}
+	.item_list_holder[data-type="card"] .Diff:before{position:absolute; left:2px;}
+	.item_list_holder[data-type="card"] .up .Diff:before{content:"▲"; color:#f00;}
+	.item_list_holder[data-type="card"] .down .Diff:before{content:"▼"; color:#00f;}
+.item_list_holder[data-type="card"] .UpDwnRatio{display:block; width:30%; margin:0 auto;text-align:right;}
+	
+.item_list_holder[data-type="card"] .vol_chart_div{position:absolute; padding:6px 5px; width:30%; top:45px; right:2%;}
+.item_list_holder[data-type="card"] .Volume{display:block; position:absolute; top:80px; right:6%;}
+
+	/*카드 확장*/
+	.item_list_holder[data-type="card"] tr.extend{height:290px;margin:5px 0px; transition:all 0.3s;}
+	.item_list_holder[data-type="card"]>tbody>tr .item_more_info{display:none;}
+	.item_list_holder[data-type="card"]>tbody>tr.extend .item_more_info{display:block;position:relative; border-top:#999 solid 2px; margin-top:5px;}
+	.item_list_holder[data-type="card"] .table_type01{box-sizing:border-box; width:49%;font-size:12px;}
+	#item_list_panel .table_type01 td,
+	.item_list_holder[data-type="card"] .table_type01 td{text-align:right;padding-right:5px}
+	#item_list_panel .table_type01 thead,
+	.item_list_holder[data-type="card"] .table_type01 thead{background:#CCC}
+	.item_list_holder[data-type="card"] .item_more_info_conclude{position:absolute;top:0;right:-1px;}
+	#item_list_panel .item_more_info_conclude tr td:first-child,
+	.item_list_holder[data-type="card"] .item_more_info_conclude tr td:first-child{text-align:center;padding:0}
+	
+	#item_list_panel h1{border-bottom:#333 solid 2px; margin-top:44px; margin-bottom:10px;}	
+	#item_list_panel .table_type01{margin-top:10px;}
+	#item_list_panel .item_more_info_menu{margin-top:10px;}
+}
+
+/* End of - 카드 형식*/
+
+/* End of 관심그룹 리스트*/
+
+/* 종목별 보기*/
+
+/* - 상단공통*/
+.item_commen_div{border-bottom:#333 double 3px;}
+.item_commen_func{position:relative;}
+.up .item_commen_func{background:#f00;}
+.down .item_commen_func{background:#00f;}
+.item_commen_func h1{font-size:20px; display:inline-block; box-sizing:border-box; width:25%; text-align:center; text-shadow:none; color:#fff; padding:3px;}
+.item_commen_div .item_commen_func button{position:absolute;top:0px;box-sizing:border-box;height:100%;width:25%; padding:0;border-radius:0; box-shadow:none;margin:0; font-size:14px;}
+.item_commen_func button:nth-last-child(1){right:0}
+.item_commen_func button:nth-last-child(2){right:25%}
+.item_commen_func button:nth-last-child(3){right:50%}
+
+.item_comment_info{position:relative;}
+
+.item_comment_info .itemCaption{display:block; width:50%; text-align:center;}
+.item_comment_info .Curr{display:block;box-sizing:border-box;width:50%;background-color:#CCC;text-align:right; padding-bottom:4px;font-size:40px;font-weight:bold;padding-right:10px;}
+.item_comment_info .Diff, .item_comment_info .UpDwnRatio{display:inline-block; box-sizing:border-box; width:24%; text-align:right; padding-right:1%;}
+	.item_comment_info .Diff{position:relative;}
+	.item_comment_info .Diff:before{position:absolute; left:2px;}
+	.up .item_comment_info .Diff:before{content:"▲"; color:#f00;}
+	.down .item_comment_info .Diff:before{content:"▼"; color:#00f;}
+	.item_comment_info .UpDwnRatio:after{content:"%"; padding-left:3px;}
+.item_comment_info .mini_chart_area{box-sizing:border-box; position:absolute;top:0;right:0;width:50%;height:100%; background:#0FF;}	
+.item_comment_info .option_desc{display:block;box-sizing:border-box;background-color:#CCC;text-align:center; padding:5px;font-size:25px;font-weight:bold;}
+.item_desc_div{border-top:#333 double 1px; font-size:14px;}
+
+.relevant_fur{font-size:0; border-top:#666 solid 1px;}
+.relevant_fur h1{display:inline-block; width:20%;font-size:14px; text-align:center; color:#fff; text-shadow:none;}
+.relevant_fur.up h1{background-color:#f00;}
+.relevant_fur.down h1{background-color:#00f;}
+.relevant_fur span{display:inline-block; box-sizing:border-box;width:20%;font-size:14px; text-align:right; padding-right:2px;}
+.relevant_fur .Diff{position:relative;}
+	.relevant_fur .Diff:before{position:absolute; left:2px;}
+	.relevant_fur.up .Diff:before{content:"▲"; color:#f00;}
+	.item_comment_info.down .Diff:before{content:"▼"; color:#00f;}
+.relevant_fur .UpDwnRatio:after{content:"%"; padding-left:2px;}
+
+/* End of - 상단공통*/
+
+/* - 종목정보 */
+.item_desc_dl{padding:10px 5px;}
+.item_desc_dl>dt{background:#999; font-weight:bold; text-shadow:none; color:#fff; margin-top:5px; padding-left:5px;}
+.item_desc_dl>dt:before{content:"●"; padding-right:3px;}
+.item_desc_dl>dd{margin-left:20px; letter-spacing:-1px;}
+.item_desc_dl>dd dt{font-weight:bold;}
+.item_desc_dl>dd dt:before{content:"-"; padding-right:3px;}
+.item_desc_dl>dd dd{padding-left:15px;}
+.item_desc_dl>dd .ex_income{text-align:right; width:70%;}
+.item_desc_dl>dd .ex_income li{padding:0 10px;}
+.item_desc_dl>dd .ex_income_tick{border-top:#666 solid 1px;}
+/* End of - 종목정보*/
+
+/* -종목별 메뉴링크*/
+.item_commen_navi ul a{box-sizing:border-box;height:30px;line-height:30px;padding:0;}
+/* End of -종목별 메뉴링크*/
+
+
+/*- 옵션 테이블*/
+#item_option_table th{background:#CCC;}
+#item_option_table tbody td{text-align:right; padding-right:3px; position:relative;}
+#item_option_table tbody td{position:relative;}
+#item_option_table tr.active{background:#FF3;}
+#item_option_table tr[data-call="down"] td:nth-of-type(1),
+#item_option_table tr[data-call="down"] td:nth-of-type(2),
+#item_option_table tr[data-put="down"] td:nth-of-type(3),
+#item_option_table tr[data-put="down"] td:nth-of-type(4){color:#00f;}
+#item_option_table tr[data-call="up"] td:nth-of-type(1),
+#item_option_table tr[data-call="up"] td:nth-of-type(2),
+#item_option_table tr[data-put="up"] td:nth-of-type(3),
+#item_option_table tr[data-put="up"] td:nth-of-type(4){color:#f00;}
+	#item_option_table tr td:nth-of-type(1):before,
+	#item_option_table tr td:nth-of-type(4):before{position:absolute; left:2px;}
+	#item_option_table tr[data-call="up"] td:nth-of-type(1):before,
+	#item_option_table tr[data-put="up"] td:nth-of-type(4):before{content:"▲"; color:#f00;}
+	#item_option_table tr[data-call="down"] td:nth-of-type(1):before,
+	#item_option_table tr[data-put="down"] td:nth-of-type(4):before{content:"▼"; color:#00f;}
+/*- End of 옵션 테이블*/
+
+/*- 관심그룹 레이어*/
+.bg_layer{position:absolute;width:100%;height:0%;opacity:0;top:0;left:0;background:rgba(0,0,0,0.8);overflow:hidden;z-index:1000;}
+.layer_section{background:#f9f9f9; margin:60px 20px 10px; position:relative;box-shadow:rgba(255,255,255,0.5) 4px 4px 5px;}
+.layer_section header{border-bottom:#333 double 3px;}
+.layer_section header h1{background:#CCC; padding:10px; text-shadow:none}
+.layer_section .layer_type_div{padding:0 10px;} 
+.layer_section .ui-controlgroup-controls{width:100%;border-radius:0;} 
+.layer_section .layer_type_div .ui-radio{box-sizing:border-box;width:50%;}
+.layer_section .layer_type_div .ui-radio label{text-align:center; padding:5px;}
+.layer_section .layer_content{padding:10px;} 
+.layer_section .layer_content.type_02{display:none;}
+
+.layer_section .layer_content h2{margin-top:10px;}
+.layer_reg_group_name_div{margin-bottom:20px;}
+.layer_reg_group_name_div .ui-input-text{box-sizing:border-box;height:44px; width:70%; border-radius:0;}
+.layer_reg_group_name_div .ui-input-text input{height:100%;}
+.layer_section .layer_reg_group_name_div button.btn_layer_reg_group_name{box-sizing:border-box; height:44px; width:30%;}
+.layer_section .layer_content .ui-corner-all{border-radius:0;}
+
+.layer_section .btn_layer_ok{margin-top:30px;}
+.layer_section footer{padding:10px 20px 10px; border-top:#333 double 3px;}
+.layer_section footer p{text-align:center;}
+.layer_section footer a{display:block;text-align:center;padding:10px;}
+.layer_section .btn_close_layer{position:absolute;top:4px;right:4px;box-sizing:border-box;width:60px; height:32px; padding:0;border-radius:0; margin:0;}
+
+/*
+.layer_section .layer_seach_step_div .ui-select{box-sizing:border-box; width:33.3333%;}
+.layer_section .layer_seach_step_div .ui-select>div{padding-left:3px; padding-right:3px;}
+.layer_section .layer_seach_step_div .ui-select>div:after{display:none;}
+*/
+
+.layer_section .layer_seach_step_div{display:none;}
+
+/*- End of 관심그룹레이어*/
+
+
+/* End of 종목별 보기 */
+
+
+/* 관심등록 */
+#reg_group_div{margin-bottom:20px; padding-bottom:10px; border-bottom:#333 double 3px; border-radius:0;}
+#reg_group_div .ui-controlgroup-controls {width:100%;}
+#reg_group_div .ui-input-text{box-sizing:border-box;height:44px; width:70%;}
+#reg_group_div button{box-sizing:border-box;height:44px; width:30%;}
+
+#group_list_type{margin-bottom:20px; padding-bottom:10px; border-bottom:#333 double 3px; border-radius:0;}
+#group_list_type .ui-controlgroup-controls {width:100%;}
+#group_list_type .ui-radio{width:50%;}
+#group_list_type label{text-align:center;}
+
+#group_list a{box-sizing:border-box;display:block;border:#666 solid 3px; margin-bottom:10px;}
+#group_list h2{color:#fff; text-shadow:none; background-color:#999; padding:3px 10px;}
+#group_list p{text-align:center; padding:5px 10px; color:#666}
+#group_list span{color:#00f}
+/* End of 관심등록 */
+
+/* 관심그룹 종목 */
+#GROUP_ITEM>article>h1{padding-bottom:10px; border-bottom:#333 double 3px; margin-bottom:10px;}
+
+#group_item_list{margin-top:10px;}
+#group_item_list li{border:#666 solid 3px; position:relative; margin-bottom:10px;}
+#group_item_list h3{color:#fff; text-shadow:none; background-color:#999; padding:3px 10px; font-size:14px;}
+#group_item_list input[type="checkbox"]{vertical-align:middle; margin:0 5px;}
+#group_item_list label{display:inline-block; margin:0;}
+#group_item_list p{text-align:center; padding:10px 10px; color:#666}
+#group_item_list span{color:#00f}
+#group_item_list button{position:absolute; box-sizing:border-box; width:45px; height:30px; right:5px; bottom:5px; padding:0px; margin:0; border-radius:0;}
+
+#group_item_func_div .ui-controlgroup-controls{width:100%; border-radius:0; padding-top:20px; border-top:#333 double 3px;}
+#group_item_func_div .ui-controlgroup-controls button{box-sizing:border-box; width:50%;} 
+/* End of 관심그룹 종목 */
+
+
+/* 게시판 리스트 */
+.board_filter_div{margin-bottom:20px; padding-bottom:10px; border-bottom:#333 double 3px; border-radius:0;}
+.board_filter_div .ui-controlgroup-controls {width:100%;}
+.board_filter_div .ui-input-text{box-sizing:border-box;height:44px; width:40%;}
+.board_filter_div .ui-select{box-sizing:border-box;width:40%;}
+	#board_category-button{box-sizing:border-box; height:44px;}
+#BOARD_LIST .board_filter_div button.btn_board_filter{box-sizing:border-box;height:44px;padding:0;width:20%;}
+#SCHEDULE .board_filter_div button.btn_board_filter{box-sizing:border-box;height:44px;padding:0;width:20%;}
+
+#board_list{width:100%}
+#board_list th{white-space:nowrap;padding:5px 3px; background:#CCC;}
+#board_list tbody td{text-align:center;padding:5px 3px; vertical-align:middle;}
+#board_list tbody tr td:nth-of-type(1){padding-left:5px; text-align:left;}
+#board_list tbody tr td:nth-of-type(2),
+#board_list tbody tr td:nth-of-type(3){white-space:nowrap;}
+
+.board_navi{padding-top:10px; margin-top:10px; border-top:#333 double 3px; text-align:center; position:relative;}
+.board_navi button.btn_board_list,
+.board_navi button.btn_board_list_first,
+.board_navi button.btn_board_list_last{display:inline-block; width:auto; padding:0px; width:32px; height:32px; box-shadow:none; border-radius:0;}
+.board_navi button.btn_board_list_first,
+.board_navi button.btn_board_list_last{position:absolute; width:60px;}
+.board_navi button.btn_board_list_first{left:0; bottom:0;}
+.board_navi button.btn_board_list_last{right:0; bottom:0;}
+/* End of 게시판 리스트 */
+
+/* 게시판 보기 */
+.view_title{padding:10px 5px; margin:10px 0; border-bottom:#333 double 3px; border-top:#333 double 3px; background:#CCC; text-shadow:none;}
+.view_title_sub{margin-top:5px; text-align:right}
+.view_title_sub span.view_author{margin-right:10px;}
+.view_content{line-height:150%; padding:5px;}
+/* End of 게시판 보기 */
+
+/* 해외일정 */
+#schedule_list th{background:#CCC;}
+#schedule_list th, #schedule_list td{text-align:center; vertical-align:middle;}
+/* End of 해외 일정 */
+
+/*하단 메뉴*/
+#app footer .shortcut_menu_div li{}
+
+#app footer{box-sizing:border-box;}
+#app footer .shortcut_menu_div{box-sizing:border-box;}
+#app footer .all_menu{box-sizing:border-box;position:relative;padding-top:25px;z-index:100;height:0px;padding-top:0px;overflow-y:scroll;-webkit-overflow-scrolling:touch;}
+#app footer .all_menu h1,footer .all_menu h2,footer .all_menu li{height:30px;}
+#app footer .all_menu h2{margin-left:40px;}
+#app footer .all_menu li{margin-left:80px;}
+	 
+#app footer .all_menu a{padding-left:50px;line-height:30px;color:rgb(51,51,51)}
+
+#app footer a.ui-draggable-dragging{z-index:100;box-sizing:border-box;width:67px;border:#F00 solid 3px;overflow:hidden;white-space:nowrap;}

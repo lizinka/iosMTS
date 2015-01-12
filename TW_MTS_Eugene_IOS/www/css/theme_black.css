@@ -1,0 +1,51 @@
+
+/*기본 색상*/
+#app[data-theme="black"] header[data-role="header"],
+#app[data-theme="black"] header .ui-select div,
+#app[data-theme="black"] #item_select_table div.ui-select,
+#app[data-theme="black"] #dialog_item_select_table div.ui-select,
+#app[data-theme="black"] #item_select_table span.exchange,
+#app[data-theme="black"] #dialog_item_select_table span.exchange,
+#app[data-theme="black"] #board_list .board_tite span.category,
+#app[data-theme="black"] footer .shortcut_menu_div{background-color:#5A5959;}
+
+/*강조색*/
+#app[data-theme="black"] header a[data-rel="back"]:after,
+#app[data-theme="black"] #SETTING button#save_setting,
+#app[data-theme="black"] #ITEM_LIST #item_type_select button.active,
+#app[data-theme="black"] #ITEM_CHART div.ui-radio label.ui-radio-on,
+#app[data-theme="black"] #ITEM_CHART .ui-select.active #chart_set_min_number-button,
+#app[data-theme="black"] footer .shortcut_menu_div a.act,
+#app[data-theme="black"] .page_dialog header button,
+#app[data-theme="black"] #dialog_item_group h3 button,
+#app[data-theme="black"] #dialog_item_group li button.btn_del_item,
+#app[data-theme="black"] #dialog_chart_setting ul button,
+#app[data-theme="black"] header a[data-rel="back"]:active,
+#app[data-theme="black"] header button.btn_header_right:active{background-color:#000000;}
+
+/*정보창*/
+#app[data-theme="black"] .page_dialog header,
+#app[data-theme="black"] header button.btn_dialog.open{background-color:#333333;}
+#app[data-theme="black"] .page_dialog{border-color:#333333;}
+
+/* 종목별 메뉴
+#app .item_commen_navi li a.active{background-color:rgb(94,85,86);}
+#app #edit_group_div button{background-color:rgb(94,85,86);}
+#app .item_commen_navi ul{border-color:rgb(94,85,86);}
+*/
+
+
+/*전체메뉴 영역*/
+#app[data-theme="black"] footer .footer_menu_area .ui-checkbox,
+#app[data-theme="black"] footer .all_menu_group h1,
+#app[data-theme="black"] footer .all_menu>h1 a{background-color:#333333;}
+#app[data-theme="black"] footer .all_menu_group{border-color:#333333;}
+
+/*
+#app footer .all_menu a.ui-draggable-dragging{background-image:linear-gradient(270deg, #ffff00 -15%,  #9e080d 30%);
+											  background-image:-webkit-linear-gradient(270deg, #ffff00 -15%,  #9e080d 30%);
+											  }
+*/
+
+
+

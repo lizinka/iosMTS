@@ -1,0 +1,1154 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" />
+<title>유진투자선물 MTS</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery_ui.js"></script>
+<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="js/jquery.number.min.js"></script>
+<script type="text/javascript" src="js/overflow.js"></script>
+<script type="text/javascript" src="js/jqm_setting.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
+<script type="text/javascript" src="js/websocket.js"></script>
+
+<script type="text/javascript" src="js/web_mts.js"></script>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css" type="text/css" />
+<link rel="stylesheet" href="css/reset.css" type="text/css" />
+<link rel="stylesheet" href="css/web_mts.css" type="text/css" />
+<link rel="stylesheet" href="css/theme_blue.css" type="text/css" />
+<link rel="stylesheet" href="css/theme_green.css" type="text/css" />
+<link rel="stylesheet" href="css/theme_black.css" type="text/css" />
+<link rel="stylesheet" href="css/theme_brown.css" type="text/css" />
+<link rel="stylesheet" href="css/theme_violet.css" type="text/css" />
+</head>
+<!-- ver New -->
+<body id="app" data-real="true" data-theme="red">
+
+<!--
+<div id="console">
+<div></div>
+<button type="button" id="btn_console_close">닫기</button>
+</div>
+<section id="HOME" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>유진투자선물</h1><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+    	<ul data-role="listview">
+            <li><a href="#DEV"><span>0-01</span>개발자모드</a></li>
+            <li><a href="#TEST"><span>0-02</span>통신테스트</a></li>
+            <li><a href="#NOTIFICATION"</li><span>0-03</span>알림 창</a></li>
+            <li><a href="#LOGIN"><span>a-01</span>로그인페이지</a></li>
+            <li><a href="#ITEM_SEARCH"><span>b</span>종목검색</a></li>
+            <li><a href="#ITEM_SELECT"><span>b-01</span>종목선택</a></li>
+            <li><a href="#ITEM_LIST"><span>c</span>종목리스트</a></li>
+            <li><a href="#ITEM_ASKING" data-code="OESZ14" data-server_code="OESZ14" data-type="option_item"><span>d-01</span>종목별보기 - 호가</a></li>
+            <li><a href="#ITEM_CONCLUDE" data-code="TEST12" data-type="futures"><span>d-02</span>종목별보기 - 체결</a></li>
+            <li><a href="#ITEM_DAILY" data-code="TEST12" data-type="futures"><span>d-03</span>종목별보기 - 일자별</a></li>
+            <li><a href="#ITEM_CHART" data-code="OESZ14" data-sever_code="OESZ14" data-type="option_item"><span>d-04</span>종목별보기 - 차트</a></li>
+            <li><a href="#ITEM_OPTION" data-code="OESZ14" data-server_code="OESZ14" data-item_type="option"><span>d-05</span>종목별보기 - 옵션</a></li>
+            <li><a href="#ITEM_COMMEN"><span>e-01</span>종목별공통 - 종목정보영역활성상태</a></li>
+            <li><a href="#GROUP_LAYER"><span>e-02</span>관심그룹 레이어</a></li>
+            <li><a href="#SEARCH_LAYER"><span>e-03</span>종목찾기 레이어</a></li>
+            <li><a href="#GROUP_LIST"><span>f-01</span>관심그룹 - 리스트</a></li>
+            <li><a href="#GROUP_ITEM"><span>f-02</span>관심그룹 - 아이템편집</a></li>
+            <li><a href="#BOARD_LIST" data-code="" data-type="board_list"><span>g-01</span>투자정보 - 리스트</a></li>
+            <li><a href="#BOARD_VIEW" data-code="" data-type="board_view"><span>g-02</span>투자정보 - 게시물보기</a></li>
+            <li><a href="#SCHEDULE"><span>g-03</span>투자정보 - 해외일정</a></li>
+            <li><a href="#FOOTER_MENU"><span>h-01</span>공통 - 전체메뉴표시</a></li>
+            <li><a href="#LOADING"</li><span>h-02</span>공통 - LOADIONG</a></li>
+          
+        </ul>
+    </article>
+    <footer data-role="footer">
+    	<div data-role="navbar">
+            <ul>
+                <li><a href="#">공인인증</a></li>
+                <li><a href="#">이용안내</a></li>
+                <li><a href="#">ID등록</a></li>
+                <li><a href="#">고객센터</a></li>
+            </ul>
+        </div>
+    </footer>
+</section><!-- End of #HOME-->
+<!--
+<section id="TEST" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">뒤로</a>
+    	<h1>통신 테스트</h1>
+    </header>
+    <article data-role="content">
+    	<div data-role="controlgroup" data-type="horizontal">
+        	<select id="test_page_id">
+            	<option value="#LOGIN">로그인</option>
+                <option value="#ITEM_SEARCH">종목검색</option>
+                <option value="#ITEM_SELECT">종목선택</option>
+                <option value="#ITEM_LIST">종목리스트</option>
+                <option value="#ITEM_ASKING">종목별보기 - 호가</option>
+                <option value="#ITEM_CONCLUDE">종목별보기 - 체결</option>
+                <option value="#ITEM_DAILY">종목별보기 - 일자별</option>
+                <option value="#ITEM_CHART">종목별보기 - 차트</option>
+                <option value="#ITEM_OPTION">종목별보기 - 옵션</option>
+                <option value="#GROUP_LAYER">관심그룹 레이어</option>
+                <option value="#GROUP_LIST">관심그룹 - 리스트</option>
+                <option value="#GROUP_ITEM">관심그룹 - 아이템편집</option>
+                <option value="#BOARD_LIST">투자정보 - 리스트</option>
+                <option value="#BOARD_VIEW">투자정보 - 게시물보기</option>
+                <option value="#SCHEDULE">투자정보 - 해외일정</option>
+                <option value="#FOOTER_MENU">공통 - 전체메뉴표시</option>
+            </select>
+            <select id="test_data_type">
+            	<option value="existing">조회</option>
+                <option value="real">실시간</option>
+                <option value="close">종료</option>
+            </select>
+        </div>
+        
+        
+        <div data-role="controlgroup" data-type="horizontal">
+    		<input type="text" id="test_item" data-wrapper-class="controlgroup-textinput ui-btn" placeholder="data-code" />
+            <button type="button" id="btn_test">전송</button>
+        </div>
+        <div id="recive_data_div"></div>
+    </article>
+</section><!-- End of #TEST -->
+
+<section id="LOGIN" data-role="page" data-ani="pause" data-login='false'>
+    <article data-role="content">
+        <div class="wave wave_01"></div>
+        <div class="wave wave_02"></div>
+        <div class="wave wave_03"></div>
+        <div class="wave wave_04"></div>	
+        <h1>유진투자선물</h1>
+        
+        <form id="login_form" name="login_form" action="#" method="post">
+        	<div class="login_input">	
+                <label for="login_id">아이디</label>
+                <input type="text" id="login_id" placeholder="아이디를 입력하세요" required />
+            </div>
+            <div  class="login_input">
+            	<label for="login_pw">비밀번호</label>
+            	<input type="password" id="login_pw" placeholder="비밀번호를 입력하세요" required />
+        	</div>
+            <div class="login_check">
+                <input type="checkbox" id="check_realtime" checked="checked" /><label for="check_realtime">실시간 시세</label>
+            	<input type="checkbox" id="save_id_check" checked="checked" /><label for="save_id_check">아이디 저장</label>
+            </div>
+            <div id="btn_login_div" data-role="controlgroup" data-type="horizontal">
+            	<button type="submit" id="btn_login">로그인</button>
+                <a href="#SETTING" data-rel="dialog">설정</a>
+            </div>
+        </form>
+        
+        <div class="colse_area">
+        	<p><span class="app_title">제일로 M</span>을 종료하시겠습니까?</p>
+            <div data-role="controlgroup" data-type="horizontal">
+            <button type="button" class="btn_colose_app">종료</button>
+            <button type="button" class="btn_history_back">취소</button>
+            </div>	
+        </div>
+        
+        <div class="copyright">
+        	<p>고객상담전화 : <span class="tel_name">파생상품 1팀</span> <a class="login_tel" href="tel:02-3771-8988">02-3771-8988</a></p>
+            <p><span class="tel_name">파생상품 2팀</span> <a class="login_tel" href="tel:02-3771-8748">02-3771-8748</a></p>
+            <p><span class="tel_name"> 해외 상품팀 </span> <a class="login_tel" href="tel:02-3771-8717">02-3771-8717</a></p>
+            
+            <p class="ko">서울특별시 영등포구 국제금융로2길  28 유진투자증권 빌딩 3층</p>
+            <p class="en">copyright &copy; 2014 EUGENE INVESTMENT &amp; FUTURES Co.,LTD.<br />ALL RIGHTS RESERVED.</p>
+        </div>
+    </article>
+</section><!-- End of #LOGIN -->
+
+
+<section id="CLOSE" data-role="page" data-ani="play">
+    <article data-role="content">
+        <div class="wave wave_01"></div>
+        <div class="wave wave_02"></div>
+        <div class="wave wave_03"></div>
+        <div class="wave wave_04"></div>	
+        <h1>유진투자선물</h1>
+        
+        <div class="colse_area">
+        	<p><span class="app_title">제일로 M</span>을 종료하시겠습니까?</p>
+            <div data-role="controlgroup" data-type="horizontal">
+            <button type="button" class="btn_colose_app">종료</button>
+            <button type="button" class="btn_history_back">취소</button>
+            </div>	
+        </div>
+        
+        <div class="copyright">
+        	<p>고객상담전화 : <span class="tel_name">파생상품 1팀</span> <a class="login_tel" href="tel:02-3771-8988">02-3771-8988</a></p>
+            <p><span class="tel_name">파생상품 2팀</span> <a class="login_tel" href="tel:02-3771-8748">02-3771-8748</a></p>
+            <p><span class="tel_name"> 해외 상품팀 </span> <a class="login_tel" href="tel:02-3771-8717">02-3771-8717</a></p>
+            
+            <p class="ko">서울특별시 영등포구 국제금융로2길  28 유진투자증권 빌딩 3층</p>
+            <p class="en">copyright &copy; 2014 EUGENE INVESTMENT &amp; FUTURES Co.,LTD.<br />ALL RIGHTS RESERVED.</p>
+        </div>
+    </article>
+</section><!-- End of #LOGIN -->
+
+
+<section id="SETTING" data-role="page">
+	<header data-role="header">
+    	<a data-rel="back">닫기</a>
+        <h1>제일로 M 설정</h1>
+        <button  id="save_setting">설정저장</button>
+    </header>
+    <article data-role="content">
+    	<div id="setting_item_login" class="setting_item">
+        	<label for="setting_login">로그인</label>
+            <select id="setting_login" data-role="none">
+            	<option value="hts" selected="selected">고객용</option>
+                <option value="inner">사원용</option>
+            </select>
+            <p class="setting_desc"></p>
+        </div>
+        
+        <div  id="setting_item_theme" class="setting_item">
+        	<label for="setting_theme">테마</label>
+            <select id="setting_theme" data-role="none">
+            	<option value="red" selected="selected">빨간색</option>
+                <option value="blue">파란색</option>
+                <option value="green">초록색</option>
+                <option value="brown">갈색</option>
+                <option value="violet">보라색</option>
+                <option value="black">검은색</option>
+            </select>
+            <p class="setting_desc"></p>
+        </div>
+    </article>
+</section>
+
+
+<section id="ITEM_SELECT" data-role="page" data-type="">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">뒤로</a>
+        <h1>종목 검색</h1>
+        <!--
+        <button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    	-->
+        <div id="search_type_div">
+        	<h2>검색 범위</h2>
+        	<div data-role="controlgroup" data-type="horizontal">
+                <select class="select_item_type">
+                    <option value="futures">선물</option>
+                    <option value="option">옵션</option>
+                </select>
+                <select class="select_category">
+                	<option value="currency">통화</option>
+                    <option value="interest">채권</option>
+                    <option value="index">지수</option>
+                    <option value="commodity">농산물</option>
+                    <option value="metals">금속</option>
+                    <option value="energy">에너지</option>
+					<!--
+                    <option value="single_stock">지수옵션</option>
+                    <option value="etc_comodity">기타 농산물</option>
+                    <option value="other">기타</option>
+                    -->
+                </select>
+            </div>
+        </div>
+        <!--
+        <table id="item_select_table_header" class="table_type01">
+        	
+        </table>
+        --> 
+    </header>
+    <article data-role="content">
+        <table id="item_select_table" class="table_type01">
+            <thead>
+            	<tr><th>상품</th><th class="btn_td">월물</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table> 
+                
+    </article><!-- End of [data-role="content"]-->
+    
+    <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #ITEM_SEARCH -->
+
+
+<!--
+<section id="ITEM_SEARCH" data-role="page" data-type="futures">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">뒤로</a>
+        <h1>종목 검색</h1><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    	
+        <div id="search_type_div">
+        	<h2>검색 범위</h2>
+        	<div data-role="controlgroup" data-type="horizontal">
+                <select class="search_item_type">
+                    <option value="futures">선물</option>
+                    <option value="option">옵션</option>
+                </select>
+                <select class="search_exchange">
+                    <option value="false">거래소선택</option>
+                </select>
+            </div>
+        </div>
+        
+    </header>
+    <article data-role="content">
+        <!--
+        <div id="search_desc" class="desc_div">
+        	검색 범위를 지정하세요.
+        </div>
+        
+        <div id="item_search_div">
+        	<h1>종목 아이템 선택</h1>
+        	<div class="search_step step_01">
+            	<h2>구분</h2>
+                <ul>
+                	<li id="item_category_currency">
+                    	<input type="radio" name="item_search_step01" id="step01_01" value="currency" /><label for="step01_01">통화</label>
+                    </li>
+                    <li id="item_category_interest">
+                    	<input type="radio" name="item_search_step01" id="step01_02" value="interest" /><label for="step01_02">채권</label>
+                    </li>
+                    <li id="item_category_index">
+                    	<input type="radio" name="item_search_step01" id="step01_03" value="index" /><label for="step01_03">지수</label>
+                    </li>
+                    <li id="item_category_commodity">
+                    	<input type="radio" name="item_search_step01" id="step01_04" value="commodity" /><label for="step01_04">농산물</label>
+                    </li>
+                    <li id="item_category_metals">
+                    	<input type="radio" name="item_search_step01" id="step01_05" value="metals" /><label for="step01_05">금속</label>
+                    </li>
+                    <li id="item_category_energy">
+                    	<input type="radio" name="item_search_step01" id="step01_06" value="energy" /><label for="step01_06">에너지</label>
+                    </li>
+                    <li id="item_category_single_stock">
+                    	<input type="radio" name="item_search_step01" id="step01_07" value="single_stock" /><label for="step01_07">지수옵션</label>
+                    </li>
+                    <li id="item_etc_comodity">
+                    	<input type="radio" name="item_search_step01" id="step01_08" value="etc_comodity" /><label for="step01_08">기타농산물</label>
+                    </li>
+                    <li id="item_other">
+                    	<input type="radio" name="item_search_step01" id="step01_09" value="item_other" /><label for="step01_09">기타</label>
+                    </li>
+                </ul>
+            </div><!-- End of .step01 
+            <div class="search_step step_02">
+            	<h2>상품</h2>
+                <ul></ul>
+            </div>
+            <div class="search_step step_03">
+            	<h2>월물</h2>
+                <ul></ul>
+            </div> 
+        </div><!-- End of #item_search_div 
+                
+        <article id="search_result_article">
+        	<table class="item_list_holder" data-type="card">
+                <tbody>
+                </tbody>
+            </table>
+        	
+            <div id="search_menu" data-role="navbar">
+                <ul>
+                	<li><a class="search_result_link" href="">시세보기</a></li>
+                    <li><button type="button"  class="btn_layer_interest">관심그룹</button></li>
+                    <li><a class="search_result_tel" href="">전화주문</a></li>
+                </ul>
+            </div>    
+        </article><!-- End of #search_result_article 
+    
+    </article><!-- End of [data-role="content"]
+    
+    <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer><!-- End of [data-role="footer"
+</section><!-- End of #ITEM_SEARCH -->
+
+<section id="ITEM_LIST" data-role="page">
+	<div id="item_list_panel" data-role="panel">
+    	<h1>6AU14</h1>
+        <div class="more_info">
+        	
+        </div>
+    </div><!-- End of #item_list_panel -->
+    
+    <header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">이전</a><h1 class="real_title">관심그룹 <span class="real_time"></span></h1>
+        <!--
+        <button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+        -->
+        <div data-role="controlgroup" data-type="horizontal" class="interest_select_div">
+        	<h2>등록된 관심종목</h2>
+            <select class="interest_select"></select>
+            <div id="item_type_select">
+            	<button type="button" class="btn_interest_table active">표</button>
+            	<button type="button" class="btn_interest_card">카드</button>
+            </div>
+        </div>
+        <button class="btn_header_right btn_dialog" data-dialog="item_select">종목선택</button>
+    </header>
+    <article data-role="content">
+        <div id="no_group_select_desc" class="desc_div">
+        	<p>관심종목 그룹이 없습니다.</p>
+        </div>
+        <div id="edit_group_div" data-role="controlgroup" data-type="horizontal">
+        	<button type="button" id="btn_del_all_item">전체종목 삭제</button>
+            <button type="button" id="btn_del_group">그룹 삭제</button>
+        </div>
+        <div id="no_item_list_desc" class="desc_div">
+            <p>등록된 관심 종목이 없습니다.</p>
+            <button type="button">이 그룹을 삭제함</button>
+        </div>        
+        <div id="item_list_table_div">
+        	<table id="item_list_table" class="item_list_holder" data-type="table">
+                <thead>
+                	<tr>
+                    	<th class="function">기능</th>
+                        <th class="itemType">구분</th>
+                    	<th>종목명</th>
+                        <th>현재가</th>
+                        <th>대비/등락</th>
+                        <th>거래량</th>
+                        <th class="item_more_info">추가정보</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	
+                </tbody>
+            </table>
+        </div>
+    </article><footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer> 
+</section><!-- End of #ITEM_LIST -->
+
+
+<section id="ITEM_ASKING" data-role="page" class="down subtitle">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>
+        	<span class="itemCd">6CU14</span> <span class="option_desc itemCaption">CME E-mini S&quot;P 500</span>
+        </h1>
+        
+        <a data-rel="back">이전</a>
+    	<button class="btn_dialog" data-dialog="item_info">종목정보</button>
+        <button class="btn_dialog" data-dialog="item_group">관심그룹</button>
+        <button class="btn_dialog" data-dialog="item_select">종목선택</button>
+    </header>
+    <article data-role="content" class="item_article">
+    	<div class="item_commen_div">
+            <div class="item_commen_info">
+            	<span class="Curr">0.9132</span>
+                <div class="commen_info_data">
+                    <span class="Diff">0.0004</span>
+                    <span class="UpDwnRatio">0.02</span>
+                    <span class="vol">0.02</span>
+                </div>
+            </div>
+        </div><!-- End of .item_commen_div -->
+        <div class="item_desc_div" style="display:none">
+            <button type="button" class="btn_item_commen_info_close">종목정보 닫기</button>
+        </div><!-- End of .item_desc_div -->
+        <div class="item_commen_navi" data-role="navbar">
+            <ul>
+                <li><a href="#ITEM_ASKING" class="active">호가</a></li>
+                <li><a href="#ITEM_CONCLUDE">체결</a></li>
+                <li><a href="#ITEM_DAILY">일자별</a></li>
+                <li class="option_item_only"><a href="#ITEM_OPTION">행사가</a></li>
+                <li><a href="#ITEM_CHART">차트</a></li>
+            </ul>
+        </div>
+        
+        <table id="item_asking_table" class="table_type01">
+        	<thead>
+            	<tr><th>매도잔량</th><th class="Time">14:02:04</th><th>매수잔량</th></tr>
+            </thead>
+            <tfoot>
+            	<tr><td class="sell_total_qut">--</td><td class="sell_total_gap">--</td><td class="buy_total_qut">--</td></tr>
+            </tfoot>
+            <tbody class="tbody_sell">
+            	<tr><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td><td class="Prc">--</td><td rowspan="5"><ul class="asking_side">
+                <li><span>시가</span><span class="side_open side_price"></span></li>
+                <li><span>고가</span><span class="side_high side_price"></span></li>
+                <li><span>저가</span><span class="side_low side_price"></span></li>
+                <!--<li><span>종가</span><span class="side_last side_price"></span></li>-->
+                <li><span>전일</span><span class="side_settlement side_price"></span></li>
+                </ul></td></tr>
+                <tr><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td><td class="Prc">--</td></tr>
+                <tr><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td><td class="Prc">--</td></tr>
+                <tr><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td><td class="Prc">--</td></tr>
+                <tr><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td><td class="Prc">--</td></tr>
+            </tbody>
+            <tbody class="tbody_buy">    
+                <tr><td rowspan="5">
+                	<ul class="asking_side">
+                    	<li><span>증거금</span><span class="trust_margin">--</span></li>
+                        <li><span>만기</span><span class="last_trade">--</span></li>
+                        <li><span>통화</span><span class="curr_cd">--</span></li>
+                        <li><span>틱 Size</span><span class="tick_size">--</li>
+                        <li><span>틱 가치</span><span class="tick_value">--</li>
+                    </ul>
+                </td><td class="Prc">--</td><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td></tr>
+                <tr><td class="Prc">--</td><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td></tr>
+                <tr><td class="Prc">--</td><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td></tr>
+                <tr><td class="Prc">--</td><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td></tr>
+                <tr><td class="Prc">--</td><td class="Qut"><span class="ask_vol"></span><span class="number">--</span></td></tr>
+            </tbody>
+        </table>
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #ITEM_ASKING -->
+
+<section id="ITEM_CONCLUDE" data-role="page" class="down subtitle">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+       	<h1>
+        	<span class="itemCd">6CU14</span> <span class="option_desc itemCaption">CME E-mini S&quot;P 500</span>
+        </h1>
+        
+        <a data-rel="back">이전</a>
+    	<button class="btn_dialog" data-dialog="item_info">종목정보</button>
+        <button class="btn_dialog" data-dialog="item_group">관심그룹</button>
+        <button class="btn_dialog" data-dialog="item_select">종목선택</button>
+    </header>
+    <article data-role="content" class="item_article">
+    	<div class="item_commen_div">
+            <div class="item_commen_info">
+            	<span class="Curr">0.9132</span>
+                <div class="commen_info_data">
+                    <span class="Diff">0.0004</span>
+                    <span class="UpDwnRatio">0.02</span>
+                    <span class="vol">0.02</span>
+                </div>
+            </div>
+        </div><!-- End of .item_commen_div -->
+        
+        <div class="item_desc_div" style="display:none">
+            <button type="button" class="btn_item_commen_info_close">종목정보 닫기</button>
+        </div><!-- End of .item_desc_div -->
+        
+        <div class="item_commen_navi" data-role="navbar">
+            <ul>
+                <li><a href="#ITEM_ASKING">호가</a></li>
+                <li><a href="#ITEM_CONCLUDE" class="active">체결</a></li>
+                <li><a href="#ITEM_DAILY">일자별</a></li>
+                <li class="option_item_only"><a href="#ITEM_OPTION">행사가</a></li>
+                <li><a href="#ITEM_CHART">차트</a></li>
+            </ul>
+        </div>
+      
+        <table id="item_conclude_table" class="table_type01">
+        	<thead>
+            	<tr><th>일자</th><th>시간</th><th>체결</th><th>대비</th><th>거래량</th></tr>
+            </thead>
+            <tbody>
+            	            	
+            </tbody>
+        </table>
+        
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #ITEM_CONCLUDE -->
+
+<section id="ITEM_DAILY" data-role="page" class="up subtitle">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+   		<h1>
+        	<span class="itemCd">6CU14</span> <span class="option_desc itemCaption">CME E-mini S&quot;P 500</span>
+        </h1>
+        
+        <a data-rel="back">이전</a>
+    	<button class="btn_dialog" data-dialog="item_info">종목정보</button>
+        <button class="btn_dialog" data-dialog="item_group">관심그룹</button>
+        <button class="btn_dialog" data-dialog="item_select">종목선택</button>
+    </header>
+    <article data-role="content" class="item_article">
+    	<div class="item_commen_div">
+            <div class="item_commen_info">
+            	<span class="Curr">0.9132</span>
+                <div class="commen_info_data">
+                    <span class="Diff">0.0004</span>
+                    <span class="UpDwnRatio">0.02</span>
+                    <span class="vol">0.02</span>
+                </div>
+            </div>
+        </div><!-- End of .item_commen_div -->
+        
+        <div class="item_desc_div" style="display:none">
+            <button type="button" class="btn_item_commen_info_close">종목정보 닫기</button>
+        </div><!-- End of .item_desc_div -->
+       
+        <div class="item_commen_navi" data-role="navbar">
+            <ul>
+                <li><a href="#ITEM_ASKING">호가</a></li>
+                <li><a href="#ITEM_CONCLUDE">체결</a></li>
+                <li><a href="#ITEM_DAILY" class="active">일자별</a></li>
+                <li class="option_item_only"><a href="#ITEM_OPTION">행사가</a></li>
+                <li><a href="#ITEM_CHART">차트</a></li>
+            </ul>
+        </div>
+        
+        <table id="item_daily_table" class="table_type01">
+        	<thead>
+            	<tr><th>일자</th><th>체결</th><th>대비</th><th>거래량</th></tr>
+            </thead>
+            <tbody>
+          
+            </tbody>
+        </table>
+        
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #ITEM_DAILY -->
+
+<section id="ITEM_CHART" data-role="page" class="up subtitle">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1 class="real_title">차트<span class="real_time"></span></h1>
+      	<a data-rel="back">이전</a>
+        <div data-role="controlgroup" data-type="horizontal">
+            <div id="chart_type">
+                <input type="radio" id="chart_set_month" name="chart_set" value="month" />
+                <label for="chart_set_month">월</label>
+                <input type="radio" id="chart_set_week" name="chart_set" value="week" />
+                <label for="chart_set_week">주</label>
+                <input type="radio" id="chart_set_day" name="chart_set" value="day" checked="checked" />
+                <label for="chart_set_day">일</label>
+                
+                <input type="radio" id="chart_set_min" name="chart_set" value="min" />
+                <label for="chart_set_min">분</label>
+                        
+                <select name="chart_set_min_number" id="chart_set_min_number">
+                    <option value="false">분</option>
+                    <option value="1">1분</option>
+                    <option value="3">3분</option>
+                    <option value="3">5분</option>
+                    <option value="10">10분</option>
+                    <option value="15">15분</option>
+                    <option value="30">30분</option>
+                    <option value="30">60분</option>
+                </select>
+                <input type="radio" id="chart_set_tic" name="chart_set" value="tic" />
+                <label for="chart_set_tic">틱</label>
+            </div>
+        </div>
+        <button class="btn_dialog" data-dialog="chart_setting">차트설정</button>
+    </header>
+    <article data-role="content" class="item_article">
+        <div class="item_commen_div">
+            <div class="item_commen_info">
+              	<h1><span class="itemCd">6CU14</span> <span class="option_desc itemCaption">CME E-mini S&quot;P 500</span></h1>     
+                
+            	<span class="Curr">0.9132</span>
+                <span class="Diff">0.0004</span>
+                <span class="UpDwnRatio">0.02</span>
+                <span class="vol">0.02</span>
+            </div>
+        </div><!-- End of .item_commen_div -->
+    </article>
+</section><!-- End of #ITEM_CHART -->
+
+<section id="ITEM_OPTION" data-role="page" class="up" data-type="option">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>
+        	<span class="itemCd">6CU14</span> <span class="option_desc itemCaption">CME E-mini S&quot;P 500</span>
+        </h1>
+        
+        <a data-rel="back">이전</a>
+        <button class="btn_dialog" data-dialog="item_select">종목선택</button>
+    </header>
+    <article data-role="content" class="item_article">
+        <div class="item_commen_div">
+            <div class="item_commen_info">
+            	<span class="Curr">0.9132</span>
+                <div class="commen_info_data">
+                    <span class="Diff">0.0004</span>
+                    <span class="UpDwnRatio">0.02</span>
+                    <span class="vol">0.02</span>
+                </div>
+            </div>
+        </div><!-- End of .item_commen_div -->
+        <table id="item_option_table_both" class="item_option_table table_type01" data-display="both" data-active="true">
+        	<thead>
+            	<tr><th class="call_opt call_data" colspan="2">콜옵션</th><th rowspan="2">행사가</th><th class="put_opt put_data" colspan="2">풋옵션</th></tr>
+                <tr><th class="call_data">대비</th><th class="call_data">현재가</th><th class="put_data">현재가</th><th  class="put_data">대비</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <table id="item_option_table_call" class="item_option_table table_type01" data-dispaly="col" data-active="false">
+        		<thead>
+            	<tr><th class="call_opt call_data" colspan="3">콜옵션</th><th rowspan="2">행사가</th></tr>
+                <tr><th class="call_vol call_data">거래량</th><th class="call_data">대비</th><th class="call_data">현재가</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <table id="item_option_table_put" class="item_option_table table_type01" data-display="put" data-active="false">
+        	<thead>
+            	<tr><th rowspan="2">행사가</th><th class="put_opt put_data" colspan="3">풋옵션</th></tr>
+                <tr><th class="put_data">현재가</th><th  class="put_data">대비</th><th  class="put_vol put_data">거래량</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #ITEM_OPTION -->
+
+
+
+
+
+<!--
+<section id="GROUP_LIST" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>GROUP_LIST</h1>
+        <a data-rel="back">이전</a><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+    	<h1>새 관심그룹 등록</h1>
+        <div id="reg_group_div" data-role="controlgroup" data-type="horizontal">
+        	<input type="text" id="reg_group_name" placeholder="그룹명을 입력하세요" data-wrapper-class="controlgroup-textinput ui-btn" />
+            <button type="button" id="btn_reg_group_name">등록</button>
+        </div>
+        
+        <h1>등록된 관심그룹 : <span id="cnt_group_list_item" class="cnt_span">00</span> 개</h2>
+        <ul id="group_list">
+        	<li><a href="#"><h2>관심그룹 명</h2><p>등록된 종목 : <span>00</span> 개</p></a></li>
+            <li><a href="#"><h2>관심그룹 명</h2><p>등록된 종목 : <span>00</span> 개</p></a></li>
+            <li><a href="#"><h2>관심그룹 명</h2><p>등록된 종목 : <span>00</span> 개</p></a></li>
+            <li><a href="#"><h2>관심그룹 명</h2><p>등록된 종목 : <span>00</span> 개</p></a></li>
+        </ul>
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #GROUP_LIST -->
+
+<!--
+<section id="GROUP_ITEM" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>GROUP_ITEM</h1>
+        <a data-rel="back">이전</a><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+    	<h1 id="group_item_name">관심그룹 이름</h1>
+        
+        <h2>등록된 종목 : <span id="cnt_group_item" class="cnt_span">00</span> 개</h2>
+        <ul id="group_item_list">
+        	<li>
+            	<h3><input type="checkbox" id="group_item_6AU14" value="6AU14" data-role="none">
+                    <label for="group_item_6AU14">6AU14</label></h3>
+            	<p>CME 호주달러<span>2014.09</span></p>
+                <button type="buttion" class="btn_group_item_handler">이동</button>
+            </li>
+            <li>
+            	<h3><input type="checkbox" id="group_item_6AU14" value="6AU14" data-role="none">
+                    <label for="group_item_6AU14">6AU14</label></h3>
+            	<p>CME 호주달러<span>2014.09</span></p>
+                <button type="buttion" class="btn_group_item_handler">이동</button>
+            </li>
+            <li>
+            	<h3><input type="checkbox" id="group_item_6AU14" value="6AU14" data-role="none">
+                    <label for="group_item_6AU14">6AU14</label></h3>
+            	<p>CME 호주달러<span>2014.09</span></p>
+                <button type="buttion" class="btn_group_item_handler">이동</button>
+            </li>
+            <li>
+            	<h3><input type="checkbox" id="group_item_6AU14" value="6AU14" data-role="none">
+                    <label for="group_item_6AU14">6AU14</label></h3>
+            	<p>CME 호주달러<span>2014.09</span></p>
+                <button type="buttion" class="btn_group_item_handler">이동</button>
+            </li>
+            <li>
+            	<h3><input type="checkbox" id="group_item_6AU14" value="6AU14" data-role="none">
+                    <label for="group_item_6AU14">6AU14</label></h3>
+            	<p>CME 호주달러<span>2014.09</span></p>
+                <button type="buttion" class="btn_group_item_handler">이동</button>
+            </li>
+        </ul>
+        
+        <div id="group_item_func_div" data-role="controlgroup" data-type="horizontal">
+        	<button id="btn_group_item_del">선택된 종목 삭제</button>
+            <button id="btn_group_del">그룹삭제</button>
+        </div>
+        
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #GROUP_ITEM -->
+
+<section id="BOARD_LIST" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>BOARD_LIST</h1>
+        <a data-rel="back">이전</a>
+    </header>
+    <article data-role="content"> 
+        <table id="board_list" class="table_type01">
+        	<col span="1" id="board_list_title" />
+            <col span="1" id="board_list_date" />
+        	<thead>
+            	<tr><th>제 목</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>	
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #BOARD_LIST -->
+
+<section id="BOARD_VIEW" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+        <a data-rel="back">이전</a>
+        <h1>게시판 제목</h1>
+    </header>
+    <article data-role="content">
+        <div class="view_title">
+        	<h2></h2>
+            <div class="view_title_sub">
+            	<span class="view_author"></span>
+            	<span class="view_data"></span>
+                <span class="view_time"></span>
+            </div>
+        </div>
+        <div class="view_content">
+        	
+        </div>
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #BOARD_VIEW -->
+
+<section id="SCHEDULE" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>BOARD_LIST</h1>
+        <a data-rel="back">이전</a><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+        <h1>게시판 이름</h1>
+        <div class="board_filter_div" data-role="controlgroup" data-type="horizontal">
+        	<input type="date" id="schedule_date"  data-wrapper-class="controlgroup-textinput ui-btn" />
+            <select id="board_category">
+            	<option value="1">국가</option>
+            </select>
+            <button class="btn_board_filter" type="button">확인</button>
+        </div>
+        <table id="schedule_list" class="table_type01">
+        	<thead>
+            	<tr><th>일자</th><th rowspan="2">국가</th><th colspan="4">내용</th></tr>
+                <tr><th>시간</th><th>직전</th><th>예상</th><th>발표</th><th>단위</th></tr>
+            </thead>
+            <tbody>
+            	<tr><td>08/14</td><td rowspan="2">독일</td><td colspan="4">CP (전월대비)</td></tr>
+                <tr><td>15:00</td><td>0.30</td><td>0.30</td><td>0.30</td><td>%</td></tr>
+                <tr><td>08/14</td><td rowspan="2">독일</td><td colspan="4">CP (전월대비)</td></tr>
+                <tr><td>15:00</td><td>0.30</td><td>0.30</td><td>0.30</td><td>%</td></tr>
+                <tr><td>08/14</td><td rowspan="2">독일</td><td colspan="4">CP (전월대비)</td></tr>
+                <tr><td>15:00</td><td>0.30</td><td>0.30</td><td>0.30</td><td>%</td></tr>
+                <tr><td>08/14</td><td rowspan="2">독일</td><td colspan="4">CP (전월대비)</td></tr>
+                <tr><td>15:00</td><td>0.30</td><td>0.30</td><td>0.30</td><td>%</td></tr>
+                <tr><td>08/14</td><td rowspan="2">독일</td><td colspan="4">CP (전월대비)</td></tr>
+                <tr><td>15:00</td><td>0.30</td><td>0.30</td><td>0.30</td><td>%</td></tr>
+                <tr><td>08/14</td><td rowspan="2">독일</td><td colspan="4">CP (전월대비)</td></tr>
+                <tr><td>15:00</td><td>0.30</td><td>0.30</td><td>0.30</td><td>%</td></tr>
+            </tbody>
+        </table>	
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+</section><!-- End of #SCHEDULE -->
+
+<!--
+<section id="GROUP_LAYER" data-role="page" class="up" data-code='layer_code_2'>
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>GROUP_LAYER</h1>
+        <a data-rel="back">이전</a><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+    	<div class="item_commen_div">
+        	<div class="item_commen_func">
+            	<h1 class="itemCd">6CU14</h1>
+            	<button type="button" class="btn_item_commen_info">종목정보</button>
+                <button type="button" class="btn_layer_interest">관심종목</button>
+                <button type="button" class="btn_layer_search">종목검색</button>
+            </div>
+            <div class="item_commen_info">
+            	<span class="itemCaption">----</span>
+            	<span class="Curr">0.9132</span>
+                <span class="Diff">0.0004</span>
+                <span class="UpDwnRatio">0.02</span>
+            	<div class="mini_chart_area">MIni Chart</div>
+            </div>
+            <div class="item_desc_div" style="display:none">
+
+            </div>
+            <div class="item_commen_navi" data-role="navbar">
+            	<ul>
+                    <li><a href="#ITEM_ASKING">호가</a></li>
+                    <li><a href="#ITEM_CONCLUDE">체결</a></li>
+                    <li class="option_item_only"><a href="#ITEM_OPTION">행사가</a></li>
+                    <li><a href="#ITEM_DAILY">일자별</a></li>
+                    <li><a href="#ITEM_CHART">차트</a></li>
+                </ul>
+            </div>
+        </div>
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+
+    <div class="bg_layer">
+    	<section id="layer_group" class="layer_section">
+        	<header>
+            	<h1>관심그룹</h1>
+                <div class="layer_type_div" data-role="controlgroup" data-type="horizontal">
+                	<input type="radio" name="layer_reg_group_type" id="layer_reg_group_type_01" value="reg" checked="checked" />
+                    <label for="layer_reg_group_type_01">등록하기</label>
+                    <input type="radio" name="layer_reg_group_type" id="layer_reg_group_type_02" value="search" />
+                    <label for="layer_reg_group_type_02">종목찾기</label>
+                </div>
+            </header>
+            <div class="layer_content type_01">
+            	<h2>새 관심그룹 만들기</h2>
+                <div class="layer_reg_group_name_div" data-role="controlgroup" data-type="horizontal">
+                	<input type="text" data-wrapper-class="controlgroup-textinput ui-btn" id="layer_reg_group_name" placeholder="그룹 이름을 입력하세요" />
+                    <button type="button" class="btn_layer_reg_group_name">만들기</button>
+                </div>
+                <h2>등록할 그룹 선택</h2>
+                <select id="layer_group_select_01" class="select_box_group">
+                	<option value="">그룹선택</option>
+                </select>
+                <button type="button" class="btn_layer_ok">등록</button>
+            </div>
+            <div class="layer_content type_02">
+            	<h2>관심그룹 선택</h2>
+                <select id="layer_group_select_02" class="select_box_group">
+                	<option value="1">그룹명_01</option>
+                    <option value="2">그룹명_02</option>
+                </select>
+                <h2>관심그룹 선택</h2>
+                <select id="layer_group_item_select_02" class="select_box_item">
+                	<option>관심그룹을 선택하세요</option>
+                </select>
+                <button type="button" class="btn_layer_ok">확인</button>
+            </div>
+            <footer>
+            	<p>편집은 관심그룹 페이지를 이용하세요</p>
+                <a href="#GROUP_LIST">관심그룹 으로 이동</a>
+            </footer>
+            <button type="button" class="btn_close_layer">닫기</button>
+        </section>
+    </div>
+</section><!-- End of #GROUP_LAYER -->
+
+<!--
+<section id="SEARCH_LAYER" data-role="page" class="up">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<h1>SEARCH_LAYER</h1>
+        <a data-rel="back">이전</a><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+    	<div class="item_commen_div">
+        	<div class="item_commen_func">
+            	<h1 class="itemCd">6CU14</h1>
+            	<button type="button" class="btn_item_commen_info">종목정보</button>
+                <button type="button" class="btn_layer_interest">관심종목</button>
+                <button type="button" class="btn_layer_search">종목검색</button>
+            </div>
+            <div class="item_commen_info">
+            	<span class="itemCaption">----</span>
+            	<span class="Curr">0.9132</span>
+                <span class="Diff">0.0004</span>
+                <span class="UpDwnRatio">0.02</span>
+            	<div class="mini_chart_area">MIni Chart</div>
+            </div>
+            <div class="item_desc_div" style="display:none">
+                <button type="button" class="btn_item_commen_info_close">종목정보 닫기</button>
+            </div>
+            <div class="item_commen_navi" data-role="navbar">
+            	<ul>
+                    <li><a href="#ITEM_ASKING">호가</a></li>
+                    <li><a href="#ITEM_CONCLUDE">체결</a></li>
+                    <li><a href="#ITEM_DAILY">일자별</a></li>
+                    <li class="option_item_only"><a href="#ITEM_OPTION">행사가</a></li>
+                    <li><a href="#ITEM_CHART">차트</a></li>
+                </ul>
+            </div>
+        </div>
+    </article> <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
+    <!--
+    <div class="bg_layer">
+    	<section id="layer_search" class="layer_section">
+        	<header>
+            	<h1>종목검색</h1>
+                <div class="layer_type_div" data-role="controlgroup" data-type="horizontal">
+                	<input type="radio" name="layer_search_type" id="layer_search_type_01" value="code" checked="checked" />
+                    <label for="layer_search_type_01">코드로 찾기</label>
+                    <input type="radio" name="layer_search_type" id="layer_search_type_02" value="item" />
+                    <label for="layer_search_type_02">관심종목 찾기</label>
+                </div>
+            </header>
+            <div class="layer_content type_01">
+            	<h2><label for="layer_search_fdm">거래소</label></h2>
+                <select id="layer_search_fdm" class="selectbox_fdm">
+                	<option value="1">거래소명 01</option>
+                    <option value="2">거래소명 02</option>
+                </select>
+                <h2><label for="layer_search_code">종목코드</label></h2>
+                <input type="text" id="layer_search_code" placeholder="종목코드를 입력하세요" data-wrapper-class="ui-btn" />
+                <div class="layer_seach_step_div" data-role="controlgroup" data-type="horizontal">
+                	<select id="layer_seach_stap_01">
+                    	<option value="">통화</option>
+                    </select>
+                    <select id="layer_seach_stap_02">
+                    	<option value="">영국달러</option>
+                    </select>
+                    <select id="layer_seach_stap_02">
+                    	<option value="">15/03</option>
+                    </select>
+                </div>
+                <button type="button" class="btn_layer_ok">확인</button>
+            </div>
+            <div class="layer_content type_02">
+            	<h2>관심그룹 선택</h2>
+                <select id="layer_group_select_02" class="select_box_group">
+                	<option value="1">그룹명_01</option>
+                    <option value="2">그룹명_02</option>
+                </select>
+                <h2>관심그룹 선택</h2>
+                <select id="layer_group_item_select_02" class="select_box_item">
+                	<option value="1">종목명</option>
+                    <option value="2">종목명</option>
+                </select>
+                <button type="button" class="btn_layer_ok">확인</button>
+            </div>
+            <footer>
+            	<p>세부검색은 검색페이지를 이용하세요</p>
+                <a href="#ITEM_SEARCH">검색페이지로 이동</a>
+            </footer>
+            <button type="button" class="btn_close_layer">닫기</button>
+        </section>
+    </div>
+</section><!-- End of #GROUP_LAYER -->
+
+<section id="FOOTER_MENU" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">이전</a>
+        <h1>FOOTER_MENU</h1>
+        <button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+    	<div data-role="fieldcontain">
+        <h1>하단메뉴</h1> 
+        <a href="#HELP">도움말레이어</a>
+        </div>
+    </article>
+    <footer class="open" data-role="footer" data-position="fixed" data-tap-toggle="false">
+    	<div class="footer_menu_area">
+            <div class="btn_all_menu_div">
+                <button type="button" class="btn_footer_menu">전체메뉴</button>
+            </div>
+            <div class="shortcut_menu_div" data-role="navbar">
+              <ul class="shortcut_menu">
+                <li><a href="#BOARD_LIST" data-code="1"  data-type="board_list">공지사항</a></li>
+                <li><a href="#ITEM_SELECT">종목검색</a></li>
+                <li><a href="#ITEM_LIST">관심종목</a></li>
+                <li><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></li>
+                <li><a href="#HELP">도움말</a></li>
+              </ul>
+            </div>
+            <form id="footer_real_check" >
+                <label for="footer_real_check">실시간 데이터</label>
+                <input name="footer_real_check" id="footer_real_check" type="checkbox">
+            </form>
+            <div id="close_app_div"><a href="#LOGIN" class="ui-link">종료</a></div>
+        </div>
+        <div class="all_menu" style="height: 517px;">
+          <h1><a href="tel:'+tel_number+'">전화주문</a></h1>
+          <h1><a href="#ITEM_SELECT">종목검색</a></h1>
+          <h1><a href="#ITEM_LIST">관심종목</a></h1>
+          <h1><a href="#BOARD_LIST" data-code="1" data-type="board_list">공지사항</a></h1>
+          <h1><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></h1>
+          <h1><a href="#HELP">도움말</a></h1>
+          
+          <div class="all_menu_group">
+          	<h1>등록 된관심 그룹</h1>
+            <h2><a href="#ITEM_LIST" data-code="group_1415160361878">test_group01</a></h2>
+            <ul>
+            	<li><a href="#ITEM_ASKING" data-code="EMDZ14" data-server_code="EMDZ14" data-type="futures">E-Mini S&amp;P Midcap 400</a></li>
+                <li><a href="#ITEM_ASKING" data-code="OESZ14" data-server_code="OESZ14_C675" data-type="option_item">E-mini S&amp;P 500 Dec'14</a></li>
+                <li><a href="#ITEM_ASKING" data-code="OHHIZ14" data-server_code="OHHIZ14_C10400" data-type="option_item" class="ui-link ui-draggable">H-Share Index Options Dec'14</a></li>
+                <li><a href="#ITEM_ASKING" data-code="ESZ14" data-server_code="ESZ14" data-type="futures" class="ui-link ui-draggable">CME S&amp;P 500 Mini</a></li>
+            </ul>
+            <p>등록된 관심그룹과 종목이 없습니다.</p>
+          </div>
+          
+        </div>
+    </footer>
+  
+</section><!-- End of #FOOTER_MENU -->
+
+
+<section id="LOADING" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">이전</a>
+        <h1>LOADING</h1>
+        <button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
+    </header>
+    <article data-role="content">
+    	<div data-role="fieldcontain">
+        <h1>LADING 이미지</h1>
+        </div>
+    </article>
+    <footer data-role="footer" data-position="fixed" data-tap-toggle="false">
+        <div class="shortcut_menu_div" data-role="navbar">
+        	<ul class="shortcut_menu">
+            	<li><a href="#">item01</a></li>
+                <li><a href="#">item02</a></li>
+                <li><a href="#">item03</a></li>
+                <li><a href="#">item04</a></li>
+                <li><a href="#">item05</a></li>
+            </ul>
+        </div>
+        <div class="all_menu">
+        	<h1><a href="tel:000-0000-0000">바로 전화주문</a></h1>
+        	<h1><a href="#ITEM_SEARCH">종목검색</a></h1>
+            <h1><a href="#GROUP_LIST">관심종목</a></h1>
+            	<h2><a href="#GROUP_ITEM" data-code="">관심종목 이름01</a></h2>
+                    <ul>
+                        <li><a href="#ITEM_ASKING" data-code="">종목코드 / 이름</a></li>
+                        <li><a href="#ITEM_ASKING" data-code="">종목코드 / 이름</a></li>
+                        <li><a href="#ITEM_ASKING" data-code="">종목코드 / 이름</a></li>
+                    </ul>
+               <h2><a href="#GROUP_LIST" data-code="">관심종목 이름02</a></h2>
+                    <ul>
+                        <li><a href="#ITEM_ASKING" data-code="">종목코드 / 이름</a></li>
+                        <li><a href="#ITEM_ASKING" data-code="">종목코드 / 이름</a></li>
+                        <li><a href="#ITEM_ASKING" data-code="">종목코드 / 이름</a></li>
+                    </ul>
+             <h1><a href="#BOARD_LIST" data-code="">투자정보</a></h1>
+             	<ul>
+                	<li><a "#BOARD_LIST" data-code="">이슈리포트</a></li>
+                    <li><a "#BOARD_LIST" data-code="">Daily News</a></li>
+                    <li><a "#BOARD_LIST" data-code="">시황</a></li>
+                    <li><a "#BOARD_LIST" data-code="">해외일정</a></li>
+                </ul>
+            <h1><a href="#">공지사항</a></h1>                
+        </div>
+    </footer>    
+</section><!-- End of #LOADING -->
+
+
+<section id="DEV" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">이전</a>
+        <h1>DEV</h1>
+    </header>
+    <article data-role="content">
+        <button type="button" id="btn_test_localstorage">로컬스토리지 테스트</button>
+        <button type="button" id="btn_del_exchange">종목정보 삭제</button>
+        <button type="button" id="btn_del_group">그룹정보 삭제</button>
+        <button type="button" id="btn_del_menu">하단메뉴 정보 삭제</button>
+    </article>
+    <footer data-role="footer">
+    	
+    </footer>
+</section><!-- End of #DEV -->
+
+<section id="NOTIFICATION" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">이전</a>
+        <h1>DEV</h1>
+    </header>
+    <article data-role="content">
+        <select id="notification_select">
+        	<option value="confirm">confirm</option>
+            <option value="alert">alert</option>
+        </select>
+        <input type="text" id="notification_text" placeholder="알림 창의 메세지" />
+        <button id="btn_notification_test">Test Not</button>
+        <p id="preview_notification_data">--</p>
+    </article>
+    <footer data-role="footer">
+    	
+    </footer>
+</section><!-- End of #DEV -->
+
+ 
+</body>
+</html>

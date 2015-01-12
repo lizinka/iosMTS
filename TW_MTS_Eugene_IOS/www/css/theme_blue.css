@@ -1,0 +1,51 @@
+
+/*기본 색상*/
+#app[data-theme="blue"] header[data-role="header"],
+#app[data-theme="blue"] header .ui-select div,
+#app[data-theme="blue"] #item_select_table div.ui-select,
+#app[data-theme="blue"] #dialog_item_select_table div.ui-select,
+#app[data-theme="blue"] #item_select_table span.exchange,
+#app[data-theme="blue"] #dialog_item_select_table span.exchange,
+#app[data-theme="blue"] #board_list .board_tite span.category,
+#app[data-theme="blue"] footer .shortcut_menu_div{background-color:#139991;}
+
+/*강조색*/
+#app[data-theme="blue"] header a[data-rel="back"]:after,
+#app[data-theme="blue"] #SETTING button#save_setting,
+#app[data-theme="blue"] #ITEM_LIST #item_type_select button.active,
+#app[data-theme="blue"] #ITEM_CHART div.ui-radio label.ui-radio-on,
+#app[data-theme="blue"] #ITEM_CHART .ui-select.active #chart_set_min_number-button,
+#app[data-theme="blue"] footer .shortcut_menu_div a.act,
+#app[data-theme="blue"] .page_dialog header button,
+#app[data-theme="blue"] #dialog_item_group h3 button,
+#app[data-theme="blue"] #dialog_item_group li button.btn_del_item,
+#app[data-theme="blue"] #dialog_chart_setting ul button,
+#app[data-theme="blue"] header a[data-rel="back"]:active,
+#app[data-theme="blue"] header button.btn_header_right:active{background-color:#0A4C49;}
+
+/*정보창*/
+#app[data-theme="blue"] .page_dialog header,
+#app[data-theme="blue"] header button.btn_dialog.open{background-color:#1A4C4A;}
+#app[data-theme="blue"] .page_dialog{border-color:#1A4C4A;}
+
+/* 종목별 메뉴
+#app .item_commen_navi li a.active{background-color:rgb(94,85,86);}
+#app #edit_group_div button{background-color:rgb(94,85,86);}
+#app .item_commen_navi ul{border-color:rgb(94,85,86);}
+*/
+
+
+/*전체메뉴 영역*/
+#app[data-theme="blue"] footer .footer_menu_area .ui-checkbox,
+#app[data-theme="blue"] footer .all_menu_group h1,
+#app[data-theme="blue"] footer .all_menu>h1 a{background-color:#6FD4CF;}
+#app[data-theme="blue"] footer .all_menu_group{border-color:#6FD4CF;}
+
+/*
+#app footer .all_menu a.ui-draggable-dragging{background-image:linear-gradient(270deg, #ffff00 -15%,  #9e080d 30%);
+											  background-image:-webkit-linear-gradient(270deg, #ffff00 -15%,  #9e080d 30%);
+											  }
+*/
+
+
+

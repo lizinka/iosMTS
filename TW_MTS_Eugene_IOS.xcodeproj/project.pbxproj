@@ -1,0 +1,479 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C273BFA81A5E785400ACE1E1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFA71A5E785400ACE1E1 /* main.m */; };
+		C273BFAB1A5E785400ACE1E1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFAA1A5E785400ACE1E1 /* AppDelegate.m */; };
+		C273BFAE1A5E785400ACE1E1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFAD1A5E785400ACE1E1 /* ViewController.m */; };
+		C273BFB11A5E785400ACE1E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C273BFAF1A5E785400ACE1E1 /* Main.storyboard */; };
+		C273BFB31A5E785400ACE1E1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C273BFB21A5E785400ACE1E1 /* Images.xcassets */; };
+		C273BFB61A5E785400ACE1E1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C273BFB41A5E785400ACE1E1 /* LaunchScreen.xib */; };
+		C273BFC21A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFC11A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.m */; };
+		C273BFCE1A5E7FBB00ACE1E1 /* WebBridgeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFCC1A5E7FBB00ACE1E1 /* WebBridgeViewController.m */; };
+		C273BFD01A5EA0D200ACE1E1 /* WebBridgeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C273BFD21A5EA0D200ACE1E1 /* WebBridgeViewController.xib */; };
+		C273C02C1A5FB12000ACE1E1 /* SocketConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C02B1A5FB12000ACE1E1 /* SocketConnector.m */; };
+		C273C0301A5FB26400ACE1E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C02F1A5FB26400ACE1E1 /* Reachability.m */; };
+		C273C29C1A5FC16100ACE1E1 /* www in Resources */ = {isa = PBXBuildFile; fileRef = C273C29B1A5FC16100ACE1E1 /* www */; };
+		C273C29E1A62459800ACE1E1 /* Datas in Resources */ = {isa = PBXBuildFile; fileRef = C273C29D1A62459800ACE1E1 /* Datas */; };
+		C273C2A11A62656500ACE1E1 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C2A01A62656500ACE1E1 /* Global.m */; };
+		C273C2A31A626F5000ACE1E1 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C273C2A21A626F5000ACE1E1 /* libz.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C273BFBC1A5E785400ACE1E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C273BF9A1A5E785400ACE1E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C273BFA11A5E785400ACE1E1;
+			remoteInfo = TW_MTS_Eugene_IOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TW_MTS_Eugene_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C273BFA61A5E785400ACE1E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C273BFA71A5E785400ACE1E1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C273BFA91A5E785400ACE1E1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C273BFAA1A5E785400ACE1E1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C273BFAC1A5E785400ACE1E1 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C273BFAD1A5E785400ACE1E1 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C273BFB01A5E785400ACE1E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C273BFB21A5E785400ACE1E1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C273BFB51A5E785400ACE1E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		C273BFBB1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TW_MTS_Eugene_IOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C273BFC01A5E785400ACE1E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C273BFC11A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TW_MTS_Eugene_IOSTests.m; sourceTree = "<group>"; };
+		C273BFCB1A5E7FBB00ACE1E1 /* WebBridgeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebBridgeViewController.h; sourceTree = "<group>"; };
+		C273BFCC1A5E7FBB00ACE1E1 /* WebBridgeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebBridgeViewController.m; sourceTree = "<group>"; };
+		C273BFD11A5EA0D200ACE1E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/WebBridgeViewController.xib; sourceTree = "<group>"; };
+		C273C02A1A5FB12000ACE1E1 /* SocketConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketConnector.h; sourceTree = "<group>"; };
+		C273C02B1A5FB12000ACE1E1 /* SocketConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConnector.m; sourceTree = "<group>"; };
+		C273C02D1A5FB20200ACE1E1 /* StructLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StructLayout.h; sourceTree = "<group>"; };
+		C273C02E1A5FB26400ACE1E1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		C273C02F1A5FB26400ACE1E1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		C273C29B1A5FC16100ACE1E1 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		C273C29D1A62459800ACE1E1 /* Datas */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Datas; sourceTree = "<group>"; };
+		C273C29F1A62656500ACE1E1 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
+		C273C2A01A62656500ACE1E1 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
+		C273C2A21A626F5000ACE1E1 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C273BF9F1A5E785400ACE1E1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C273C2A31A626F5000ACE1E1 /* libz.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C273BFB81A5E785400ACE1E1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C273BF991A5E785400ACE1E1 = {
+			isa = PBXGroup;
+			children = (
+				C273C2A21A626F5000ACE1E1 /* libz.dylib */,
+				C273BFA41A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */,
+				C273BFBE1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests */,
+				C273BFA31A5E785400ACE1E1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C273BFA31A5E785400ACE1E1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */,
+				C273BFBB1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C273BFA41A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */ = {
+			isa = PBXGroup;
+			children = (
+				C273C29F1A62656500ACE1E1 /* Global.h */,
+				C273C2A01A62656500ACE1E1 /* Global.m */,
+				C273C29D1A62459800ACE1E1 /* Datas */,
+				C273C29B1A5FC16100ACE1E1 /* www */,
+				C273C02E1A5FB26400ACE1E1 /* Reachability.h */,
+				C273C02F1A5FB26400ACE1E1 /* Reachability.m */,
+				C273C02D1A5FB20200ACE1E1 /* StructLayout.h */,
+				C273C02A1A5FB12000ACE1E1 /* SocketConnector.h */,
+				C273C02B1A5FB12000ACE1E1 /* SocketConnector.m */,
+				C273BFA91A5E785400ACE1E1 /* AppDelegate.h */,
+				C273BFAA1A5E785400ACE1E1 /* AppDelegate.m */,
+				C273BFAC1A5E785400ACE1E1 /* ViewController.h */,
+				C273BFAD1A5E785400ACE1E1 /* ViewController.m */,
+				C273BFAF1A5E785400ACE1E1 /* Main.storyboard */,
+				C273BFB21A5E785400ACE1E1 /* Images.xcassets */,
+				C273BFB41A5E785400ACE1E1 /* LaunchScreen.xib */,
+				C273BFA51A5E785400ACE1E1 /* Supporting Files */,
+				C273BFCB1A5E7FBB00ACE1E1 /* WebBridgeViewController.h */,
+				C273BFCC1A5E7FBB00ACE1E1 /* WebBridgeViewController.m */,
+				C273BFD21A5EA0D200ACE1E1 /* WebBridgeViewController.xib */,
+			);
+			path = TW_MTS_Eugene_IOS;
+			sourceTree = "<group>";
+		};
+		C273BFA51A5E785400ACE1E1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C273BFA61A5E785400ACE1E1 /* Info.plist */,
+				C273BFA71A5E785400ACE1E1 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C273BFBE1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				C273BFC11A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.m */,
+				C273BFBF1A5E785400ACE1E1 /* Supporting Files */,
+			);
+			path = TW_MTS_Eugene_IOSTests;
+			sourceTree = "<group>";
+		};
+		C273BFBF1A5E785400ACE1E1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C273BFC01A5E785400ACE1E1 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C273BFA11A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C273BFC51A5E785400ACE1E1 /* Build configuration list for PBXNativeTarget "TW_MTS_Eugene_IOS" */;
+			buildPhases = (
+				C273BF9E1A5E785400ACE1E1 /* Sources */,
+				C273BF9F1A5E785400ACE1E1 /* Frameworks */,
+				C273BFA01A5E785400ACE1E1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TW_MTS_Eugene_IOS;
+			productName = TW_MTS_Eugene_IOS;
+			productReference = C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C273BFBA1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C273BFC81A5E785400ACE1E1 /* Build configuration list for PBXNativeTarget "TW_MTS_Eugene_IOSTests" */;
+			buildPhases = (
+				C273BFB71A5E785400ACE1E1 /* Sources */,
+				C273BFB81A5E785400ACE1E1 /* Frameworks */,
+				C273BFB91A5E785400ACE1E1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C273BFBD1A5E785400ACE1E1 /* PBXTargetDependency */,
+			);
+			name = TW_MTS_Eugene_IOSTests;
+			productName = TW_MTS_Eugene_IOSTests;
+			productReference = C273BFBB1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C273BF9A1A5E785400ACE1E1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = winwaysystems;
+				TargetAttributes = {
+					C273BFA11A5E785400ACE1E1 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					C273BFBA1A5E785400ACE1E1 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = C273BFA11A5E785400ACE1E1;
+					};
+				};
+			};
+			buildConfigurationList = C273BF9D1A5E785400ACE1E1 /* Build configuration list for PBXProject "TW_MTS_Eugene_IOS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C273BF991A5E785400ACE1E1;
+			productRefGroup = C273BFA31A5E785400ACE1E1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C273BFA11A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */,
+				C273BFBA1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C273BFA01A5E785400ACE1E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C273C29E1A62459800ACE1E1 /* Datas in Resources */,
+				C273BFB11A5E785400ACE1E1 /* Main.storyboard in Resources */,
+				C273BFB61A5E785400ACE1E1 /* LaunchScreen.xib in Resources */,
+				C273BFD01A5EA0D200ACE1E1 /* WebBridgeViewController.xib in Resources */,
+				C273C29C1A5FC16100ACE1E1 /* www in Resources */,
+				C273BFB31A5E785400ACE1E1 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C273BFB91A5E785400ACE1E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C273BF9E1A5E785400ACE1E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C273C02C1A5FB12000ACE1E1 /* SocketConnector.m in Sources */,
+				C273BFAE1A5E785400ACE1E1 /* ViewController.m in Sources */,
+				C273BFAB1A5E785400ACE1E1 /* AppDelegate.m in Sources */,
+				C273C2A11A62656500ACE1E1 /* Global.m in Sources */,
+				C273BFCE1A5E7FBB00ACE1E1 /* WebBridgeViewController.m in Sources */,
+				C273C0301A5FB26400ACE1E1 /* Reachability.m in Sources */,
+				C273BFA81A5E785400ACE1E1 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C273BFB71A5E785400ACE1E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C273BFC21A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C273BFBD1A5E785400ACE1E1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C273BFA11A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */;
+			targetProxy = C273BFBC1A5E785400ACE1E1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C273BFAF1A5E785400ACE1E1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C273BFB01A5E785400ACE1E1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C273BFB41A5E785400ACE1E1 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C273BFB51A5E785400ACE1E1 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		C273BFD21A5EA0D200ACE1E1 /* WebBridgeViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C273BFD11A5EA0D200ACE1E1 /* Base */,
+			);
+			name = WebBridgeViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C273BFC31A5E785400ACE1E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C273BFC41A5E785400ACE1E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C273BFC61A5E785400ACE1E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TW_MTS_Eugene_IOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C273BFC71A5E785400ACE1E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TW_MTS_Eugene_IOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		C273BFC91A5E785400ACE1E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = TW_MTS_Eugene_IOSTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TW_MTS_Eugene_IOS.app/TW_MTS_Eugene_IOS";
+			};
+			name = Debug;
+		};
+		C273BFCA1A5E785400ACE1E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = TW_MTS_Eugene_IOSTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TW_MTS_Eugene_IOS.app/TW_MTS_Eugene_IOS";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C273BF9D1A5E785400ACE1E1 /* Build configuration list for PBXProject "TW_MTS_Eugene_IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C273BFC31A5E785400ACE1E1 /* Debug */,
+				C273BFC41A5E785400ACE1E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C273BFC51A5E785400ACE1E1 /* Build configuration list for PBXNativeTarget "TW_MTS_Eugene_IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C273BFC61A5E785400ACE1E1 /* Debug */,
+				C273BFC71A5E785400ACE1E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C273BFC81A5E785400ACE1E1 /* Build configuration list for PBXNativeTarget "TW_MTS_Eugene_IOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C273BFC91A5E785400ACE1E1 /* Debug */,
+				C273BFCA1A5E785400ACE1E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C273BF9A1A5E785400ACE1E1 /* Project object */;
+}
