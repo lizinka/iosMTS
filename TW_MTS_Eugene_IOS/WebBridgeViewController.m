@@ -14,7 +14,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self networkCheck];
+    //return YES;
     global = [[Global alloc] initWithIF];
     UserId = [[NSString alloc] init];
     Password = [[NSString alloc] init];
@@ -185,8 +186,8 @@
         Password = [json objectForKey:@"pass"];
         LoginType = [json objectForKey:@"loginType"];
         
-        UserId = @"opercut";
-        Password = @"pohaha28";
+   //     UserId = @"opercut";
+   //     Password = @"pohaha28";
         [conn Connect:@"61.78.34.111" port:33101];
     }
 }
@@ -206,7 +207,11 @@
 }
 
 - (void)RequestStart {
-    [self Request:1 gtr:@"wfxlogon" tr:@"usrlogon"];
+
+
+  
+  
+   [self Request:1 gtr:@"wfxlogon" tr:@"usrlogon"];
 }
 
 - (void) Request:(int)gubun gtr : (NSString*)gtrcode tr : (NSString*)trcode {
@@ -981,15 +986,26 @@
     else 
         return nil;
 }
+@synthesize hud;
 
 - (int) OnError:(NSError*) err {
-    UIAlertView *alert = [[UIAlertView alloc]
+  /*  UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"접속에러"
                           message:@"연결이 되지 않습니다."
                           delegate:nil
                           cancelButtonTitle:@"확인"
                           otherButtonTitles:nil];
-    [alert show];
+    [alert show];*/
+    hud = [LGViewHUD defaultHUD];
+    hud.image = [UIImage imageNamed:@"rounded-checkmark.png"];
+    hud.topText = @"확인";
+    hud.bottomText = @"네트워크 재접속 중입니다.(6)";
+    hud.activityIndicatorOn = YES;
+    [self setTimer];
+    [hud showInView:self.view];
+    
+
+    
     //self.loginScreen.btnDisConnect.enabled  = FALSE;
     NSLog(@"%@",[err description]);//code
     return 0;
@@ -1087,4 +1103,180 @@
 {
     
 }
+
+
+//- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+//{
+//    [self networkCheck];
+//    return YES;
+//}
+
+//네트워크 상태 체크 Notification 등록
+- (void)networkCheck
+{
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
+    
+    internetReach = [Reachability reachabilityForInternetConnection];
+    [internetReach startNotifier];
+    [self updateInterfaceWithReachability:internetReach];
+}
+
+
+// 네트워크 상태가 변경 될 경우 호출된다.
+- (void)reachabilityChanged:(NSNotification *)note
+{
+    Reachability *curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    [self updateInterfaceWithReachability:curReach];
+}
+
+// 네트워크 상태가 변경 될 경우 처리
+- (void)updateInterfaceWithReachability:(Reachability *)curReach
+{
+    if(curReach == internetReach)
+    {
+        NetworkStatus netStatus = [curReach currentReachabilityStatus];
+        
+        NSString *statusString = @"";
+        switch (netStatus)
+        {
+            case NotReachable:
+                statusString = @"Access Not Available";
+                //재접속 연결을 하고 있는 상태라면 그냥 Return
+                if (!m_bisReconnMode ) {
+                    
+                    m_bisReconnMode = true;
+                    @try {
+                        NSMutableDictionary *jObj = [[NSMutableDictionary alloc ] init];
+                        
+                        
+                        [jObj setValue:@"#NETWORK" forKey:@"pageId"];
+                        [jObj setValue:@"close" forKey:@"type"];
+                        
+                        
+                        NSData* kData = [NSJSONSerialization dataWithJSONObject:jObj options:NSJSONWritingPrettyPrinted error:nil];
+                        
+                        NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
+                        [self csendWData :[[NSString alloc] initWithBytes:&kJson length:sizeof(kJson) encoding:0x80000000 + kCFStringEncodingDOSKorean ]];
+                        
+               //         [self setReconnSocket];
+                    } @catch (NSException *ex) {
+                        
+                    }
+                    //    networkCheckDlg = new BasicProgressDialog(MainActivity.this);
+                    //      networkCheckDlg.execute(5);
+                    
+                }
+                break;
+            case ReachableViaWiFi:
+                [self setReconnSocket];
+                [hud removeFromSuperview];
+                break;
+            case ReachableViaWWAN:
+                [self setReconnSocket];
+                [hud removeFromSuperview];
+                break;
+                
+            default:
+                [self setReconnSocket];
+                [hud removeFromSuperview];
+                break;
+        }
+        
+        NSLog(@"Net Status changed. current status=%@ ", statusString);
+        
+        // 네트워크 상태에 따라 처리
+    }
+}
+
+
+
+- (bool) setReconnSocket { // throws IOException
+    @try{
+        if([conn GetinStream] != nil)
+        {
+            [conn Disconnect];
+        }
+        
+        m_bisReconnMode = true;
+        
+        //로그인 페이지임.
+        if ([UserId  isEqual: @""] || [Password  isEqual: @""] )
+        {
+            m_bisReconnMode = false;
+         //   if (networkCheckDlg != null)
+         //   {
+         //       networkCheckDlg.cancel(true);
+         //   }
+            return true;
+        }
+        
+  
+        [conn Connect:@"61.78.34.111" port:33101];
+    }
+    
+   @catch (NSException *ex) {
+   }
+   return true;
+}
+
+
+
+
+- (void) setTimer {
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                      target:self
+                                                    selector:@selector(startTimer:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+    _timer = timer;
+    timecount = 5;
+}
+
+
+
+
+- (void) startTimer : (NSTimer *) timer {
+    NSString* Errmsg;
+    Errmsg = [NSString stringWithFormat:@"네트워크 재접속 중입니다.(%d)",timecount-- ];
+    hud.bottomText = Errmsg;
+    if (timecount == 0)
+    {
+        [self stopTimer];
+        [hud removeFromSuperview];
+        
+
+        UIAlertView *alertView;
+        alertView = [[UIAlertView alloc] initWithTitle:@"접속에러" message:@"연결이 되지 않습니다. 종료하시겠습니까?" delegate:self cancelButtonTitle:@"종료" otherButtonTitles:@"재접속",nil];
+        [alertView show];
+      
+        
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    // 사용자가 Yes를 선택한 경우
+    if (buttonIndex == 1) {
+        hud = [LGViewHUD defaultHUD];
+        hud.image = [UIImage imageNamed:@"rounded-checkmark.png"];
+        hud.topText = @"확인";
+        hud.bottomText = @"네트워크 재접속 중입니다.(6)";
+        hud.activityIndicatorOn = YES;
+        [self setTimer];
+        [hud showInView:self.view];
+    }
+    else
+    {
+        exit(0);
+    }
+}
+
+- (void) stopTimer {
+    if( _timer != NULL ) {
+        [_timer invalidate];
+        _timer = NULL;
+    }
+}
+
 @end

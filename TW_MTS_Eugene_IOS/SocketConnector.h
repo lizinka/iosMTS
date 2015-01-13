@@ -35,7 +35,7 @@
 -(void) Connect:(NSString*)ip port:(int)remoteport;
 -(void) Send:(int)tsize sendmsg:(NSString*)msg;
 -(void) Disconnect;
-
+-(NSInputStream*) GetinStream;
 -(void) OnOpened;
 -(void) OnHasRead;
 -(void) OnHasWrite;

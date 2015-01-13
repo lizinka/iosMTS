@@ -251,4 +251,10 @@
 	NSLog(@"OnEOF....");
 }
 
+-(NSInputStream*) GetinStream
+{
+    return instream;
+    
+}
+
 @end

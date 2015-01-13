@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A4CCA1C91A63D77D0004911B /* ViewHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CCA1C81A63D77D0004911B /* ViewHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A4CCA1CB1A64A4E60004911B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */; };
 		C273BFA81A5E785400ACE1E1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFA71A5E785400ACE1E1 /* main.m */; };
 		C273BFAB1A5E785400ACE1E1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFAA1A5E785400ACE1E1 /* AppDelegate.m */; };
 		C273BFAE1A5E785400ACE1E1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFAD1A5E785400ACE1E1 /* ViewController.m */; };
@@ -17,7 +19,7 @@
 		C273BFCE1A5E7FBB00ACE1E1 /* WebBridgeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFCC1A5E7FBB00ACE1E1 /* WebBridgeViewController.m */; };
 		C273BFD01A5EA0D200ACE1E1 /* WebBridgeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C273BFD21A5EA0D200ACE1E1 /* WebBridgeViewController.xib */; };
 		C273C02C1A5FB12000ACE1E1 /* SocketConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C02B1A5FB12000ACE1E1 /* SocketConnector.m */; };
-		C273C0301A5FB26400ACE1E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C02F1A5FB26400ACE1E1 /* Reachability.m */; };
+		C273C0301A5FB26400ACE1E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C02F1A5FB26400ACE1E1 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C273C29C1A5FC16100ACE1E1 /* www in Resources */ = {isa = PBXBuildFile; fileRef = C273C29B1A5FC16100ACE1E1 /* www */; };
 		C273C29E1A62459800ACE1E1 /* Datas in Resources */ = {isa = PBXBuildFile; fileRef = C273C29D1A62459800ACE1E1 /* Datas */; };
 		C273C2A11A62656500ACE1E1 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C2A01A62656500ACE1E1 /* Global.m */; };
@@ -35,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A4CCA1C71A63D77D0004911B /* ViewHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHUD.h; sourceTree = "<group>"; };
+		A4CCA1C81A63D77D0004911B /* ViewHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewHUD.m; sourceTree = "<group>"; };
+		A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TW_MTS_Eugene_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C273BFA61A5E785400ACE1E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C273BFA71A5E785400ACE1E1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -68,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4CCA1CB1A64A4E60004911B /* SystemConfiguration.framework in Frameworks */,
 				C273C2A31A626F5000ACE1E1 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,6 +91,7 @@
 		C273BF991A5E785400ACE1E1 = {
 			isa = PBXGroup;
 			children = (
+				A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */,
 				C273C2A21A626F5000ACE1E1 /* libz.dylib */,
 				C273BFA41A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */,
 				C273BFBE1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests */,
@@ -104,6 +111,8 @@
 		C273BFA41A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */ = {
 			isa = PBXGroup;
 			children = (
+				A4CCA1C71A63D77D0004911B /* ViewHUD.h */,
+				A4CCA1C81A63D77D0004911B /* ViewHUD.m */,
 				C273C29F1A62656500ACE1E1 /* Global.h */,
 				C273C2A01A62656500ACE1E1 /* Global.m */,
 				C273C29D1A62459800ACE1E1 /* Datas */,
@@ -257,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4CCA1C91A63D77D0004911B /* ViewHUD.m in Sources */,
 				C273C02C1A5FB12000ACE1E1 /* SocketConnector.m in Sources */,
 				C273BFAE1A5E785400ACE1E1 /* ViewController.m in Sources */,
 				C273BFAB1A5E785400ACE1E1 /* AppDelegate.m in Sources */,
@@ -464,6 +474,7 @@
 				C273BFC71A5E785400ACE1E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C273BFC81A5E785400ACE1E1 /* Build configuration list for PBXNativeTarget "TW_MTS_Eugene_IOSTests" */ = {
 			isa = XCConfigurationList;
@@ -472,6 +483,7 @@
 				C273BFCA1A5E785400ACE1E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
