@@ -760,7 +760,17 @@
                 
                 if ([strcode hasPrefix:@"m3005"] || [strcode hasPrefix:@"m3004"] || [strcode hasPrefix:@"m3003"] || [strcode hasPrefix:@"m3002"] || [strcode hasPrefix:@"m3001"])
                 {
+                  //  NSString *strcode = [[NSString alloc] initWithBytes:trCommheader.svcc length:sizeof(trCommheader.svcc) //encoding:0x80000000 + kCFStringEncodingDOSKorean ];
+               
+                   // [strcode release];
+                    
                     //차트데이터 처리.
+                    if([self ReceiveQueryData : recvData])
+                    {
+                       // ChartShow();
+                        m_bIsChartShow = true;
+                    }
+                    return 0;
                 }
                 else if ([strcode hasPrefix:@"mibo1030"])
                 {
@@ -940,6 +950,46 @@
     }
     
 }
+
+
+- (bool) ReceiveQueryData : (NSMutableData *)mdata
+{
+    TrLedgeheader trLedgeheader;
+    GridInOut gridInOut;
+    Xibg3002_OUT Xibg3002_OUT;
+    Xibg3002_OCCUR Xibg3002_OCCUR;
+    char *bdata = (char *)[mdata bytes];
+    memcpy(&trLedgeheader, &bdata[0], sizeof(trLedgeheader));
+    memset(&Xibg3002_OUT, 0x00, sizeof(Xibg3002_OUT));
+    memcpy(&Xibg3002_OUT, &bdata[sizeof(TrLedgeheader)], sizeof(Xibg3002_OUT));
+    
+    NSString *rmsg = [[NSString alloc] initWithBytes:&trLedgeheader.rmsg[0] length:sizeof(trLedgeheader.rmsg) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+    
+    // [rmsg release];
+    
+    memcpy(&gridInOut, &bdata[sizeof(TrLedgeheader) + sizeof(Xibg3002_OUT)], sizeof(gridInOut));
+    int count = atoi(gridInOut.nrow);
+    int dsize = 0;
+    for (int i = 0; i < count; i++) {
+        dsize = sizeof(TrLedgeheader) + sizeof(Xibg3002_OUT) + sizeof(GridInOut) + (sizeof(Xibg3002_OCCUR) * i);
+        memcpy(&Xibg3002_OCCUR, &bdata[dsize], sizeof(Xibg3002_OCCUR));
+        NSString *r_tday = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_tday[0] length:sizeof(Xibg3002_OCCUR.r_tday) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+        NSString *r_time = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_time[0] length:sizeof(Xibg3002_OCCUR.r_time) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+        NSString *r_open = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_open[0] length:sizeof(Xibg3002_OCCUR.r_open) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+        NSString *r_high = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_high[0] length:sizeof(Xibg3002_OCCUR.r_high) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+        NSString *r_lowp = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_lowp[0] length:sizeof(Xibg3002_OCCUR.r_lowp) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+        NSString *r_last = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_last[0] length:sizeof(Xibg3002_OCCUR.r_last) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+        NSString *r_tvol = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_tvol[0] length:sizeof(Xibg3002_OCCUR.r_tvol) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+        
+        
+        
+    }
+    return true;
+
+}
+
+
+
 
 -(NSData *)gzipDecompress : (NSData *)data {
     
