@@ -208,9 +208,10 @@
 
 - (void)RequestStart {
 
-
-  
-  
+  //  double aa;
+   // NSString *kk = @"12'1";
+   // kk = [global GetDoubleToFix:  [global GetFixToDouble:kk :'A'] : 'A'];
+   // kk = @"";
    [self Request:1 gtr:@"wfxlogon" tr:@"usrlogon"];
 }
 

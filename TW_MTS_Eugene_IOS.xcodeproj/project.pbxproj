@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A4CCA1C91A63D77D0004911B /* ViewHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CCA1C81A63D77D0004911B /* ViewHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A4CCA1CB1A64A4E60004911B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */; };
-		A4CCA1D01A65ED2B0004911B /* ConvertOrice.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CCA1CF1A65ED2B0004911B /* ConvertOrice.m */; };
 		C273BFA81A5E785400ACE1E1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFA71A5E785400ACE1E1 /* main.m */; };
 		C273BFAB1A5E785400ACE1E1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFAA1A5E785400ACE1E1 /* AppDelegate.m */; };
 		C273BFAE1A5E785400ACE1E1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C273BFAD1A5E785400ACE1E1 /* ViewController.m */; };
@@ -41,8 +40,6 @@
 		A4CCA1C71A63D77D0004911B /* ViewHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHUD.h; sourceTree = "<group>"; };
 		A4CCA1C81A63D77D0004911B /* ViewHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewHUD.m; sourceTree = "<group>"; };
 		A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		A4CCA1CE1A651A970004911B /* ConvertPrice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvertPrice.h; sourceTree = "<group>"; };
-		A4CCA1CF1A65ED2B0004911B /* ConvertOrice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConvertOrice.m; sourceTree = "<group>"; };
 		C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TW_MTS_Eugene_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C273BFA61A5E785400ACE1E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C273BFA71A5E785400ACE1E1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -136,8 +133,6 @@
 				C273BFCB1A5E7FBB00ACE1E1 /* WebBridgeViewController.h */,
 				C273BFCC1A5E7FBB00ACE1E1 /* WebBridgeViewController.m */,
 				C273BFD21A5EA0D200ACE1E1 /* WebBridgeViewController.xib */,
-				A4CCA1CE1A651A970004911B /* ConvertPrice.h */,
-				A4CCA1CF1A65ED2B0004911B /* ConvertOrice.m */,
 			);
 			path = TW_MTS_Eugene_IOS;
 			sourceTree = "<group>";
@@ -274,7 +269,6 @@
 				A4CCA1C91A63D77D0004911B /* ViewHUD.m in Sources */,
 				C273C02C1A5FB12000ACE1E1 /* SocketConnector.m in Sources */,
 				C273BFAE1A5E785400ACE1E1 /* ViewController.m in Sources */,
-				A4CCA1D01A65ED2B0004911B /* ConvertOrice.m in Sources */,
 				C273BFAB1A5E785400ACE1E1 /* AppDelegate.m in Sources */,
 				C273C2A11A62656500ACE1E1 /* Global.m in Sources */,
 				C273BFCE1A5E7FBB00ACE1E1 /* WebBridgeViewController.m in Sources */,

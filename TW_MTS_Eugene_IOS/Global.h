@@ -40,5 +40,13 @@
 
 -(NSString *)getDateSelebrate : (NSString *)date;
 -(NSString *)trim : (NSString*)sString;
+
+- (double) GetFixToDouble : (NSString *) Str : (char) DisplayType;
+- (double) GetFixed2N : (NSString*) Str : (double) Exp1: (double)  Exp2 : (int) TailSize;
+
+- (NSString*) GetDoubleToFix : (double) Value : (char) DisplayType;
+- (NSString*) GetN2Fixed : (double) Value: (double) Exp1 : (double) Exp2 : (int) TailSize: (NSString*) sformat;
+- (void) GetExpVal : (char) DisplayType : (double*) Exp1 : (double*)  Exp2 : (int*) TailSize : (NSString**) sformat;
+- (NSString*)  GetFixData :(char) DisplayType: (NSString*) str;
 @end
 
