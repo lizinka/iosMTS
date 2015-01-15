@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>25C5C460-BC56-4B19-9783-14CBB6DE6EFB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>TW_MTS_Eugene_IOS</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>F34B1D26BED9DFDD9CB497754DDCBAFAA5CF1384</key>
+		<string>https://github.com/lizinka/iosMTS.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>TW_MTS_Eugene_IOS.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>F34B1D26BED9DFDD9CB497754DDCBAFAA5CF1384</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/lizinka/iosMTS.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>F34B1D26BED9DFDD9CB497754DDCBAFAA5CF1384</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F34B1D26BED9DFDD9CB497754DDCBAFAA5CF1384</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iosMTS</string>
+		</dict>
+	</array>
+</dict>
+</plist>

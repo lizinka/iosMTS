@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<AlphaKnightXML>
+	<AKChart m_nFontSize="11" />
+	<AKChartWnd m_bShowOutline="1" m_clOutline="ff000000" m_bShowXAxis="1" m_nLeftDrawMargin="1" m_nRightDrawMargin="1" m_nDrawSelectType="1" m_bShowScrollbar="1">
+		<m_pXAxis m_nStartPos="0" m_nPageCnt="100" m_bShowLast="1" m_clBackground="fff0f0f0" m_clFont="ff000000" m_TimeFmt="1" m_DateFmt="1" m_nTimeAxisAlign="2" m_clLine="ff404040" m_bShowScale="1">
+			<m_PenVerticalGrid Width="1" Style="1" Color="ffdcdcdc" />
+		</m_pXAxis>
+		<m_DataObjs>
+			<AKPriceDataObj_0 m_nID="0" m_nElementCnt="0" m_NumberSystem="0" m_strCode="" m_PeriodType="2" m_nPeriodCycle="1" m_strName="">
+			</AKPriceDataObj_0>
+            <AKPriceDataObj_1 m_nID="1" m_nElementCnt="0" m_NumberSystem="0" m_strCode="" m_PeriodType="2" m_nPeriodCycle="1" m_strName="">
+			</AKPriceDataObj_1>
+        </m_DataObjs>
+		<m_ChartList>
+			<AKChartView_0 m_dHeightRatio="1.000000" m_nTopDrawMargin="10" m_nBottomDrawMargin="3" m_nBackDrawType="0" m_nBackDrawTypeDetail="0" m_clBackground1="ffffffff" m_clBackground2="ffffffff">
+				<m_YAxisLefts >
+                    <AKYAxis_0 m_clBackground="fff0f0f0" m_clFont="ff000000" m_nValueAxisAlign="2" m_clLine="ff404040" m_bShowScale="1" m_nYScaleType="0" m_dUserMin="1000000.000000" m_dUserMax="1700000.000000" m_dUserDiff="500000.000000" m_bShowViewGridLine="0" m_bRight="0">
+						<m_PenHGrid Width="1" Style="1" Color="ffdcdcdc" />
+					</AKYAxis_0>
+                </m_YAxisLefts >
+				<m_YAxisRights>
+					<AKYAxis_0 m_clBackground="fff0f0f0" m_clFont="ff000000" m_nValueAxisAlign="2" m_clLine="ff404040" m_bShowScale="1" m_nYScaleType="0" m_dUserMin="1000000.000000" m_dUserMax="1700000.000000" m_dUserDiff="500000.000000" m_bShowViewGridLine="1" m_bRight="1">
+						<m_PenHGrid Width="1" Style="1" Color="ffdcdcdc" />
+					</AKYAxis_0>
+				</m_YAxisRights>
+				<m_GraphObjs>
+					<AKGraphObj_0 nAxisID="10000" nDataID="0" m_nSortOrder="1">
+						<m_DrawInfos>
+							<e0 PlotType="8" Name="" ShowLast="0" Color="ff0080ff;ff0000ff;ffff0000;ffff0000;" DrawingOrder="1;2;3;0;" Var="0;0;0;0;" />
+						</m_DrawInfos>
+					</AKGraphObj_0>
+                    <AKGraphObj_1 nAxisID="0" nDataID="1" m_nSortOrder="1">
+						<m_DrawInfos>
+							<e0 PlotType="7" Name="" ShowLast="0" Color="ff404040;800000ff;80ff0000;80ff0000;" DrawingOrder="1;2;3;0;" Var="0;0;0;0;" />
+						</m_DrawInfos>
+					</AKGraphObj_1>
+				</m_GraphObjs>
+			</AKChartView_0>
+		</m_ChartList>
+	</AKChartWnd>
+</AlphaKnightXML>

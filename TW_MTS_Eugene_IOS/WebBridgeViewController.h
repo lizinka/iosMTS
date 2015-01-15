@@ -12,11 +12,11 @@
 #import "SocketConnector.h"
 #import "Reachability.h"
 #import "Global.h"
+#import "ChartViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <netinet/in.h>
 #import "Reachability.h"
 #import "ViewHUD.h"
-
 
 #define MSGK_NPM 0x10  // normal presentation msg
 #define MSGK_PCA 0x71  // public certificate authority
@@ -66,12 +66,16 @@
     bool m_bisReconnMode;
     NSTimer *_timer;
     int timecount;
+    ChartViewController* chartV;
+    NSString* m_Setting;
 }
 
 @property (nonatomic, strong) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) Global *global;
+@property (nonatomic, strong) ChartViewController* chartV;
 
 @property (strong, nonatomic) IBOutlet LGViewHUD *hud;
+
 -(void) LoadTrHashDatas:(int) nIndex;
 - (void)settimerHBeat;
 - (void)sendHBeatCheck;
@@ -79,6 +83,5 @@
 - (void)ChartDestroy;
 -(void)ChartShow;
 -(NSData *)gzipDecompress : (NSData *)data;
-
 
 @end

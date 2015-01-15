@@ -204,7 +204,6 @@
     return removeSpaceString;
 }
 
-
 - (double) GetFixToDouble: (NSString *) Str : (char) DisplayType
 {
     int TailSize;
@@ -257,7 +256,7 @@
     }
     
     
- //   [Body initWithCapacity: iPos ];
+    //   [Body initWithCapacity: iPos ];
     Body = [Body substringWithRange:NSMakeRange(0, iPos)];
     Tail = [ NSMutableString stringWithString:Str];
     i++;
@@ -278,7 +277,7 @@
             i++;
         }
     
- //   [Tail initWithCapacity: iPos -1];
+    //   [Tail initWithCapacity: iPos -1];
     Tail = [Tail substringWithRange:NSMakeRange(0, iPos)];
     if ([Body length]  > 0)
     {
@@ -346,7 +345,7 @@
             itail = itail + 0.01;
             stail = [NSString stringWithFormat:sformat,  itail ] ;
             rValue =  [NSString stringWithFormat:@"%.0d%@%@", iBody, @"'", stail];
-
+            
             return rValue;
         }
     }
@@ -541,8 +540,6 @@
     return ResultData;
     
 }
-
-
 @end
 
 

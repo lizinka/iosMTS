@@ -15,7 +15,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self networkCheck];
-    //return YES;
     global = [[Global alloc] initWithIF];
     UserId = [[NSString alloc] init];
     Password = [[NSString alloc] init];
@@ -102,14 +101,8 @@
             if ([sTrType isEqualToString:@"chart"])
             {
                 BOOL bIsRedraw = [json objectForKey:@"newDraw"];
-                if (bIsRedraw) {
-                    //if (chartV != nil) {
-                        //차트 보여주기 소스 구현.
-                    //}
-                    
                     return;
                 }
-                
                 m_sChartSetting = [json objectForKey:@"chartSetting"];
                 m_sChartSetting = [global trim:m_sChartSetting];
                 
@@ -186,8 +179,6 @@
         Password = [json objectForKey:@"pass"];
         LoginType = [json objectForKey:@"loginType"];
         
-   //     UserId = @"opercut";
-   //     Password = @"pohaha28";
         [conn Connect:@"61.78.34.111" port:33101];
     }
 }
@@ -207,12 +198,6 @@
 }
 
 - (void)RequestStart {
-
-  //  double aa;
-   // NSString *kk = @"12'1";
-   // kk = [global GetDoubleToFix:  [global GetFixToDouble:kk :'A'] : 'A'];
-   // kk = @"";
-   [self Request:1 gtr:@"wfxlogon" tr:@"usrlogon"];
 }
 
 - (void) Request:(int)gubun gtr : (NSString*)gtrcode tr : (NSString*)trcode {
@@ -491,7 +476,6 @@
     int msglen = msg.length;
     BOOL isSearch = FALSE;
     
-    
     char *binary = (char *)[msg bytes];
     
     @try {
@@ -577,46 +561,9 @@
             int datasize = 0;
             int ilen = msglen - sizeof(Commheader);
             
-            while (TRUE) {
-                memcpy(&realCommheader, &binary[datasize], sizeof(RealCommheader));
-                //	memcpy(&realQuote, &binary[datasize+sizeof(RealCommheader)], sizeof(realQuote));
-                char tmpchar[3];
-                
-                memcpy(&tmpchar, &realCommheader.mlen[0], sizeof(realCommheader.mlen));
-                datasize += sizeof(realCommheader) + atoi(tmpchar);
-                //    char realdata[atoi(tmpchar)];
-                //  memcpy(&realdata, &binary[datasize+sizeof(RealCommheader)], sizeof(realdata));
-                //		NSString *strcode = [[NSString alloc] initWithBytes:realQuote.code length:sizeof(realQuote.code) encoding:0x80000000 + kCFStringEncodingDOSKorean ];
-                //
-                //	if ([strcode hasPrefix:@"XXXXNEWS"] ) {
-                //			return 0;
-                //		}
-                //		else if ([strcode hasPrefix:@"XXXXTIME"] ) {
-                //			return 0;
-                //	}
-                //		else {
-                //	NSMutableData *recvRealdata;
-                NSData* recvRealdata = [msg subdataWithRange: NSMakeRange(datasize+sizeof(RealCommheader),atoi(tmpchar))];
-                //  [NSJSONSerialization dataWithJSONObject:realdata options:NSJSONWritingPrettyPrinted error:nil];
-                //      NSData* recvRealdata = [[NSData alloc] initWithBytes:realdata length:sizeof(realdata) encoding:0x80000000 + kCFStringEncodingDOSKorean ];
-                //recvRealdata=[[NSMutableData alloc] init];
-                //[recvRealdata initWithBytes:&realQuote length: sizeof(realQuote)];
-                [self ReceiveRealData:recvRealdata];
-                //		if (self.priceBoardScreen.view.subviews != nil) {
-                //				[self.priceBoardScreen RealSiseData: recvRealdata];
-                //			}
-                //		else if (self.chartScreen.view.subviews != nil) {
-                //			[self.chartScreen RealSiseData: recvRealdata];
-                //		}
-                //		else if (self.orderScreen.view.subviews != nil) {
-                //			[self.orderScreen RealSiseData: recvRealdata];
-                //		}
-                //	}
                 
                 
-                //	[strcode release];
                 
-                if (ilen <= datasize)
                     break;
             }
             
@@ -761,17 +708,7 @@
                 
                 if ([strcode hasPrefix:@"m3005"] || [strcode hasPrefix:@"m3004"] || [strcode hasPrefix:@"m3003"] || [strcode hasPrefix:@"m3002"] || [strcode hasPrefix:@"m3001"])
                 {
-                  //  NSString *strcode = [[NSString alloc] initWithBytes:trCommheader.svcc length:sizeof(trCommheader.svcc) //encoding:0x80000000 + kCFStringEncodingDOSKorean ];
-               
-                   // [strcode release];
-                    
                     //차트데이터 처리.
-                    if([self ReceiveQueryData : recvData])
-                    {
-                       // ChartShow();
-                        m_bIsChartShow = true;
-                    }
-                    return 0;
                 }
                 else if ([strcode hasPrefix:@"mibo1030"])
                 {
@@ -912,31 +849,6 @@
 
 -(void) ReceiveRealData: (NSData*) receivedata
 {
-    
-    NSError *error;
-    //NSData에 담겨온 결과값 JSON형태로 해석
-    NSArray *json = [NSJSONSerialization JSONObjectWithData:receivedata
-                                                    options:kNilOptions
-                                                      error:&error];
-    NSString * sTrRealKey;
-    sTrRealKey = nil;
-    //테이블뷰에 출력할 데이터에 결과값 삽입
-    sTrRealKey = [[json objectAtIndex:0] objectForKey:@"type"];
-    NSString * sTrCode;
-    
-    @try {
-        NSString * sRealPage = [[json objectAtIndex:0] objectForKey:@"pageId"];
-        
-        //if ((trcomm.getftype() == 'L') |  (trcomm.getftype() == 'l')) {
-        if ([sRealPage isEqualToString:@"#ITEM_CONCLUDE"]) {
-            // if(m_bIsChartShow)
-            //  {
-            //    RealData.setContRealDataJSon(jObj);
-            //   FrameLayout localV = (FrameLayout)chartV;
-            //   View child = localV.getChildAt(0);
-            //   if(((AKChartView)child).getReadyRealData())
-            //   {
-            //      ((AKChartView)child).UpdateChartRealData();
             //  }
             // }
         }
