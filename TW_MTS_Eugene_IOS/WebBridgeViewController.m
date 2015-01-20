@@ -102,7 +102,7 @@
             {
                 BOOL bIsRedraw = [json objectForKey:@"newDraw"];
                     return;
-                }
+            }
                 m_sChartSetting = [json objectForKey:@"chartSetting"];
                 m_sChartSetting = [global trim:m_sChartSetting];
                 
