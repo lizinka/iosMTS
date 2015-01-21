@@ -39,7 +39,7 @@
 #define ZF_CLS   '8'   // Close Screen
 #define ZF_DEL   '5'   // real cancel
 
-@interface WebBridgeViewController : UIViewController <SocketIF>
+@interface WebBridgeViewController : UIViewController <SocketIF, ChartEventProtocol>
 {
     SocketConnector *conn;
     NSTimer *timerHBeat;
@@ -58,7 +58,6 @@
     NSString *UserId;
     NSString *Password;
     NSString *LoginType;
-    NSString *m_sChartSetting;
     uint16_t rwmid[10];
     NSMutableData *recvd[10];
     NSString *m_sReqData;
@@ -67,7 +66,6 @@
     NSTimer *_timer;
     int timecount;
     ChartViewController* chartV;
-    NSString* m_Setting;
 }
 
 @property (nonatomic, strong) IBOutlet UIWebView *webView;
@@ -82,6 +80,7 @@
 - (void)csendWData:(NSString*)sSend;
 - (void)ChartDestroy;
 -(void)ChartShow;
+-(void)ReqChartData:(NSMutableData*)data:(int)nPeriod;
 -(NSData *)gzipDecompress : (NSData *)data;
 
 @end

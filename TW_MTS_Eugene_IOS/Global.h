@@ -48,5 +48,6 @@
 - (NSString*) GetN2Fixed : (double) Value: (double) Exp1 : (double) Exp2 : (int) TailSize: (NSString*) sformat;
 - (void) GetExpVal : (char) DisplayType : (double*) Exp1 : (double*)  Exp2 : (int*) TailSize : (NSString**) sformat;
 - (NSString*)  GetFixData :(char) DisplayType: (NSString*) str;
+- (NSString*) CalcRealSise:(NSString*)sPrice:(int)nDiv:(int)nOpos;
 @end
 

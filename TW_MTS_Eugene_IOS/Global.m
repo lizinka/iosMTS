@@ -306,6 +306,33 @@
         else
             dVal = dVal + iBody;
     }
+    else
+    {
+        mMinus = ([[Str substringWithRange:NSMakeRange(1, 1)] isEqualToString: @"-"]);
+      
+        if ([Tail length] > 0)
+        {
+            if ([Tail length] < TailSize)
+                //   Tail := Tail + StringOfChar('0', TailSize - Length(Tail));
+                [Tail appendString:@"0"];
+            
+            
+            if (Exp1 == 0.25)
+            {
+                if (([[Tail substringWithRange:NSMakeRange([Tail length], 1)] isEqualToString: @"2"]) || ([[Tail substringWithRange:NSMakeRange([Tail length], 1)] isEqualToString: @"7"]))
+                {
+                    [Tail appendString:@"5"];
+                }
+            }
+            dVal = [Tail floatValue]; //  StrtoFloatDef(tail, 0);
+            dVal = (dVal / Exp2);
+        }
+        if (mMinus)
+            dVal = dVal*-1 ;
+        else
+            dVal = dVal ;
+        
+    }
     return  dVal;
     
 }
@@ -539,6 +566,37 @@
     }
     return ResultData;
     
+}
+
+- (NSString*) CalcRealSise:(NSString*)sPrice:(int)nDiv:(int)nOpos
+{
+    sPrice = [self trim:sPrice];
+    
+    if ([sPrice isEqual:@""])
+    {
+        return @"0.0";
+    }
+
+    NSRange nDecimalIndex = [sPrice rangeOfString:@"."];
+    NSMutableString* sRealPrice;
+    if (nDecimalIndex.location > 0)
+    {
+        if ([sPrice length] > nDecimalIndex.location + nDiv + 1)
+        {
+            [sRealPrice deleteCharactersInRange:NSMakeRange(nDecimalIndex.location + nDiv + 1, [sPrice length])];
+        }
+    }
+    
+    if (nOpos > 0) {
+        int nSepIndex = nDecimalIndex.location - nOpos;
+        if (nDecimalIndex.location == NSNotFound)
+        {
+            nSepIndex = [sPrice length] - nOpos;
+        }
+        [sRealPrice insertString:@"'" atIndex:nSepIndex];
+    }
+    
+    return sRealPrice;
 }
 @end
 

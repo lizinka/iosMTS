@@ -11,15 +11,19 @@
 @implementation WebBridgeViewController
 @synthesize webView;
 @synthesize global;
+@synthesize chartV;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self networkCheck];
+    
+    self.view.autoresizesSubviews = YES;
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    
     global = [[Global alloc] initWithIF];
     UserId = [[NSString alloc] init];
     Password = [[NSString alloc] init];
     LoginType = [[NSString alloc] init];
-    m_sChartSetting = [[NSString alloc] init];
     m_sReqData = [[NSString alloc] init];
     trTransHashMap = [NSMutableDictionary dictionary];
     trDataMoreHashMap = [NSMutableDictionary dictionary];
@@ -32,12 +36,12 @@
         recvd[i]=[[NSMutableData alloc] init];
     }
     
-    //NSURL *url = [NSURL URLWithString:@"http://codetest.coforward.com/web_mts/prototype/index.html"];
+    NSURL *url = [NSURL URLWithString:@"http://codetest.coforward.com/web_mts/prototype/index.html"];
     //NSURL *url = [NSURL URLWithString:@"http://m.naver.com"];
-    NSString *indexFilePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"www"];
-    //NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
-    NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
+    //NSString *indexFilePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"www"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    //NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
+    //NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
     [webView loadRequest:request];
     //[webView setScalesPageToFit:YES];
 }
@@ -100,16 +104,85 @@
         {
             if ([sTrType isEqualToString:@"chart"])
             {
-                BOOL bIsRedraw = [json objectForKey:@"newDraw"];
+                BOOL bIsRedraw = [[json objectForKey:@"newDraw"] boolValue];
+                if (!bIsRedraw) {
+                    if (chartV != nil && m_bIsChartShow) {
+                        //차트 세팅변경 구현.
+                         [chartV ChangeIndicatorSetting:[json objectForKey:@"chartSetting"]];
+                    }
                     return;
                 }
-                m_sChartSetting = [json objectForKey:@"chartSetting"];
-                m_sChartSetting = [global trim:m_sChartSetting];
                 
-                NSString *sHight = [json objectForKey:@"chartHight"];
-                sHight = [global trim:sHight];
-                m_nChartHeight = sHight.intValue;
+                m_nChartHeight  = [[json objectForKey:@"chartHight"] intValue];
+                //sHight = [global trim:sHight];
+                //m_nChartHeight = sHight.intValue;
                 //차트 시세 요청
+                Xibg3002_IN Xibg3002_in;
+                NSData *data;
+                NSUInteger lengthOfBinary;
+                void *binary;
+                
+                NSString *sTmp = [json objectForKey:@"serverCode"];
+                memset(&Xibg3002_in, 0x00, sizeof(Xibg3002_in));
+                if (sTmp != nil)
+                {
+                    data = [sTmp dataUsingEncoding:0x80000000 + kCFStringEncodingDOSKorean];//NSUTF8StringEncoding
+                    lengthOfBinary = [data length];
+                    binary = (void *)[data bytes]; //void => char ?
+                    memcpy(&Xibg3002_in.code, binary, lengthOfBinary);
+                }
+                
+                NSString *sTmp2 = [json objectForKey:@"chartValue"];
+                if (sTmp2 != nil)
+                {
+                    data = [sTmp2 dataUsingEncoding:0x80000000 + kCFStringEncodingDOSKorean];//NSUTF8StringEncoding
+                    lengthOfBinary = [data length];
+                    binary = (void *)[data bytes]; //void => char ?
+                    memcpy(&Xibg3002_in.nmin, binary, lengthOfBinary);
+                }
+                
+                NSString *sTmp3 = @"200";
+                data = [sTmp3 dataUsingEncoding:0x80000000 + kCFStringEncodingDOSKorean];//NSUTF8StringEncoding
+                lengthOfBinary = [data length];
+                binary = (void *)[data bytes]; //void => char ?
+                memcpy(&Xibg3002_in.dcnt, binary, lengthOfBinary);
+                
+                Xibg3002_in.next = 'n';
+                
+                //m_sReqData = [NSString stringWithFormat:@"%s", (char*)&Xibg3002_in];
+                
+                //m_sReqData = [[NSString alloc] initWithBytes:(char*)&Xibg3002_in length:sizeof(Xibg3002_in) encoding:];
+                
+                m_sReqData = [[NSString alloc] initWithBytes:&Xibg3002_in length:sizeof(Xibg3002_in) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+                
+                sTrCode = [json objectForKey:@"chartType"];
+                if ([sTrCode isEqualToString:@"month"]) {
+                    sTrCode = @"m3005";
+                }
+                else if ([sTrCode isEqualToString:@"week"]) {
+                    sTrCode = @"m3004";
+                }
+                else if ([sTrCode isEqualToString:@"day"]) {
+                    sTrCode = @"m3003";
+                }
+                else if ([sTrCode isEqualToString:@"min"]) {
+                    sTrCode = @"m3002";
+                }
+                else if ([sTrCode isEqualToString:@"tic"]) {
+                    sTrCode = @"m3001";
+                }
+                
+                [self ChartShow];
+                
+                NSDictionary* setObj = [json objectForKey:@"chartSetting"];
+                
+                if([setObj count] > 0)
+                {
+                    NSString* Setting = [setObj description];
+                    [chartV ChangeIndicatorSetting:Setting];
+                }
+                m_bIsChartShow = true;
+                [self Request:5 gtr:@"mobile" tr:sTrCode];
                 return;
             }
             else
@@ -152,6 +225,11 @@
     [self Request:5 gtr:@"mobile" tr:sTrCode];
 }
 
+-(void)closeApp:(NSString*)arg
+{
+    exit(1);
+}
+
 -(void)ReqLogin:(NSString*) arg
 {
     m_sLoginInfo = arg;
@@ -179,6 +257,11 @@
         Password = [json objectForKey:@"pass"];
         LoginType = [json objectForKey:@"loginType"];
         
+        //UserId = @"opercut";
+        //Password = @"pohaha28";
+        
+        UserId = @"bbangms";
+        Password = @"m1475s";
         [conn Connect:@"61.78.34.111" port:33101];
     }
 }
@@ -198,6 +281,7 @@
 }
 
 - (void)RequestStart {
+    [self Request:1 gtr:@"wfxlogon" tr:@"usrlogon"];
 }
 
 - (void) Request:(int)gubun gtr : (NSString*)gtrcode tr : (NSString*)trcode {
@@ -560,10 +644,25 @@
             //RealQuote realQuote;
             int datasize = 0;
             int ilen = msglen - sizeof(Commheader);
+            //originData는 전체데이터에서 Commheader를뺀 데이터
+            NSMutableData* recvRealData = originData;
             
+            while (TRUE)
+            {
+                NSData* tmpData = [recvRealData subdataWithRange:NSMakeRange(0, sizeof(RealCommheader))];
+                [recvRealData replaceBytesInRange:NSMakeRange(0, sizeof(RealCommheader)) withBytes:NULL length:0];
                 
+                //여러개의 실시간 시세를 하나씩 잘라서 처리한다.
+                //mlen은 하나의 실시간 시세 길이다.
+                memcpy(&realCommheader, [tmpData bytes], sizeof(RealCommheader));
+                char tmpLen[3];
+                memcpy(tmpLen, realCommheader.mlen, sizeof(realCommheader.mlen));
                 
+                tmpData = [recvRealData subdataWithRange:NSMakeRange(0, atoi(tmpLen))];
+                [recvRealData replaceBytesInRange:NSMakeRange(0, atoi(tmpLen)) withBytes:NULL length:0];
+                [self ReceiveRealData:tmpData];
                 
+                if ([recvRealData length] <= 0)
                     break;
             }
             
@@ -709,6 +808,35 @@
                 if ([strcode hasPrefix:@"m3005"] || [strcode hasPrefix:@"m3004"] || [strcode hasPrefix:@"m3003"] || [strcode hasPrefix:@"m3002"] || [strcode hasPrefix:@"m3001"])
                 {
                     //차트데이터 처리.
+                    NSString* sData = [[NSString alloc] initWithData:recvData encoding:NSUTF8StringEncoding];
+                    char pData[[recvData length]];
+                    [recvData getBytes:pData length:[recvData length]];
+                    
+                    int nPeriod = 0;
+                    if ([strcode hasPrefix:@"m3005"]) {
+                        nPeriod = 4;
+                    }
+                    else if ([strcode hasPrefix:@"m3004"]) {
+                        nPeriod = 3;
+                    }
+                    else if ([strcode hasPrefix:@"m3003"]) {
+                        nPeriod = 2;
+                    }
+                    else if ([strcode hasPrefix:@"m3002"]) {
+                        nPeriod = 1;
+                    }
+                    else if ([strcode hasPrefix:@"m3001"]) {
+                        nPeriod = 0;
+                    }
+
+                    if ([chartV getNextMode]) {
+                        [chartV UpdateNextData:recvData];
+                    }
+                    else
+                    {
+                        [self ReqChartData:recvData:nPeriod];
+                        m_bIsChartShow = true;
+                    }
                 }
                 else if ([strcode hasPrefix:@"mibo1030"])
                 {
@@ -734,21 +862,7 @@
                 }
                 else
                 {
-                    NSString* sData = [[NSString alloc] initWithData:recvData encoding:NSUTF8StringEncoding];
-                    NSError* error;
-                    NSDictionary* json = [NSJSONSerialization JSONObjectWithData:[sData dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
-                    if (json == nil)
-                    {
-                        return -1;
-                    }
-                    if (error)
-                    {
-                        NSLog(@"error : %@", error.localizedDescription);
-                        return -1;
-                    }
-                    
-                    NSData* kData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-                    NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
+                    NSString* kJson = [[NSString alloc] initWithData:recvData encoding:NSUTF8StringEncoding];
                     [self csendWData:kJson];
                 }
             }
@@ -849,60 +963,34 @@
 
 -(void) ReceiveRealData: (NSData*) receivedata
 {
-            //  }
-            // }
+    NSError* error;
+    NSDictionary* json = [NSJSONSerialization JSONObjectWithData:receivedata options:kNilOptions error:&error];
+    if (json == nil)
+    {
+        return;
+    }
+    if (error)
+    {
+        NSLog(@"error : %@", error.localizedDescription);
+        return;
+    }
+    
+    NSString* sRealPage = [json objectForKey:@"pageId"];
+    if ([sRealPage isEqualToString:@"#ITEM_CONCLUDE"])
+    {
+        if (m_bIsChartShow && chartV != nil)
+        {
+            //차트 리얼데이터 넘김.
+            if([chartV getReadyRealData])
+            {
+                [chartV UpdateChartRealData:json];
+            }
         }
-        
-    csendWData:[[NSString alloc] initWithBytes:&receivedata length:sizeof(receivedata) encoding:0x80000000 + kCFStringEncodingDOSKorean ];
-    }
-    @catch (NSException *ex) {
-        NSString *name = [ex name];
-        NSLog(@"Name: %@\n", name);
-        NSLog(@"Reason: %@\n", [ex reason]);
-        
     }
     
+    NSString* sData = [[NSString alloc] initWithData:receivedata encoding:NSUTF8StringEncoding];
+    [self csendWData:sData];
 }
-
-
-- (bool) ReceiveQueryData : (NSMutableData *)mdata
-{
-    TrLedgeheader trLedgeheader;
-    GridInOut gridInOut;
-    Xibg3002_OUT Xibg3002_OUT;
-    Xibg3002_OCCUR Xibg3002_OCCUR;
-    char *bdata = (char *)[mdata bytes];
-    memcpy(&trLedgeheader, &bdata[0], sizeof(trLedgeheader));
-    memset(&Xibg3002_OUT, 0x00, sizeof(Xibg3002_OUT));
-    memcpy(&Xibg3002_OUT, &bdata[sizeof(TrLedgeheader)], sizeof(Xibg3002_OUT));
-    
-    NSString *rmsg = [[NSString alloc] initWithBytes:&trLedgeheader.rmsg[0] length:sizeof(trLedgeheader.rmsg) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-    
-    // [rmsg release];
-    
-    memcpy(&gridInOut, &bdata[sizeof(TrLedgeheader) + sizeof(Xibg3002_OUT)], sizeof(gridInOut));
-    int count = atoi(gridInOut.nrow);
-    int dsize = 0;
-    for (int i = 0; i < count; i++) {
-        dsize = sizeof(TrLedgeheader) + sizeof(Xibg3002_OUT) + sizeof(GridInOut) + (sizeof(Xibg3002_OCCUR) * i);
-        memcpy(&Xibg3002_OCCUR, &bdata[dsize], sizeof(Xibg3002_OCCUR));
-        NSString *r_tday = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_tday[0] length:sizeof(Xibg3002_OCCUR.r_tday) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-        NSString *r_time = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_time[0] length:sizeof(Xibg3002_OCCUR.r_time) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-        NSString *r_open = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_open[0] length:sizeof(Xibg3002_OCCUR.r_open) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-        NSString *r_high = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_high[0] length:sizeof(Xibg3002_OCCUR.r_high) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-        NSString *r_lowp = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_lowp[0] length:sizeof(Xibg3002_OCCUR.r_lowp) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-        NSString *r_last = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_last[0] length:sizeof(Xibg3002_OCCUR.r_last) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-        NSString *r_tvol = [[NSString alloc] initWithBytes:&Xibg3002_OCCUR.r_tvol[0] length:sizeof(Xibg3002_OCCUR.r_tvol) encoding:0x80000000 + kCFStringEncodingDOSKorean];
-        
-        
-        
-    }
-    return true;
-
-}
-
-
-
 
 -(NSData *)gzipDecompress : (NSData *)data {
     
@@ -949,16 +1037,18 @@
     else 
         return nil;
 }
+
 @synthesize hud;
 
 - (int) OnError:(NSError*) err {
-  /*  UIAlertView *alert = [[UIAlertView alloc]
+    /*UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"접속에러"
                           message:@"연결이 되지 않습니다."
                           delegate:nil
                           cancelButtonTitle:@"확인"
                           otherButtonTitles:nil];
     [alert show];*/
+    
     hud = [LGViewHUD defaultHUD];
     hud.image = [UIImage imageNamed:@"rounded-checkmark.png"];
     hud.topText = @"확인";
@@ -966,8 +1056,6 @@
     hud.activityIndicatorOn = YES;
     [self setTimer];
     [hud showInView:self.view];
-    
-
     
     //self.loginScreen.btnDisConnect.enabled  = FALSE;
     NSLog(@"%@",[err description]);//code
@@ -985,15 +1073,15 @@
     NSString *indexFilePath;
     if (nIndex == 0)
     {
-        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransData" ofType:@"dat" inDirectory:@"Datas/TransData"];
+        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransData" ofType:@"dat"];
     }
     else if (nIndex == 1)
     {
-        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransMore" ofType:@"dat" inDirectory:@"Datas/TransData"];
+        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransMore" ofType:@"dat"];
     }
     else if (nIndex == 2)
     {
-        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransReal" ofType:@"dat" inDirectory:@"Datas/TransData"];
+        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransReal" ofType:@"dat"];
     }
     
     //NSMutableArray *arrayData = [NSMutableArray alloc];
@@ -1059,20 +1147,35 @@
 
 - (void)ChartDestroy
 {
-    
+    if (chartV != nil) {
+        [chartV.view removeFromSuperview];
+        [chartV removeFromParentViewController];
+        chartV = nil;
+        m_bIsChartShow = false;
+    }
 }
 
 -(void)ChartShow
 {
-    
+    chartV = [[ChartViewController alloc] initWithNibName:@"ChartViewController" bundle:nil];
+    chartV.view.frame = CGRectMake(0, 110, 320, 480);
+    chartV.chartEventIF = self;
+    [self.view addSubview:chartV.view];
 }
 
+//Chart Protocol
+-(void)RequireInsertData:(void*)reqData:(NSString*)sTrCode
+{    
+    m_sReqData = [[NSString alloc] initWithBytes:reqData length:sizeof(Xibg3002_IN) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+    [self Request:5 gtr:@"mobile" tr:sTrCode];
+}
 
-//- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-//{
-//    [self networkCheck];
-//    return YES;
-//}
+-(void)ReqChartData:(NSMutableData*)data:(int)nPeriod
+{
+    if (chartV != nil) {
+        [chartV ReqData:data:nPeriod];
+    }
+}
 
 //네트워크 상태 체크 Notification 등록
 - (void)networkCheck
@@ -1091,6 +1194,10 @@
     Reachability *curReach = [note object];
     NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
     [self updateInterfaceWithReachability:curReach];
+    /*[self ChartDestroy];
+     chartV = [[ChartViewController alloc] initWithNibName:@"ChartViewController" bundle:nil];
+     [self.view addSubview:chartV.view];
+     chartV.akchart.frame = CGRectMake(0, 200, 300, 500);*/
 }
 
 // 네트워크 상태가 변경 될 경우 처리
@@ -1122,7 +1229,7 @@
                         NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
                         [self csendWData :[[NSString alloc] initWithBytes:&kJson length:sizeof(kJson) encoding:0x80000000 + kCFStringEncodingDOSKorean ]];
                         
-               //         [self setReconnSocket];
+                        //         [self setReconnSocket];
                     } @catch (NSException *ex) {
                         
                     }
@@ -1167,20 +1274,20 @@
         if ([UserId  isEqual: @""] || [Password  isEqual: @""] )
         {
             m_bisReconnMode = false;
-         //   if (networkCheckDlg != null)
-         //   {
-         //       networkCheckDlg.cancel(true);
-         //   }
+            //   if (networkCheckDlg != null)
+            //   {
+            //       networkCheckDlg.cancel(true);
+            //   }
             return true;
         }
         
-  
+        
         [conn Connect:@"61.78.34.111" port:33101];
     }
     
-   @catch (NSException *ex) {
-   }
-   return true;
+    @catch (NSException *ex) {
+    }
+    return true;
 }
 
 
@@ -1208,11 +1315,11 @@
         [self stopTimer];
         [hud removeFromSuperview];
         
-
+        
         UIAlertView *alertView;
         alertView = [[UIAlertView alloc] initWithTitle:@"접속에러" message:@"연결이 되지 않습니다. 종료하시겠습니까?" delegate:self cancelButtonTitle:@"종료" otherButtonTitles:@"재접속",nil];
         [alertView show];
-      
+        
         
     }
 }
@@ -1241,5 +1348,4 @@
         _timer = NULL;
     }
 }
-
 @end

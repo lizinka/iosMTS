@@ -21,9 +21,39 @@
 		C273C02C1A5FB12000ACE1E1 /* SocketConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C02B1A5FB12000ACE1E1 /* SocketConnector.m */; };
 		C273C0301A5FB26400ACE1E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C02F1A5FB26400ACE1E1 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C273C29C1A5FC16100ACE1E1 /* www in Resources */ = {isa = PBXBuildFile; fileRef = C273C29B1A5FC16100ACE1E1 /* www */; };
-		C273C29E1A62459800ACE1E1 /* Datas in Resources */ = {isa = PBXBuildFile; fileRef = C273C29D1A62459800ACE1E1 /* Datas */; };
 		C273C2A11A62656500ACE1E1 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C2A01A62656500ACE1E1 /* Global.m */; };
 		C273C2A31A626F5000ACE1E1 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C273C2A21A626F5000ACE1E1 /* libz.dylib */; };
+		C273C3071A6797CA00ACE1E1 /* AKDataLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = C273C3061A6797CA00ACE1E1 /* AKDataLoader.mm */; };
+		C273C3251A679AC900ACE1E1 /* 000660_d_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C30B1A679AC900ACE1E1 /* 000660_d_1.dat */; };
+		C273C3261A679AC900ACE1E1 /* 000660_m_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C30C1A679AC900ACE1E1 /* 000660_m_1.dat */; };
+		C273C3271A679AC900ACE1E1 /* 000660_s_300.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C30D1A679AC900ACE1E1 /* 000660_s_300.dat */; };
+		C273C3281A679AC900ACE1E1 /* 000660_s_60.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C30E1A679AC900ACE1E1 /* 000660_s_60.dat */; };
+		C273C3291A679AC900ACE1E1 /* 000660_t_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C30F1A679AC900ACE1E1 /* 000660_t_1.dat */; };
+		C273C32A1A679AC900ACE1E1 /* 000660_w_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3101A679AC900ACE1E1 /* 000660_w_1.dat */; };
+		C273C32B1A679AC900ACE1E1 /* 005930_d_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3111A679AC900ACE1E1 /* 005930_d_1.dat */; };
+		C273C32C1A679AC900ACE1E1 /* 005930_m_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3121A679AC900ACE1E1 /* 005930_m_1.dat */; };
+		C273C32D1A679AC900ACE1E1 /* 005930_s_300.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3131A679AC900ACE1E1 /* 005930_s_300.dat */; };
+		C273C32E1A679AC900ACE1E1 /* 005930_s_60.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3141A679AC900ACE1E1 /* 005930_s_60.dat */; };
+		C273C32F1A679AC900ACE1E1 /* 005930_t_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3151A679AC900ACE1E1 /* 005930_t_1.dat */; };
+		C273C3301A679AC900ACE1E1 /* 005930_w_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3161A679AC900ACE1E1 /* 005930_w_1.dat */; };
+		C273C3311A679AC900ACE1E1 /* K001_d_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3171A679AC900ACE1E1 /* K001_d_1.dat */; };
+		C273C3321A679AC900ACE1E1 /* K001_m_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3181A679AC900ACE1E1 /* K001_m_1.dat */; };
+		C273C3331A679AC900ACE1E1 /* K001_s_300.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3191A679AC900ACE1E1 /* K001_s_300.dat */; };
+		C273C3341A679AC900ACE1E1 /* K001_s_60.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C31A1A679AC900ACE1E1 /* K001_s_60.dat */; };
+		C273C3351A679AC900ACE1E1 /* K001_t_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C31B1A679AC900ACE1E1 /* K001_t_1.dat */; };
+		C273C3361A679AC900ACE1E1 /* K001_w_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C31C1A679AC900ACE1E1 /* K001_w_1.dat */; };
+		C273C3371A679AC900ACE1E1 /* snek_multi_a.set in Resources */ = {isa = PBXBuildFile; fileRef = C273C31E1A679AC900ACE1E1 /* snek_multi_a.set */; };
+		C273C3381A679AC900ACE1E1 /* snek_multi_b.set in Resources */ = {isa = PBXBuildFile; fileRef = C273C31F1A679AC900ACE1E1 /* snek_multi_b.set */; };
+		C273C3391A679AC900ACE1E1 /* snek_single.set in Resources */ = {isa = PBXBuildFile; fileRef = C273C3201A679AC900ACE1E1 /* snek_single.set */; };
+		C273C33A1A679AC900ACE1E1 /* MTSTrTransData.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3221A679AC900ACE1E1 /* MTSTrTransData.dat */; };
+		C273C33B1A679AC900ACE1E1 /* MTSTrTransMore.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3231A679AC900ACE1E1 /* MTSTrTransMore.dat */; };
+		C273C33C1A679AC900ACE1E1 /* MTSTrTransReal.dat in Resources */ = {isa = PBXBuildFile; fileRef = C273C3241A679AC900ACE1E1 /* MTSTrTransReal.dat */; };
+		C273C3441A679E5C00ACE1E1 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C273C3421A679E5C00ACE1E1 /* CoreFoundation.framework */; };
+		C273C3451A679E5C00ACE1E1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C273C3431A679E5C00ACE1E1 /* Foundation.framework */; };
+		C273C3471A679E6800ACE1E1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C273C3461A679E6800ACE1E1 /* UIKit.framework */; };
+		C273C3521A67A10900ACE1E1 /* libAKChart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C273C3511A67A10900ACE1E1 /* libAKChart.a */; };
+		C273C35F1A67A6C400ACE1E1 /* ChartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C273C35D1A67A6C400ACE1E1 /* ChartViewController.m */; };
+		C273C3601A67A6C400ACE1E1 /* ChartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C273C35E1A67A6C400ACE1E1 /* ChartViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +70,7 @@
 		A4CCA1C71A63D77D0004911B /* ViewHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHUD.h; sourceTree = "<group>"; };
 		A4CCA1C81A63D77D0004911B /* ViewHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewHUD.m; sourceTree = "<group>"; };
 		A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TW_MTS_Eugene_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C273BFA21A5E785400ACE1E1 /* 제일로 M.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "제일로 M.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C273BFA61A5E785400ACE1E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C273BFA71A5E785400ACE1E1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C273BFA91A5E785400ACE1E1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -62,10 +92,42 @@
 		C273C02E1A5FB26400ACE1E1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C273C02F1A5FB26400ACE1E1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C273C29B1A5FC16100ACE1E1 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
-		C273C29D1A62459800ACE1E1 /* Datas */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Datas; sourceTree = "<group>"; };
 		C273C29F1A62656500ACE1E1 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		C273C2A01A62656500ACE1E1 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
 		C273C2A21A626F5000ACE1E1 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		C273C3051A6797CA00ACE1E1 /* AKDataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKDataLoader.h; sourceTree = "<group>"; };
+		C273C3061A6797CA00ACE1E1 /* AKDataLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AKDataLoader.mm; sourceTree = "<group>"; };
+		C273C30B1A679AC900ACE1E1 /* 000660_d_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 000660_d_1.dat; sourceTree = "<group>"; };
+		C273C30C1A679AC900ACE1E1 /* 000660_m_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 000660_m_1.dat; sourceTree = "<group>"; };
+		C273C30D1A679AC900ACE1E1 /* 000660_s_300.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 000660_s_300.dat; sourceTree = "<group>"; };
+		C273C30E1A679AC900ACE1E1 /* 000660_s_60.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 000660_s_60.dat; sourceTree = "<group>"; };
+		C273C30F1A679AC900ACE1E1 /* 000660_t_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 000660_t_1.dat; sourceTree = "<group>"; };
+		C273C3101A679AC900ACE1E1 /* 000660_w_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 000660_w_1.dat; sourceTree = "<group>"; };
+		C273C3111A679AC900ACE1E1 /* 005930_d_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 005930_d_1.dat; sourceTree = "<group>"; };
+		C273C3121A679AC900ACE1E1 /* 005930_m_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 005930_m_1.dat; sourceTree = "<group>"; };
+		C273C3131A679AC900ACE1E1 /* 005930_s_300.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 005930_s_300.dat; sourceTree = "<group>"; };
+		C273C3141A679AC900ACE1E1 /* 005930_s_60.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 005930_s_60.dat; sourceTree = "<group>"; };
+		C273C3151A679AC900ACE1E1 /* 005930_t_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 005930_t_1.dat; sourceTree = "<group>"; };
+		C273C3161A679AC900ACE1E1 /* 005930_w_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = 005930_w_1.dat; sourceTree = "<group>"; };
+		C273C3171A679AC900ACE1E1 /* K001_d_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = K001_d_1.dat; sourceTree = "<group>"; };
+		C273C3181A679AC900ACE1E1 /* K001_m_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = K001_m_1.dat; sourceTree = "<group>"; };
+		C273C3191A679AC900ACE1E1 /* K001_s_300.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = K001_s_300.dat; sourceTree = "<group>"; };
+		C273C31A1A679AC900ACE1E1 /* K001_s_60.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = K001_s_60.dat; sourceTree = "<group>"; };
+		C273C31B1A679AC900ACE1E1 /* K001_t_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = K001_t_1.dat; sourceTree = "<group>"; };
+		C273C31C1A679AC900ACE1E1 /* K001_w_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = K001_w_1.dat; sourceTree = "<group>"; };
+		C273C31E1A679AC900ACE1E1 /* snek_multi_a.set */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = snek_multi_a.set; sourceTree = "<group>"; };
+		C273C31F1A679AC900ACE1E1 /* snek_multi_b.set */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = snek_multi_b.set; sourceTree = "<group>"; };
+		C273C3201A679AC900ACE1E1 /* snek_single.set */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = snek_single.set; sourceTree = "<group>"; };
+		C273C3221A679AC900ACE1E1 /* MTSTrTransData.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MTSTrTransData.dat; sourceTree = "<group>"; };
+		C273C3231A679AC900ACE1E1 /* MTSTrTransMore.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MTSTrTransMore.dat; sourceTree = "<group>"; };
+		C273C3241A679AC900ACE1E1 /* MTSTrTransReal.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MTSTrTransReal.dat; sourceTree = "<group>"; };
+		C273C3421A679E5C00ACE1E1 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		C273C3431A679E5C00ACE1E1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C273C3461A679E6800ACE1E1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C273C3511A67A10900ACE1E1 /* libAKChart.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAKChart.a; path = TW_MTS_Eugene_IOS/libs/libAKChart.a; sourceTree = "<group>"; };
+		C273C35C1A67A6C400ACE1E1 /* ChartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChartViewController.h; sourceTree = "<group>"; };
+		C273C35D1A67A6C400ACE1E1 /* ChartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChartViewController.m; sourceTree = "<group>"; };
+		C273C35E1A67A6C400ACE1E1 /* ChartViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChartViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +135,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C273C3521A67A10900ACE1E1 /* libAKChart.a in Frameworks */,
+				C273C3471A679E6800ACE1E1 /* UIKit.framework in Frameworks */,
+				C273C3441A679E5C00ACE1E1 /* CoreFoundation.framework in Frameworks */,
+				C273C3451A679E5C00ACE1E1 /* Foundation.framework in Frameworks */,
 				A4CCA1CB1A64A4E60004911B /* SystemConfiguration.framework in Frameworks */,
 				C273C2A31A626F5000ACE1E1 /* libz.dylib in Frameworks */,
 			);
@@ -91,18 +157,17 @@
 		C273BF991A5E785400ACE1E1 = {
 			isa = PBXGroup;
 			children = (
-				A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */,
-				C273C2A21A626F5000ACE1E1 /* libz.dylib */,
 				C273BFA41A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */,
 				C273BFBE1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests */,
 				C273BFA31A5E785400ACE1E1 /* Products */,
+				C273C2FD1A6795A100ACE1E1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		C273BFA31A5E785400ACE1E1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */,
+				C273BFA21A5E785400ACE1E1 /* 제일로 M.app */,
 				C273BFBB1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests.xctest */,
 			);
 			name = Products;
@@ -111,17 +176,23 @@
 		C273BFA41A5E785400ACE1E1 /* TW_MTS_Eugene_IOS */ = {
 			isa = PBXGroup;
 			children = (
+				C273C3051A6797CA00ACE1E1 /* AKDataLoader.h */,
+				C273C3061A6797CA00ACE1E1 /* AKDataLoader.mm */,
 				A4CCA1C71A63D77D0004911B /* ViewHUD.h */,
 				A4CCA1C81A63D77D0004911B /* ViewHUD.m */,
 				C273C29F1A62656500ACE1E1 /* Global.h */,
 				C273C2A01A62656500ACE1E1 /* Global.m */,
-				C273C29D1A62459800ACE1E1 /* Datas */,
-				C273C29B1A5FC16100ACE1E1 /* www */,
 				C273C02E1A5FB26400ACE1E1 /* Reachability.h */,
 				C273C02F1A5FB26400ACE1E1 /* Reachability.m */,
 				C273C02D1A5FB20200ACE1E1 /* StructLayout.h */,
 				C273C02A1A5FB12000ACE1E1 /* SocketConnector.h */,
 				C273C02B1A5FB12000ACE1E1 /* SocketConnector.m */,
+				C273C35C1A67A6C400ACE1E1 /* ChartViewController.h */,
+				C273C35D1A67A6C400ACE1E1 /* ChartViewController.m */,
+				C273C35E1A67A6C400ACE1E1 /* ChartViewController.xib */,
+				C273BFCB1A5E7FBB00ACE1E1 /* WebBridgeViewController.h */,
+				C273BFCC1A5E7FBB00ACE1E1 /* WebBridgeViewController.m */,
+				C273BFD21A5EA0D200ACE1E1 /* WebBridgeViewController.xib */,
 				C273BFA91A5E785400ACE1E1 /* AppDelegate.h */,
 				C273BFAA1A5E785400ACE1E1 /* AppDelegate.m */,
 				C273BFAC1A5E785400ACE1E1 /* ViewController.h */,
@@ -129,10 +200,9 @@
 				C273BFAF1A5E785400ACE1E1 /* Main.storyboard */,
 				C273BFB21A5E785400ACE1E1 /* Images.xcassets */,
 				C273BFB41A5E785400ACE1E1 /* LaunchScreen.xib */,
+				C273C3081A679A7600ACE1E1 /* resource */,
+				C273C29B1A5FC16100ACE1E1 /* www */,
 				C273BFA51A5E785400ACE1E1 /* Supporting Files */,
-				C273BFCB1A5E7FBB00ACE1E1 /* WebBridgeViewController.h */,
-				C273BFCC1A5E7FBB00ACE1E1 /* WebBridgeViewController.m */,
-				C273BFD21A5EA0D200ACE1E1 /* WebBridgeViewController.xib */,
 			);
 			path = TW_MTS_Eugene_IOS;
 			sourceTree = "<group>";
@@ -163,6 +233,82 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C273C2FD1A6795A100ACE1E1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C273C3511A67A10900ACE1E1 /* libAKChart.a */,
+				C273C3461A679E6800ACE1E1 /* UIKit.framework */,
+				C273C3421A679E5C00ACE1E1 /* CoreFoundation.framework */,
+				C273C3431A679E5C00ACE1E1 /* Foundation.framework */,
+				C273C2A21A626F5000ACE1E1 /* libz.dylib */,
+				A4CCA1CA1A64A4E60004911B /* SystemConfiguration.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C273C3081A679A7600ACE1E1 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				C273C3091A679AC900ACE1E1 /* Datas */,
+			);
+			name = resource;
+			sourceTree = "<group>";
+		};
+		C273C3091A679AC900ACE1E1 /* Datas */ = {
+			isa = PBXGroup;
+			children = (
+				C273C30A1A679AC900ACE1E1 /* SampleData */,
+				C273C31D1A679AC900ACE1E1 /* Settings */,
+				C273C3211A679AC900ACE1E1 /* TransData */,
+			);
+			path = Datas;
+			sourceTree = "<group>";
+		};
+		C273C30A1A679AC900ACE1E1 /* SampleData */ = {
+			isa = PBXGroup;
+			children = (
+				C273C30B1A679AC900ACE1E1 /* 000660_d_1.dat */,
+				C273C30C1A679AC900ACE1E1 /* 000660_m_1.dat */,
+				C273C30D1A679AC900ACE1E1 /* 000660_s_300.dat */,
+				C273C30E1A679AC900ACE1E1 /* 000660_s_60.dat */,
+				C273C30F1A679AC900ACE1E1 /* 000660_t_1.dat */,
+				C273C3101A679AC900ACE1E1 /* 000660_w_1.dat */,
+				C273C3111A679AC900ACE1E1 /* 005930_d_1.dat */,
+				C273C3121A679AC900ACE1E1 /* 005930_m_1.dat */,
+				C273C3131A679AC900ACE1E1 /* 005930_s_300.dat */,
+				C273C3141A679AC900ACE1E1 /* 005930_s_60.dat */,
+				C273C3151A679AC900ACE1E1 /* 005930_t_1.dat */,
+				C273C3161A679AC900ACE1E1 /* 005930_w_1.dat */,
+				C273C3171A679AC900ACE1E1 /* K001_d_1.dat */,
+				C273C3181A679AC900ACE1E1 /* K001_m_1.dat */,
+				C273C3191A679AC900ACE1E1 /* K001_s_300.dat */,
+				C273C31A1A679AC900ACE1E1 /* K001_s_60.dat */,
+				C273C31B1A679AC900ACE1E1 /* K001_t_1.dat */,
+				C273C31C1A679AC900ACE1E1 /* K001_w_1.dat */,
+			);
+			path = SampleData;
+			sourceTree = "<group>";
+		};
+		C273C31D1A679AC900ACE1E1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C273C31E1A679AC900ACE1E1 /* snek_multi_a.set */,
+				C273C31F1A679AC900ACE1E1 /* snek_multi_b.set */,
+				C273C3201A679AC900ACE1E1 /* snek_single.set */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C273C3211A679AC900ACE1E1 /* TransData */ = {
+			isa = PBXGroup;
+			children = (
+				C273C3221A679AC900ACE1E1 /* MTSTrTransData.dat */,
+				C273C3231A679AC900ACE1E1 /* MTSTrTransMore.dat */,
+				C273C3241A679AC900ACE1E1 /* MTSTrTransReal.dat */,
+			);
+			path = TransData;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -180,7 +326,7 @@
 			);
 			name = TW_MTS_Eugene_IOS;
 			productName = TW_MTS_Eugene_IOS;
-			productReference = C273BFA21A5E785400ACE1E1 /* TW_MTS_Eugene_IOS.app */;
+			productReference = C273BFA21A5E785400ACE1E1 /* 제일로 M.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C273BFBA1A5E785400ACE1E1 /* TW_MTS_Eugene_IOSTests */ = {
@@ -212,6 +358,7 @@
 				TargetAttributes = {
 					C273BFA11A5E785400ACE1E1 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = V4BY6SJJVJ;
 					};
 					C273BFBA1A5E785400ACE1E1 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -243,12 +390,36 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C273C29E1A62459800ACE1E1 /* Datas in Resources */,
 				C273BFB11A5E785400ACE1E1 /* Main.storyboard in Resources */,
+				C273C32D1A679AC900ACE1E1 /* 005930_s_300.dat in Resources */,
+				C273C3271A679AC900ACE1E1 /* 000660_s_300.dat in Resources */,
+				C273C3391A679AC900ACE1E1 /* snek_single.set in Resources */,
+				C273C3321A679AC900ACE1E1 /* K001_m_1.dat in Resources */,
+				C273C3251A679AC900ACE1E1 /* 000660_d_1.dat in Resources */,
+				C273C3361A679AC900ACE1E1 /* K001_w_1.dat in Resources */,
+				C273C3381A679AC900ACE1E1 /* snek_multi_b.set in Resources */,
+				C273C32A1A679AC900ACE1E1 /* 000660_w_1.dat in Resources */,
+				C273C33C1A679AC900ACE1E1 /* MTSTrTransReal.dat in Resources */,
+				C273C3291A679AC900ACE1E1 /* 000660_t_1.dat in Resources */,
+				C273C3301A679AC900ACE1E1 /* 005930_w_1.dat in Resources */,
 				C273BFB61A5E785400ACE1E1 /* LaunchScreen.xib in Resources */,
+				C273C3281A679AC900ACE1E1 /* 000660_s_60.dat in Resources */,
 				C273BFD01A5EA0D200ACE1E1 /* WebBridgeViewController.xib in Resources */,
+				C273C3261A679AC900ACE1E1 /* 000660_m_1.dat in Resources */,
+				C273C32F1A679AC900ACE1E1 /* 005930_t_1.dat in Resources */,
+				C273C3601A67A6C400ACE1E1 /* ChartViewController.xib in Resources */,
+				C273C3371A679AC900ACE1E1 /* snek_multi_a.set in Resources */,
+				C273C32C1A679AC900ACE1E1 /* 005930_m_1.dat in Resources */,
+				C273C32B1A679AC900ACE1E1 /* 005930_d_1.dat in Resources */,
+				C273C3351A679AC900ACE1E1 /* K001_t_1.dat in Resources */,
+				C273C33B1A679AC900ACE1E1 /* MTSTrTransMore.dat in Resources */,
 				C273C29C1A5FC16100ACE1E1 /* www in Resources */,
+				C273C3341A679AC900ACE1E1 /* K001_s_60.dat in Resources */,
+				C273C32E1A679AC900ACE1E1 /* 005930_s_60.dat in Resources */,
 				C273BFB31A5E785400ACE1E1 /* Images.xcassets in Resources */,
+				C273C33A1A679AC900ACE1E1 /* MTSTrTransData.dat in Resources */,
+				C273C3331A679AC900ACE1E1 /* K001_s_300.dat in Resources */,
+				C273C3311A679AC900ACE1E1 /* K001_d_1.dat in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,8 +437,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C273C35F1A67A6C400ACE1E1 /* ChartViewController.m in Sources */,
 				A4CCA1C91A63D77D0004911B /* ViewHUD.m in Sources */,
 				C273C02C1A5FB12000ACE1E1 /* SocketConnector.m in Sources */,
+				C273C3071A6797CA00ACE1E1 /* AKDataLoader.mm in Sources */,
 				C273BFAE1A5E785400ACE1E1 /* ViewController.m in Sources */,
 				C273BFAB1A5E785400ACE1E1 /* AppDelegate.m in Sources */,
 				C273C2A11A62656500ACE1E1 /* Global.m in Sources */,
@@ -403,10 +576,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Hark Hoon Kim (83YRQBJPN4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Hark Hoon Kim (83YRQBJPN4)";
 				INFOPLIST_FILE = TW_MTS_Eugene_IOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TW_MTS_Eugene_IOS/libs",
+				);
+				PRODUCT_NAME = "제일로 M";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -414,10 +595,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Hark Hoon Kim (83YRQBJPN4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Hark Hoon Kim (83YRQBJPN4)";
 				INFOPLIST_FILE = TW_MTS_Eugene_IOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TW_MTS_Eugene_IOS/libs",
+				);
+				PRODUCT_NAME = "제일로 M";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

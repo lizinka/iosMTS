@@ -463,9 +463,6 @@ typedef struct _Xo420402_OCCUR
 } Xo420402_OCCUR;
 
 
-
-
-
 //틱 layout
 typedef struct _Xibg3002_IN
 {
@@ -494,14 +491,12 @@ typedef struct _Xibg3002_OCCUR
 {
     char r_tday[8];  // 거래일
     char r_time[6];  // 체결시간
-    char r_open[9];  // 시가
-    char r_high[9];  // 고가
-    char r_lowp[9];  // 저가
-    char r_last[9];  // 현재가
+    char r_open[10];  // 시가
+    char r_high[10];  // 고가
+    char r_lowp[10];  // 저가
+    char r_last[10];  // 현재가
     char r_tvol[12]; // 체결수량
 } Xibg3002_OCCUR;
-
-
 
 //시세조회
 typedef struct _Pibo7011_IN

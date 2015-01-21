@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
@@ -12,11 +13,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <webView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tvw-HL-T7i">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tvw-HL-T7i">
+                    <rect key="frame" x="0.0" y="20" width="600" height="580"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="Mrw-cl-Dbx"/>
@@ -25,15 +26,12 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="tvw-HL-T7i" secondAttribute="centerY" id="5Qi-T1-hOS"/>
-                <constraint firstAttribute="centerX" secondItem="tvw-HL-T7i" secondAttribute="centerX" id="oIu-32-sU4"/>
+                <constraint firstItem="tvw-HL-T7i" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="B5X-aL-EnA"/>
+                <constraint firstAttribute="trailing" secondItem="tvw-HL-T7i" secondAttribute="trailing" id="PBD-B0-gbB"/>
+                <constraint firstItem="tvw-HL-T7i" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="WK6-GR-lOy"/>
+                <constraint firstAttribute="bottom" secondItem="tvw-HL-T7i" secondAttribute="bottom" id="oZf-ck-Pc1"/>
             </constraints>
-            <point key="canvasLocation" x="347" y="380"/>
+            <point key="canvasLocation" x="677" y="539"/>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C273BFA11A5E785400ACE1E1"
-               BuildableName = "TW_MTS_Eugene_IOS.app"
+               BuildableName = "&#x110c;&#x1166;&#x110b;&#x1175;&#x11af;&#x1105;&#x1169; M.app"
                BlueprintName = "TW_MTS_Eugene_IOS"
                ReferencedContainer = "container:TW_MTS_Eugene_IOS.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C273BFA11A5E785400ACE1E1"
-            BuildableName = "TW_MTS_Eugene_IOS.app"
+            BuildableName = "&#x110c;&#x1166;&#x110b;&#x1175;&#x11af;&#x1105;&#x1169; M.app"
             BlueprintName = "TW_MTS_Eugene_IOS"
             ReferencedContainer = "container:TW_MTS_Eugene_IOS.xcodeproj">
          </BuildableReference>
@@ -76,7 +76,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C273BFA11A5E785400ACE1E1"
-            BuildableName = "TW_MTS_Eugene_IOS.app"
+            BuildableName = "&#x110c;&#x1166;&#x110b;&#x1175;&#x11af;&#x1105;&#x1169; M.app"
             BlueprintName = "TW_MTS_Eugene_IOS"
             ReferencedContainer = "container:TW_MTS_Eugene_IOS.xcodeproj">
          </BuildableReference>
@@ -94,7 +94,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C273BFA11A5E785400ACE1E1"
-            BuildableName = "TW_MTS_Eugene_IOS.app"
+            BuildableName = "&#x110c;&#x1166;&#x110b;&#x1175;&#x11af;&#x1105;&#x1169; M.app"
             BlueprintName = "TW_MTS_Eugene_IOS"
             ReferencedContainer = "container:TW_MTS_Eugene_IOS.xcodeproj">
          </BuildableReference>
@@ -105,6 +105,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "&#xc81c;&#xc77c;&#xb85c; M"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
