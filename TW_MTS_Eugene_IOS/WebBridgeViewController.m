@@ -113,6 +113,7 @@
                         if([setObj count] > 0)
                         {
                             chartV.view.hidden = NO;
+                            chartV.view.frame = CGRectMake(0, 110, 320, 480);
                             [chartV ChangeIndicatorSetting:setObj];
                         }
                     }
@@ -178,7 +179,9 @@
                     sTrCode = @"m3001";
                 }
                 
-                [self ChartShow];
+                if (!m_bIsChartShow) {
+                    [self ChartShow];
+                }
                 
                 NSDictionary* setObj = [json objectForKey:@"chartSetting"];
                 
@@ -213,6 +216,7 @@
                         if ([sType isEqualToString:@"hide"])
                         {
                             chartV.view.hidden = YES;
+                            chartV.view.frame = CGRectMake(0, 0, 0, 0);
                         }
                         else
                         {
@@ -397,6 +401,10 @@
         
         memset(&querydata, 0x00, sizeof(Querydata));
         querydata.xywin = 0x01;
+        if ([trcode hasPrefix:@"m3005"] || [trcode hasPrefix:@"m3004"] || [trcode hasPrefix:@"m3003"] || [trcode hasPrefix:@"m3002"] || [trcode hasPrefix:@"m3001"])
+        {
+            querydata.xywin = 0x02;
+        }
         querydata.certflag = icertflag;
         querydata.certoutflag = icertoutflag;
         querydata.usetrheader = iusetrheader;
