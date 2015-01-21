@@ -364,9 +364,9 @@
     [loader1 SendInsert:loader1->CurrentStart : nEnd];
 }
 
--(void)ChangeIndicatorSetting:(NSString*)sIndiData
+-(void)ChangeIndicatorSetting:(NSDictionary*)sIndiData
 {
-    if (sIndiData == nil)
+    if (sIndiData == nil || [sIndiData count] <= 0)
     {
         return;
     }
@@ -379,52 +379,16 @@
         [self.akchart RemoveIndicator:0 :nIndex];
     }
     
-    if ([sIndiData isEqualToString:@" "]) {
-        return;
-    }
-    
-    if ([sIndiData isEqualToString:@"{}"]) {
-        return;
-    }
-    
-    if ([sIndiData isEqualToString:@""]) {
-        return;
-    }
-    
-    if ([sIndiData isEqualToString:@""]) {
-        return;
-    }
-    
-    
-    if ([sIndiData isEqualToString:@"false"])
-    {
-        return;
-    }
-    
-    NSError* error;
-    NSData* data = [sIndiData dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary* IndiObj = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    
-    if (error)
-    {
-        NSLog(@"error : %@", error.localizedDescription);
-        return;
-    }
-    
-    if (IndiObj == nil)
-    {
-        return;
-    }
-    
     NSArray* sIndiNames = [self.akchart GetIndicators];
     NSString* sIndiName;
     
+    NSDictionary* IndiObj = sIndiData;
     NSDictionary* ParamObj;
     int nIndiIndex = 0;
     for (nIndex = 0; nIndex < [sIndiNames count]; nIndex++)
     {
-        sIndiNames = [sIndiNames objectAtIndex:nIndex];
-        if ([IndiObj objectForKey:sIndiNames] == nil)
+        sIndiName = [sIndiNames objectAtIndex:nIndex];
+        if ([IndiObj objectForKey:sIndiName] == nil)
         {
             if ([sIndiName isEqualToString:@"StochasticSlow"])
             {
@@ -440,7 +404,7 @@
             }
         }
         
-        ParamObj = [NSJSONSerialization JSONObjectWithData:[IndiObj objectForKey:sIndiName] options:kNilOptions error:&error];
+        ParamObj = [IndiObj objectForKey:sIndiName];
         
         if (![[ParamObj objectForKey:@"check"] boolValue])
         {

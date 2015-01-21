@@ -87,10 +87,10 @@
     NSString *sTrType = [json objectForKey:@"type"];
     NSString *sTrCode;
     if ([sTrType isEqualToString:@"real"]) {
-        if(m_bIsChartShow)
-        {
-            [self ChartDestroy];
-        }
+        //if(m_bIsChartShow)
+        //{
+        //    [self ChartDestroy];
+        //}
         
         sTrCode = @"m9001";
     }
@@ -106,9 +106,15 @@
             {
                 BOOL bIsRedraw = [[json objectForKey:@"newDraw"] boolValue];
                 if (!bIsRedraw) {
-                    if (chartV != nil && m_bIsChartShow) {
+                    if (chartV != nil && m_bIsChartShow)
+                    {
                         //차트 세팅변경 구현.
-                         [chartV ChangeIndicatorSetting:[json objectForKey:@"chartSetting"]];
+                        NSDictionary* setObj = [json objectForKey:@"chartSetting"];
+                        if([setObj count] > 0)
+                        {
+                            chartV.view.hidden = NO;
+                            [chartV ChangeIndicatorSetting:setObj];
+                        }
                     }
                     return;
                 }
@@ -178,8 +184,7 @@
                 
                 if([setObj count] > 0)
                 {
-                    NSString* Setting = [setObj description];
-                    [chartV ChangeIndicatorSetting:Setting];
+                    [chartV ChangeIndicatorSetting:setObj];
                 }
                 m_bIsChartShow = true;
                 [self Request:5 gtr:@"mobile" tr:sTrCode];
@@ -204,8 +209,18 @@
                 if ([sTrCodeKey isEqualToString:@"#CHART_CLOSE"]) {
                     if (m_bIsChartShow)
                     {
-                        [self ChartDestroy];
+                        NSString* sType = [json objectForKey:@"type"];
+                        if ([sType isEqualToString:@"hide"])
+                        {
+                            chartV.view.hidden = YES;
+                        }
+                        else
+                        {
+                            [self ChartDestroy];
+                        }
                     }
+                    
+                    return;
                 }
             }
             else

@@ -51,7 +51,7 @@
 -(bool)getReadyRealData;
 -(void)UpdateChartRealData:(NSDictionary*)realData;
 -(void) SetSettingValue:(NSString*) sSetting;
--(void)ChangeIndicatorSetting:(NSString*)sIndiData;
+-(void)ChangeIndicatorSetting:(NSDictionary*)sIndiData;
 
 -(void) SetIndiPutbar:(NSDictionary*) sData:(int) nIndex;
 -(void) SetIndiBollingerband:(NSDictionary*) sData:(int) nIndex;

@@ -24,12 +24,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TW_MTS_Eugene_IOS/WebBridgeViewController.m"
-            timestampString = "442990545.916647"
+            timestampString = "443511493.711137"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "933"
-            endingLineNumber = "933"
-            landmarkName = "-gzipDecompress:"
+            startingLineNumber = "1165"
+            endingLineNumber = "1165"
+            landmarkName = "-ChartDestroy"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
