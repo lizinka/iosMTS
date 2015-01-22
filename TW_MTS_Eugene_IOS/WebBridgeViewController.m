@@ -187,7 +187,7 @@
                     [chartV ChangeIndicatorSetting:setObj];
                 }
                 m_bIsChartShow = true;
-                [self Request:5 gtr:@"mobile" tr:sTrCode];
+                [self Request:6 gtr:@"mobile" tr:sTrCode];
                 return;
             }
             else
@@ -390,13 +390,24 @@
             {
                 data = [m_sReqData dataUsingEncoding:0x80000000 + kCFStringEncodingDOSKorean];//NSUTF8StringEncoding
                 sendData = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:0x80000000 + kCFStringEncodingDOSKorean];
+                break;
+            }
+            case 6:
+            {
+                data = [m_sReqData dataUsingEncoding:0x80000000 + kCFStringEncodingDOSKorean];//NSUTF8StringEncoding
+                sendData = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:0x80000000 + kCFStringEncodingDOSKorean];
+                break;
             }
             default:
                 break;
         }
         
+        
         memset(&querydata, 0x00, sizeof(Querydata));
         querydata.xywin = 0x01;
+        if (gubun == 6) {
+            querydata.xywin = 0x02;
+        }
         querydata.certflag = icertflag;
         querydata.certoutflag = icertoutflag;
         querydata.usetrheader = iusetrheader;
@@ -752,26 +763,22 @@
                         NSLog(@"error : %@", error.localizedDescription);
                         return -1;
                     }
+                    if (!m_bisReconnMode)
+                    {
+                       [json removeObjectForKey:@"id"];
+                       [json removeObjectForKey:@"pass"];
+                       [json setObject:@"false" forKey:@"state"];
+                       [json setObject:@"" forKey:@"tel"];
+                       [json setObject:rmsg forKey:@"msg"];
                     
-                    [json removeObjectForKey:@"id"];
-                    [json removeObjectForKey:@"pass"];
-                    [json setObject:@"false" forKey:@"state"];
-                    [json setObject:@"" forKey:@"tel"];
-                    [json setObject:rmsg forKey:@"msg"];
+
+                       NSData* kData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                     
-//                    UIAlertView *alert = [[UIAlertView alloc]
-//                                          initWithTitle:@"Login Error"
-//                                          message:rmsg
-//                                          delegate:nil
-//                                          cancelButtonTitle:@"확인"
-//                                          otherButtonTitles:nil];
-//                    [alert show];
+                       NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
                     
-                    NSData* kData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                       [self csendWData:kJson];
+                    }
                     
-                    NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
-                    
-                    [self csendWData:kJson];
                 }
                 else
                 {
@@ -790,26 +797,26 @@
                     }
                     
                     NSString *sTel = [[NSString alloc] initWithBytes:&loginOUT.orco[0] length:sizeof(loginOUT.orco) encoding:0x80000000 + kCFStringEncodingDOSKorean];
+                    if (!m_bisReconnMode) {
+                       [json removeObjectForKey:@"id"];
+                       [json removeObjectForKey:@"pass"];
+                       [json setObject:@"true" forKey:@"state"];
+                       [json setObject:sTel forKey:@"tel"];
+                       [json setObject:@"" forKey:@"msg"];
                     
-                    [json removeObjectForKey:@"id"];
-                    [json removeObjectForKey:@"pass"];
-                    [json setObject:@"true" forKey:@"state"];
-                    [json setObject:sTel forKey:@"tel"];
-                    [json setObject:@"" forKey:@"msg"];
+    
+                       jsonOrigin = [json copy];
+                       NSData* kData = [NSJSONSerialization dataWithJSONObject:jsonOrigin options:NSJSONWritingPrettyPrinted error:nil];
+                       NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
                     
-                    //                    UIAlertView *alert = [[UIAlertView alloc]
-                    //                                          initWithTitle:@"Login Error"
-                    //                                          message:rmsg
-                    //                                          delegate:nil
-                    //                                          cancelButtonTitle:@"확인"
-                    //                                          otherButtonTitles:nil];
-                    //                    [alert show];
+                       [self csendWData:kJson];
+                    }
                     
-                    jsonOrigin = [json copy];
-                    NSData* kData = [NSJSONSerialization dataWithJSONObject:jsonOrigin options:NSJSONWritingPrettyPrinted error:nil];
-                    NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
+                    if (m_bisReconnMode)
+                    {
+                        m_bisReconnMode = false;
+                    }
                     
-                    [self csendWData:kJson];
                 }
             }
             else
@@ -1343,13 +1350,40 @@
     
     // 사용자가 Yes를 선택한 경우
     if (buttonIndex == 1) {
-        hud = [LGViewHUD defaultHUD];
-        hud.image = [UIImage imageNamed:@"rounded-checkmark.png"];
-        hud.topText = @"확인";
-        hud.bottomText = @"네트워크 재접속 중입니다.(6)";
-        hud.activityIndicatorOn = YES;
-        [self setTimer];
-        [hud showInView:self.view];
+        
+        NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+        
+       
+        switch (netStatus)
+        {
+            case NotReachable:
+                                //재접속 연결을 하고 있는 상태라면 그냥 Return
+                hud = [LGViewHUD defaultHUD];
+                hud.image = [UIImage imageNamed:@"rounded-checkmark.png"];
+                hud.topText = @"확인";
+                hud.bottomText = @"네트워크 재접속 중입니다.(6)";
+                hud.activityIndicatorOn = YES;
+                [self setTimer];
+                [hud showInView:self.view];
+                break;
+            case ReachableViaWiFi:
+                [self setReconnSocket];
+                [hud removeFromSuperview];
+                break;
+            case ReachableViaWWAN:
+                [self setReconnSocket];
+                [hud removeFromSuperview];
+                break;
+                
+            default:
+                [self setReconnSocket];
+                [hud removeFromSuperview];
+                break;
+        }
+
+        
+        
+
     }
     else
     {
