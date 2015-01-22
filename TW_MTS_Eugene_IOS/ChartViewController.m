@@ -215,21 +215,21 @@
     NSDictionary *detail = [[NSDictionary alloc] initWithDictionary:[realData objectForKey:@"commen"]];
     NSString* sTmp = [detail objectForKey:@"time"];
     NSString* sDate = [sTmp substringWithRange:NSMakeRange(0, 8)];
-    NSString* sTime = [sTmp substringWithRange:NSMakeRange(8, 14)];
+    NSString* sTime = [sTmp substringWithRange:NSMakeRange(9, 6)];
     
     nDiv = [[detail objectForKey:@"zdiv"] intValue];
     nOpos = [[detail objectForKey:@"cpos"] intValue];
 
-    sTmp = [detail objectForKey:@"LastPrice"];
+    sTmp = [[detail objectForKey:@"LastPrice"] stringValue];
     float fTemp = [global GetFixToDouble:([global CalcRealSise:sTmp :nDiv :nOpos]) :m_cDataKey];
     [self.akchart PriceRealUpdateData:0 : EAK_DATA_CLOSE :fTemp];
-    sTmp = [detail objectForKey:@"OpenPrice"];
+    sTmp = [[detail objectForKey:@"OpenPrice"] stringValue];
     fTemp = [global GetFixToDouble:([global CalcRealSise:sTmp :nDiv :nOpos]) :m_cDataKey];
     [self.akchart PriceRealUpdateData:0 : EAK_DATA_OPEN :fTemp];
-    sTmp = [detail objectForKey:@"HighPrice"];
+    sTmp = [[detail objectForKey:@"HighPrice" ] stringValue];
     fTemp = [global GetFixToDouble:([global CalcRealSise:sTmp :nDiv :nOpos]) :m_cDataKey];
     [self.akchart PriceRealUpdateData:0 : EAK_DATA_HIGH :fTemp];
-    sTmp = [detail objectForKey:@"LowPrice"];
+    sTmp = [[detail objectForKey:@"LowPrice"] stringValue];
     fTemp = [global GetFixToDouble:([global CalcRealSise:sTmp :nDiv :nOpos]) :m_cDataKey];
     [self.akchart PriceRealUpdateData:0 : EAK_DATA_LOW :fTemp];
     fTemp = [[detail objectForKey:@"LastVolume"] floatValue];

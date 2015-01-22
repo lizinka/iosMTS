@@ -578,7 +578,7 @@
     }
 
     NSRange nDecimalIndex = [sPrice rangeOfString:@"."];
-    NSMutableString* sRealPrice;
+    NSMutableString* sRealPrice = [sPrice copy];
     if (nDecimalIndex.location > 0)
     {
         if ([sPrice length] > nDecimalIndex.location + nDiv + 1)
@@ -596,7 +596,7 @@
         [sRealPrice insertString:@"'" atIndex:nSepIndex];
     }
     
-    return sRealPrice;
+    return [NSString stringWithString:sRealPrice];
 }
 @end
 
