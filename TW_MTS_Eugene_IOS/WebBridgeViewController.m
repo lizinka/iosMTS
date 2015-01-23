@@ -818,6 +818,20 @@
                     
                     if (m_bisReconnMode)
                     {
+                        
+                        NSMutableDictionary *jObj = [[NSMutableDictionary alloc ] init];
+                        
+                        
+                        [jObj setValue:@"#NETWORK" forKey:@"pageId"];
+                        [jObj setValue:@"connect" forKey:@"type"];
+                        
+                        
+                        NSData* kData = [NSJSONSerialization dataWithJSONObject:jObj options:NSJSONWritingPrettyPrinted error:nil];
+                        
+                        NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
+                        [self csendWData :[[NSString alloc] initWithBytes:&kJson length:sizeof(kJson) encoding:0x80000000 + kCFStringEncodingDOSKorean ]];
+                        
+                        
                         m_bisReconnMode = false;
                     }
                     
