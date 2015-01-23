@@ -113,7 +113,10 @@
                         if([setObj count] > 0)
                         {
                             chartV.view.hidden = NO;
-                            chartV.view.frame = CGRectMake(0, 110, 320, 480);
+                            CGRect nRt = [[UIScreen mainScreen] bounds];
+                            nRt.origin.y = 110;
+                            nRt.size.height -= 110;
+                            chartV.view.frame = nRt;
                             [chartV ChangeIndicatorSetting:setObj];
                         }
                     }
@@ -1181,7 +1184,10 @@
 -(void)ChartShow
 {
     chartV = [[ChartViewController alloc] initWithNibName:@"ChartViewController" bundle:nil];
-    chartV.view.frame = CGRectMake(0, 110, 320, 480);
+    CGRect nRt = [[UIScreen mainScreen] bounds];
+    nRt.origin.y = 110;
+    nRt.size.height -= 110;
+    chartV.view.frame = nRt;
     chartV.chartEventIF = self;
     [self.view addSubview:chartV.view];
 }

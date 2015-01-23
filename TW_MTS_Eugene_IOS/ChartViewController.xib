@@ -17,13 +17,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i5M-Pr-FkT" customClass="AKChartView">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="480"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" constant="20" symbolic="YES" id="QqM-gs-nIy"/>
+                <constraint firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="QqM-gs-nIy"/>
                 <constraint firstItem="i5M-Pr-FkT" firstAttribute="leading" secondItem="ln6-rp-FaC" secondAttribute="leading" id="WMf-tF-Cfp"/>
                 <constraint firstItem="i5M-Pr-FkT" firstAttribute="top" secondItem="ln6-rp-FaC" secondAttribute="top" id="bke-cc-i6C"/>
                 <constraint firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="xrI-fw-tbd"/>
