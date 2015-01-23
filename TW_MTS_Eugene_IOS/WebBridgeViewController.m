@@ -190,7 +190,7 @@
                     [chartV ChangeIndicatorSetting:setObj];
                 }
                 m_bIsChartShow = true;
-                [self Request:6 gtr:@"mobile" tr:sTrCode];
+                [self Request:5 gtr:@"mobile" tr:sTrCode];
                 return;
             }
             else
@@ -1281,8 +1281,6 @@
         // 네트워크 상태에 따라 처리
     }
 }
-
-
 
 - (bool) setReconnSocket { // throws IOException
     @try{
