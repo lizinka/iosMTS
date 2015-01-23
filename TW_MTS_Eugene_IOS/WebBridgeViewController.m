@@ -1207,7 +1207,7 @@
     
     internetReach = [Reachability reachabilityForInternetConnection];
     [internetReach startNotifier];
-    [self updateInterfaceWithReachability:internetReach];
+  //  [self updateInterfaceWithReachability:internetReach];
 }
 
 
