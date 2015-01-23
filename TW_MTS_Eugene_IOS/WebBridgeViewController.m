@@ -1294,7 +1294,7 @@
         m_bisReconnMode = true;
         
         //로그인 페이지임.
-        if ([UserId  isEqual: @""] || [Password  isEqual: @""] )
+        if ((UserId == nil || [UserId  isEqual: @""]) || (Password == nil || [Password  isEqual: @""]) )
         {
             m_bisReconnMode = false;
             //   if (networkCheckDlg != null)
