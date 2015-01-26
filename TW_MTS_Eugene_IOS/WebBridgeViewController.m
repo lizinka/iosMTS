@@ -42,6 +42,10 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     //NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
     //NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
+    
+    webView.scrollView.bounces = NO;
+//    webView.scrollView.alwaysBounceHorizontal = NO;
+//    webView.scrollView.alwaysBounceVertical = NO;
     [webView loadRequest:request];
     //[webView setScalesPageToFit:YES];
 }
@@ -284,7 +288,7 @@
         
         UserId = @"bbangms";
         Password = @"m1475s";
-        [conn Connect:@"61.78.34.111" port:33101];
+        [conn Connect:@"112.175.141.175" port:33101];
     }
 }
 
@@ -759,7 +763,10 @@
                     NSString *rmsg = [[NSString alloc] initWithBytes:&loginOUT.rmsg[0] length:sizeof(loginOUT.rmsg) encoding:0x80000000 + kCFStringEncodingDOSKorean];
                     
                     NSError* error;
-                    NSMutableDictionary* json = [NSJSONSerialization JSONObjectWithData:[m_sLoginInfo dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+                    NSDictionary* jsonOrigin = [NSJSONSerialization JSONObjectWithData:[m_sLoginInfo dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+                    
+                    NSMutableDictionary *json = [jsonOrigin mutableCopy];
+
                     if (json == nil) {
                         return -1;
                     }
