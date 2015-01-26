@@ -1330,7 +1330,7 @@
         }
         
         
-        [conn Connect:@"61.78.34.111" port:33101];
+        [conn Connect:@"112.175.141.175" port:33101];
     }
     
     @catch (NSException *ex) {
