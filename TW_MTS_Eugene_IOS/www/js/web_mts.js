@@ -58,6 +58,7 @@ function ini_app(){
 		window.android_os.ReqRealCancel=function(){return false;}
 	}//End of if(app_type=='web');
 	
+	console.log('==app_type : '+app_type+'==');
 		
 	ini_test();
 	ini_login()/*로그인 기능 처리*/
@@ -72,7 +73,7 @@ function ini_app(){
 	ini_footer();
 
 	/*페이지 이동관련 초기화*/
-	jQuery('#app').on('tap','a:not([data-rel="back"],[href="#HELP"],[data-rel="dialog"],[href^="tel"])', function(){return ini_page(this,navigation_page);});
+	jQuery('#app').on('tap','a:not([data-rel="back"],[href="#HELP"],[data-rel="dialog"],[href^="tel"],[target="_blank"])', function(){return ini_page(this,navigation_page);});
 	
 	/*스크롤 감지 페이지 초기화*/
 	$(window).on('scrollstop',function(){
@@ -95,7 +96,11 @@ function ini_app(){
 			}
 	);
 	
-	jQuery('#app').on('pageshow','section[data-role="page"]',function(){show_layer_help_before('auto');});
+	jQuery('#app').on('pageshow','section[data-role="page"]',
+				function(){
+						var page_id='#'+jQuery(this).attr('id');
+						ini_page_show(page_id);
+				});
 	jQuery('#app').on('tap','button.btn_close_loading',function(){jQuery.mobile.loading('hide');});
 																						
 	    page_height=jQuery(window).height();
@@ -123,6 +128,7 @@ function ini_app(){
 	}
 
 }/*End of ini_app()*/
+
 
 /*테스트 모드*/
 function ini_test(){
@@ -228,7 +234,6 @@ function send_native(msg, no_loading_icon){
 		jQuery.mobile.loading('show');
 	}
 	msg=JSON.stringify(msg);
-	
 	switch (app_type){
 		case 'android':
 			window.android_os.setMessage(msg);
@@ -281,14 +286,14 @@ function before_login(msg){
 function from_android(msg){
 	console.log('==form_android==');
 	/*테스트 코드 적용*/
-	if(app_type=="web"){
+	if(app_type=='web'){
 		console.log('웹소켓 데이터 수신 : ['+msg.origin+':'+msg.timeStamp+']');
 		msg=msg.data
 	}
 	console.log(msg.length);
 	console.log(msg);	
 	data=jQuery.parseJSON(msg);
-	console.log(data);
+	console.log(data);	
 	var page_id=jQuery.mobile.activePage.attr('id');
 	
 	if(page_id=='TEST'){
@@ -301,7 +306,8 @@ function from_android(msg){
 			if(type=='close'){
 			
 			}else if(type=='connect'){
-			
+				var page_id='#'+jQuery.mobile.activePage.attr('id');
+				ini_page_show(page_id);
 			}
 		break;
 		case '#LOGIN':
@@ -404,8 +410,11 @@ function ini_login(){
 	console.log('==ini_login==')
 	$( window ).resize(function(){jQuery('#LOGIN').toggleClass('active_input');}); 
 	
-	if(local.get('mts_id')){
-		jQuery('#LOGIN #login_id').val(local.get('mts_id'));
+	if(local.get('web_mts_LOGIN')){
+		var login_data=get_local_json('web_mts_LOGIN');
+		console.log(login_data);
+		jQuery('#LOGIN #login_id').val(login_data.id);
+		jQuery('#LOGIN #login_pw').val(login_data.pass);
 	}
 	
 	jQuery('#LOGIN').on('pagebeforeshow', function(){set_login_type()});
@@ -478,9 +487,12 @@ function ini_login(){
 		}
 		var save_id_check=jQuery('#LOGIN input#save_id_check').is(':checked');
 		if(save_id_check){
-			local.save({'mts_id':login_id})
+			var login_data={'id':login_id,'pass':login_pass};
+			var save_string=JSON.stringify(login_data);
+			var save_obj={'web_mts_LOGIN':save_string};
+			local.save(save_obj);
 		}else{
-			local.del('mts_id');
+			local.del('web_mts_LOGIN');
 		}
 		
 		var setting=get_local_json('web_mts_SETTING');
@@ -669,6 +681,7 @@ function ini_page(triger, callback){
 	}
 	
 	var page_id=jQuery(triger).attr('href');
+	
 		
 	var code=jQuery(triger).attr('data-code');
 	var item_type=jQuery(triger).attr('data-type');
@@ -779,6 +792,9 @@ function ini_page(triger, callback){
 					shortcut.find('a[href="#ITEM_LIST"]:not([data-code])').addClass('act');
 				}
 			break;
+			case '#ITEM_CHART':
+				request_item_real_data('#ITEM_CHART');
+			break;
 			default:
 					shortcut.find('a[href="#ITEM_ASKING"][data-code="'+data.itemCd+'"]').addClass('act');
 			break;
@@ -790,10 +806,6 @@ function ini_page(triger, callback){
 		
 		if('#'+active_id==page_id||out_check!='#'){
 			jQuery.mobile.loading('hide');
-			var real_page=['#ITEM_ASKING', '#ITEM_CONCLUDE', '#ITEM_DAILY', '#ITEM_CHART'];
-			if(jQuery.inArray(page_id,real_page)>-1){
-				request_item_real_data();
-			}
 			return false;
 		}
 		
@@ -822,6 +834,51 @@ function ini_page(triger, callback){
 			}
 		}
 	}//End of reset_page_attr();
+
+	function ini_page_show(page_id){
+		console.log('==ini_page_show('+page_id+')==');
+		switch (page_id){
+			case '#ITEM_ASKING':
+				request_item_real_data()
+			break;
+			case '#ITEM_CONCLUDE':
+				request_item_real_data()
+			break; 
+			case '#ITEM_DAILY':
+				request_item_real_data()
+			break; 
+			case '#ITEM_CHART':
+				draw_chart();
+			break;
+		}		
+		jQuery.mobile.loading('hide');
+		show_layer_help_before('auto')
+	}//Emd of ini_page_show(page);
+
+
+function re_connect(){
+	var page_id='#'+jQuery(page).attr('id');
+	console.log('==ini_page_show('+page_id+')==');
+		
+	switch (page_id){
+		case '#ITEM_ASKING':
+			request_item_real_data()
+		break;
+		case '#ITEM_CONCLUDE':
+			request_item_real_data()
+		break; 
+		case '#ITEM_DAILY':
+			request_item_real_data()
+		break; 
+		case '#ITEM_CHART':
+			draw_chart();
+		break;
+	}
+	alert('재 연결에 성공했습니다.');
+}//End of re_connect()
+
+
+
 
 
 /*종목선택 초기화*/
@@ -997,8 +1054,9 @@ function ini_item_select(){
 			
 		}
 	}//End of item_selected(btn)
+
 	
-/*종목검색 페이지 초기화*/
+/*종목검색 페이지 초기화
 function ini_item_search(){
 	console.log('==ini_item_search()==');
 	jQuery('#ITEM_SEARCH select.search_item_type').on('change',function(){search_item_type()});
@@ -1481,7 +1539,11 @@ function ini_item_list(){
 			}//End of for(item_code in item_data);
 			var send_msg={pageId:'#ITEM_LIST',type:'existing',data:data_body};
 			send_native(send_msg);
-			item_list_real_request();
+			/*
+			if(jQuery('#app').attr('data-real')=='true'){
+				item_list_real_request();
+			}
+			*/
 		}
 		
 		jQuery('#item_list_table_div').slideDown(300);
@@ -1489,6 +1551,9 @@ function ini_item_list(){
 	}//End of reset_item_list_table();
 	
 	function item_list_real_request(){
+		if(jQuery('#app').attr('data-real')!='true'){
+			return false;
+		}
 		var data_real=new Array();
 		var code=jQuery('#ITEM_LIST').attr('data-code');
 		var item_data=get_local_json(code);
@@ -1512,15 +1577,21 @@ function ini_item_list(){
 	
 	//아이템 리스트 항목 처리
 	function item_list_table(data){
+		console.log('==item_list_table(data)==');
 		var item_data=data.body;
 		var data_body=new Array();
 		for(var i=0;i<item_data.length;i++){
 			var item_tr=template_item_list(item_data[i]);
 			jQuery('#item_list_table tbody').append(item_tr).trigger('creat');
 		}
-		jQuery('#item_list_table').slideDown(0);
-		jQuery('#no_item_list_desc').slideUp(0);
-		
+		 if(item_data.length>0){
+			jQuery('#item_list_table').slideDown(300);
+			jQuery('#no_item_list_desc').slideUp(300);
+		 }else{
+		 	jQuery('#item_list_table').slideUp(300);
+			jQuery('#no_item_list_desc').slideDown(300);
+		 }
+		 item_list_real_request();
 	}//End of item_list_table(data)
 	
 	
@@ -1690,17 +1761,15 @@ function ini_item_list(){
 
 /*아이템별 보기 초기화*/
 function ini_item(){
-	jQuery('#ITEM_CHART').on('pageshow',function(){draw_chart()});
-	/*
-	jQuery('#ITEM_ASKING').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_ASKING')});
-	jQuery('#ITEM_CONCLUDE').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_CONCLUDE')});
-	jQuery('#ITEM_DAILY').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_DAILY')});
-	*/
-	jQuery('#ITEM_CHART').on('pagebeforehide',function(){send_native({pageId:'#CHART_CLOSE',type:'close'},true);});
-	
-	jQuery('#ITEM_ASKING, #ITEM_CONCLUDE, #ITEM_DAILY, #ITEM_CHART').on('pageshow',function(){request_item_real_data()});
-	
-	
+	jQuery('#app').on('pagebeforehide','#ITEM_ASKING,#ITEM_CONCLUDE,#ITEM_DAILY,#ITEM_CHART,#ITEM_OPTION',
+						function(){
+							var page_id=jQuery(this).attr('id');
+							jQuery('button.btn_dialog').removeClass('open');
+							jQuery('section.page_dialog').remove();
+							if(page_id=='ITEM_CHART'){
+								send_native({pageId:'#CHART_CLOSE',type:'close'},true);
+							}
+						});
 	jQuery('#ITEM_CHART input[name="chart_set"]').on('change',function(){ini_chart_set(this);});
 	jQuery('#ITEM_CHART select#chart_set_min_number').on('tap',function(){
 						jQuery('#ITEM_CHART input[name="chart_set"]').removeAttr('checked');
@@ -1789,7 +1858,8 @@ function ini_item(){
 		}else{
 			chart_data.newDraw=true;
 		}
-		send_native(chart_data,true);	
+		send_native(chart_data,true);
+		
 	}//End of draw_chart()
 	
 	function set_chart_data(){
@@ -1913,8 +1983,8 @@ function ini_item(){
 	
 	
 	//아이템별 실시간 요청
-	function request_item_real_data(){
-		console.log('==request_item_real_data==');
+	function request_item_real_data(active_id){
+		console.log('==request_item_real_data('+active_id+')==');
 		var real_check=jQuery('#app').attr('data-real');
 		console.log(real_check);
 		
@@ -1922,8 +1992,10 @@ function ini_item(){
 			console.log('리얼데이터 안받음..')
 			return false;
 		}
-		var active_id=jQuery.mobile.activePage.attr('id');
-			active_id='#'+active_id;	
+		if(!active_id){
+			active_id=jQuery.mobile.activePage.attr('id');
+			active_id='#'+active_id;
+		}
 		var quote_check=true;
 		var depth_check=false;	
 		switch (active_id){
@@ -1943,6 +2015,7 @@ function ini_item(){
 			var request_message={pageId:active_id,itemCd:code,itemType:item_type,serverCode:code,quote:quote_check,depth:depth_check,type:'real'};
 		}
 		console.log(request_message);		
+		
 		send_native(request_message,true);
 	}//End of request_item_real_data(code)
 	
@@ -2022,8 +2095,6 @@ function ini_item(){
 			jQuery(active_id+' a.btn_base_futures').attr('data-type','futures') 
 		}
 		
-		
-	
 		
 		if(data.itemType=='option_item'){
 			if(obj.has_key(data,'optionType')){
@@ -2375,33 +2446,6 @@ function ini_item(){
 			jQuery('#item_option_table_call').css('display','none').attr('data-active','false');
 		}
 		
-		/*
-		var act_type=jQuery('#item_option_table').attr('data-display');
-		if(type=='call'){
-			if(act_type=='call'){return false;}
-			if(act_type=='both'){
-				jQuery('#item_option_table .call_opt').attr('colspan',3);
-				jQuery('#item_option_table').attr('data-display','call');
-			}
-			if(act_type=='put'){
-				jQuery('#item_option_table .put_opt').attr('colspan',2);
-				jQuery('#item_option_table .call_opt').attr('colspan',2);
-				jQuery('#item_option_table').attr('data-display','both');
-			}
-		}
-		if(type=='put'){
-			if(act_type=='put'){return false;}
-			if(act_type=='both'){
-				jQuery('#item_option_table .put_opt').attr('colspan',3);
-				jQuery('#item_option_table').attr('data-display','put');
-			}
-			if(act_type=='call'){
-				jQuery('#item_option_table .put_opt').attr('colspan',2);
-				jQuery('#item_option_table .call_opt').attr('colspan',2);
-				jQuery('#item_option_table').attr('data-display','both');
-			}
-		}
-		*/
 	}//End of option_table_swipe(type)
 	
 	
@@ -3065,7 +3109,8 @@ function ini_layer(){
 			}
 		}//End of layer_item_change();
 		
-/*dialog 초기화*/		
+
+/*dialog 초기화*/	
 function ini_dialog(){
 	console.log('==ini_dialog==');
 	//종목검색 dialog
@@ -3320,7 +3365,7 @@ function ini_dialog_item_info(button){
 
 	function dialog_item_info(data){
 		var page_id=jQuery.mobile.activePage.attr('id');
-		var dialog_code=template_dialog_item_info(data);
+		var dialog_code=(data);
 			dialog_code.css('height',dialog_height);
 			dialog_code.css('top',header_height);
 			dialog_code.find('article').css ('height',dialog_height);
@@ -3334,7 +3379,7 @@ function ini_dialog_item_group(button){
 	var page_id=jQuery.mobile.activePage.attr('id');
 	if(jQuery(button).hasClass('open')){
 		jQuery(button).removeClass('open');
-		jQuery('#dialog_item_group').slideUp(300,function(){this.remove(),draw_chart();});
+		jQuery('#dialog_item_group').slideUp(300,function(){this.remove()});
 	}else{
 		
 		jQuery('#'+page_id+' .btn_dialog').removeClass('open');
@@ -3355,9 +3400,9 @@ function ini_dialog_chart(button){
 	if(jQuery(button).hasClass('open')){
 		jQuery(button).removeClass('open');
 		jQuery('#dialog_chart_setting').slideUp(300,function(){this.remove();});
-		 draw_chart(true);
+		draw_chart(true);
 	}else{
-		send_native({pageId:'#CHART_CLOSE',type:'close'},true);
+		send_native({pageId:'#CHART_CLOSE',type:'hide'},true);
 		jQuery('#'+page_id+' .btn_dialog').removeClass('open');
 		jQuery('#'+page_id+' .page_dialog').remove();
 		var dialog_code=template_dialog_chart_setting();
@@ -3856,7 +3901,7 @@ function get_template(part){
 			return jQuery(content);
 		}else{
 			var tel_number=local.get(mts_prefix+'_tel')
-			return jQuery('<div class="footer_menu_area"><div class="btn_all_menu_div"><button type="button" class="btn_footer_menu">전체메뉴</button></div><div class="shortcut_menu_div" data-role="navbar"><ul class="shortcut_menu"><li><a href="#BOARD_LIST" data-code="1"  data-type="notice_list">공지사항</a></li><li><a href="#ITEM_SELECT">종목검색</a></li><li><a href="#ITEM_LIST">관심종목</a></li><li><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></li><li><a href="tel:'+tel_number+'">전화주문</a></li></ul></div><form id="footer_real_check" ><label for="footer_real_check">실시간 데이터</label><input name="footer_real_check" id="footer_real_check" type="checkbox"></form><div id="close_app_div"><a href="#LOGIN">종료</a></div></div><div class="all_menu"><h1><a href="tel:'+tel_number+'">전화주문</a></h1><h1><a href="#ITEM_SELECT">종목검색</a></h1><h1><a href="#ITEM_LIST">관심종목</a></h1><h1><a href="#BOARD_LIST" data-code="1" data-type="notice_list">공지사항</a></h1><h1><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></h1><h1><a href="#HELP" data-code>도움말</a></h1><h1><a href="#CLOSE"  data-rel="dialog">종료</a></h1></div>'); 	
+			return jQuery('<div class="footer_menu_area"><div class="btn_all_menu_div"><button type="button" class="btn_footer_menu">전체메뉴</button></div><div class="shortcut_menu_div" data-role="navbar"><ul class="shortcut_menu"><li><a href="#BOARD_LIST" data-code="1"  data-type="notice_list">공지사항</a></li><li><a href="#ITEM_SELECT">종목검색</a></li><li><a href="#ITEM_LIST">관심종목</a></li><li><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></li><li><a href="tel:'+tel_number+'">전화주문</a></li></ul></div><form id="footer_real_check" ><label for="footer_real_check">실시간 데이터</label><input name="footer_real_check" id="footer_real_check" type="checkbox"></form><div id="close_app_div"><a href="#LOGIN">종료</a></div></div><div class="all_menu"><h1><a href="tel:'+tel_number+'">전화주문</a></h1><h1><a href="#ITEM_SELECT">종목검색</a></h1><h1><a href="#ITEM_LIST">관심종목</a></h1><h1><a href="#BOARD_LIST" data-code="1" data-type="notice_list">공지사항</a></h1><h1><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></h1><h1><a href="#HELP" data-code>도움말</a></h1><h1><a href="#SETTING"  data-rel="dialog">설정</a></h1><h1><a href="#CLOSE"  data-rel="dialog">종료</a></h1></div>'); 	
 		}
 	}
 	
@@ -4535,6 +4580,11 @@ function get_template(part){
 		
 		return jQuery('<section id="dialog_item_group" class="page_dialog"><header><h2>관심그룹</h2><button class="btn_make_group" type="button" data-role="none">그룹생성</button></header><article>'+group_menu_html+'</article></section>');
 	}//End of template_dialog_item_group();
+
+
+	var template_popup_item_info=function(data){
+		return jQuery('<section class="page_dialog dialog_item_info"  data-role="popup"><header><h2>종목정보</h2></header><article><dl class="item_desc_dl"></dl></article></section>');
+	}
 
 
 /*가격 수치 규격화*/

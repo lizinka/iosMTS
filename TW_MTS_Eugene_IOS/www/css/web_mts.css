@@ -188,11 +188,11 @@ body[data-mode="test"] #console button{
 #LOGIN input[type="text"],#LOGIN input[type="password"]{font-size:14px;box-shadow:none;border:rgb(94,85,86) solid 2px;background-color:rgb(227,226,231); border-radius:10px; text-align:center; padding:0; height:30px; box-sizing:border-box;}
 
 #LOGIN .login_check{text-align:center; margin:0 auto; margin-top:15px;}
-#LOGIN .login_check div.ui-checkbox{display: inline-block; width:45%; box-sizing:border-box;}
+#LOGIN .login_check div.ui-checkbox{display: inline-block; width:48%; box-sizing:border-box;}
 #LOGIN div.ui-checkbox{margin:0;}
 #LOGIN input[type="checkbox"]{display:none;}
 #LOGIN label[for="check_realtime"], #LOGIN label[for="save_id_check"]{background:none; background-color:transparent;border:none; text-align:center; margin:0; padding:10px 5px 10px 30px; font-size:12px; line-height:16px;}
-#LOGIN label[for="check_realtime"]:after, #LOGIN label[for="save_id_check"]:after{width:30px;height:30px;background:url(images/login_check.png); background-repeat:no-repeat; background-size:30px; margin-top:-18px;}
+#LOGIN label[for="check_realtime"]:after, #LOGIN label[for="save_id_check"]:after{width:30px;height:30px;background:url(images/login_check.png); background-repeat:no-repeat; background-size:30px; margin-top:-18px; left:0;}
 #LOGIN label.ui-checkbox-on[for="check_realtime"]:after, #LOGIN label.ui-checkbox-on[for="save_id_check"]:after{background-position:center bottom;}
 #LOGIN label.ui-checkbox-off[for="check_realtime"]:after, #LOGIN label.ui-checkbox-off[for="save_id_check"]:after{background-position:center 9px;}
 
@@ -529,7 +529,7 @@ body[data-mode="test"] #console button{
 .item_commen_info .itemCaption{font-weight:normal;}
 
 
-.item_commen_info .Curr{display:inline-block;box-sizing:border-box;text-align:left;color:rgb(255,255,255);font-size:30px; line-height:36px; min-width:80px; font-weight:bold;letter-spacing:-1px; min-width:40%; text-align:right;}
+.item_commen_info .Curr{display:inline-block;box-sizing:border-box;text-align:left;color:rgb(255,255,255);font-size:30px; line-height:36px; min-width:80px; font-weight:bold;letter-spacing:-1px; min-width:30%; text-align:right;}
 
 .item_commen_info .commen_info_data{position:absolute; right:10px; bottom:0px; line-height:36px;}
 
@@ -1033,14 +1033,18 @@ margin-right:2px; display:inline-block; content:""; vertical-align:middle;}
 #app footer .all_menu a.ui-draggable-dragging[href="#ITEM_ASKING"]:before,
 #app footer .shortcut_menu_div a[href="#ITEM_ASKING"]:before{background-image:url(images/ic_item_w.svg);}
 #app footer .all_menu a.ui-draggable-dragging[href="#BOARD_LIST"][data-code="1"]:before,
-#app footer .shortcut_menu_div a[href="#BOARD_LIST"][data-code="1"]:before{background-image:url(images/ic_notice_w.svg);background-size:30px;}
+#app footer .shortcut_menu_div a[href="#BOARD_LIST"][data-code="1"]:before{background-image:url(images/ic_notice_w.svg);background-size:35px;}
 #app footer .all_menu a.ui-draggable-dragging[href="#BOARD_LIST"][data-code="2"]:before,
 #app footer .shortcut_menu_div a[href="#BOARD_LIST"][data-code="2"]:before{background-image:url(images/ic_news_w.svg);background-size:60px;}
 #app footer .all_menu a.ui-draggable-dragging[href="#HELP"]:before,
 #app footer .shortcut_menu_div a[href="#HELP"]:before{background-image:url(images/ic_help_w.png);}
 #app footer .all_menu a.ui-draggable-dragging[href^="tel:"]:before,
 #app footer .shortcut_menu_div a[href^="tel:"]:before{background-image:url(images/ic_tel_w.svg);background-size:35px;}
-#app footer .all_menu a.ui-draggable-dragging[href="#CLOSE:"]:before,
+
+#app footer .all_menu a.ui-draggable-dragging[href="#SETTING"]:before,
+#app footer .shortcut_menu_div a[href="#SETTING"]:before{background-image:url(images/ic_settings_w.svg);}
+
+#app footer .all_menu a.ui-draggable-dragging[href="#CLOSE"]:before,
 #app footer .shortcut_menu_div a[href="#CLOSE"]:before{background-image:url(images/ic_off_w.svg);}
 
 #app footer .footer_menu_area input[type="checkbox"]{display:none;}
@@ -1063,10 +1067,11 @@ margin-right:2px; display:inline-block; content:""; vertical-align:middle;}
 #app footer .all_menu a[href="#ITEM_SELECT"]:before{background-image:url(images/ic_search_w.svg);}
 #app footer .all_menu a[href="#ITEM_LIST"]:before{background-image: url(images/ic_folder_w.svg);}
 #app footer .all_menu a[href="#ITEM_ASKING"]:before{background-image:url(images/ic_item_b.svg);}
-#app footer .all_menu a[href="#BOARD_LIST"][data-code="1"]:before{background-image:url(images/ic_notice_w.svg);background-size:30px;}
+#app footer .all_menu a[href="#BOARD_LIST"][data-code="1"]:before{background-image:url(images/ic_notice_w.svg);background-size:35px;}
 #app footer .all_menu a[href="#BOARD_LIST"][data-code="2"]:before{background-image:url(images/ic_news_w.svg);background-size:60px;}
 #app footer .all_menu a[href^="tel:"]:before{background-image:url(images/ic_tel_w.svg); background-size:35px;}
 #app footer .all_menu a[href="#HELP"]:before{background-image:url(images/ic_help_w.png);}
+#app footer .all_menu a[href="#SETTING"]:before{background-image:url(images/ic_settings_w.svg);}
 #app footer .all_menu a[href="#CLOSE"]:before{background-image:url(images/ic_off_w.svg);}
 
 #app footer .all_menu{box-sizing:border-box;position:relative;padding-top:0px;height:0px;-webkit-overflow-scrolling:touch; overflow:scroll;}

@@ -8,21 +8,26 @@ var mts_prefix='web_mts'
 var item_catagory_caption={'currency':'통화','interest':'채권','index':'지수','commodity':'농산물','metals':'금속','energy':'에너지','single stock':'지수옵션','etc comodity':'기타 농산물', 'other':'기타'}
 var month_code={'01':'F','02':'G','03':'H','04':'J','05':'K','06':'M','07':'N','08':'Q','09':'U','10':'V','11':'X','12':'Z'};
 var month_number={'F':1,'G':2,'H':3,'J':4,'K':5,'M':6,'N':7,'Q':8,'U':9,'V':10,'X':11,'Z':12};
-var android=false;
+var app_type='web';
+var page_height='100%';
 var all_menu_height=500;
 var option_tr_cnt=10;
+var dialog_option_tr_cnt=10;
 var dialog_height='90%';
 var dialog_article='70%';
+var chart_Hight='70%';
+var header_height=48;
+var PixelRatio=1;
 /*앱 초기화 실행*/
 function ini_app(){
+	//app 플랫폼 체크
+	if (navigator.userAgent.match('Android') != null){ 
+		app_type='android';
+	}else if(navigator.userAgent.match('iPhone') != null){ 
+		app_type='ios';	
+	}
 	
-	//웹
-	 if (navigator.userAgent.match('Android') != null){
-     	android=true;
-	 }
-	
-	if(android){
-		//console.log=function(msg){jQuery('#console div').append('<p class="send">'+msg+'</p>');}
+	if(app_type=='android'){ //실행 환경이 안드로이드일 경우 
 		alert=function(msg){
 			var page_id=jQuery.mobile.activePage.attr('id');
 			msg_json={pageId:'#'+page_id,type:'alert',msg:msg}
@@ -36,18 +41,27 @@ function ini_app(){
 			var send_meg=JSON.stringify(msg_json);
 			window.android_os.reqAlert(send_meg);	
 		}	
-	}else{
+		PixelRatio=window.devicePixelRatio;
+	}//End of if(app_type=='android')
+	
+	
+	if(app_type=='ios'){// 실생 환경이 ios인 경우
+		PixelRatio=1;
+	}//End of if(app_type=='ios')
+	
+		
+	if(app_type=='web'){ //실행 환경이 웹 일경우 
 		ini_websockt();
 		window.android_os={};
-		window.android_os.setMessage=function(msg){	console.log('msg to android : '+msg);};
-		window.android_os.ReqLogin=function(msg){console.log('login to android : '+msg);};
+		window.android_os.setMessage=function(msg){	console.log('msg to native : '+msg);};
+		window.android_os.ReqLogin=function(msg){console.log('login to native : '+msg);};
 		window.android_os.ReqRealCancel=function(){return false;}
-		web_check=true;
-	}
+	}//End of if(app_type=='web');
 	
 		
 	ini_test();
 	ini_login()/*로그인 기능 처리*/
+	ini_setting()/*설정창 관련*/
 	//ini_item_search()/*종목검색 관련 초기화*/
 	ini_item_select()/*종목아이템 선택*/
 	//ini_group();/*관심그룹 관련 초기화*/
@@ -58,7 +72,7 @@ function ini_app(){
 	ini_footer();
 
 	/*페이지 이동관련 초기화*/
-	jQuery('#app').on('tap','a:not([data-rel="back"],[href="#HELP"],[data-rel="dialog"],[href^="tel"])', function(){return ini_page(this,navigation_page);});
+	jQuery('#app').on('tap','a:not([data-rel="back"],[href="#HELP"],[data-rel="dialog"],[href^="tel"],[target="_blank"])', function(){return ini_page(this,navigation_page);});
 	
 	/*스크롤 감지 페이지 초기화*/
 	$(window).on('scrollstop',function(){
@@ -77,17 +91,17 @@ function ini_app(){
 	jQuery('#app').on('pagebeforeshow','section[data-role="page"]',
 			function(){
 				jQuery.mobile.loading('hide'); 
-				jQuery('div.bg_layer').remove(); 
-				show_layer_help_before('auto');				
+				jQuery('div.bg_layer').remove(); 			
 			}
 	);
 	
+	jQuery('#app').on('pageshow','section[data-role="page"]',function(){ini_page_show(this);});
 	jQuery('#app').on('tap','button.btn_close_loading',function(){jQuery.mobile.loading('hide');});
 																						
-	var page_height=jQuery(window).height();
-	var header_height=48;	
-	var footer_height=68; 
-	var commen_height=49
+	    page_height=jQuery(window).height();
+		header_height=35;	
+	var footer_height=58; 
+	var commen_height=30
 	var table_margin=10;
 	var thead_height=60;
 	var tbody_height=page_height-(header_height+footer_height+commen_height+thead_height);
@@ -97,8 +111,19 @@ function ini_app(){
 	all_menu_height=page_height-(header_height+footer_height);	
 	dialog_height=page_height-header_height;
 	dialog_article=dialog_height-dialog_header;
+	chart_Hight=(page_height-(header_height+55))*PixelRatio;
 	option_tr_cnt=parseInt(tbody_height/tr_height);
+	dialog_option_tr_cnt=parseInt((dialog_article-thead_height)/tr_height);
+	
+	/*테마적용*/
+	var setting_data=get_local_json('web_mts_SETTING');
+	console.log(setting_data);
+	if(obj.has_key(setting_data,'theme')){
+		jQuery('#app').attr('data-theme',setting_data.theme);
+	}
+
 }/*End of ini_app()*/
+
 
 /*테스트 모드*/
 function ini_test(){
@@ -177,7 +202,7 @@ function ini_test(){
 			break;
 		}
 		console.log(msg);
-		send_android(msg)
+		send_native(msg)
 		msg=JSON.stringify(msg);
 		jQuery('#recive_data_div').append('<p class="send">'+msg+'</p>');
 		
@@ -196,34 +221,59 @@ function ini_test(){
 		jQuery('#preview_notification_data').html('{pageId:#'+page_id+',type:'+type+',msg:'+msg+'}');
 	}//End of test_notification_test();
 	
-/*안드로이드로 메세지 전달*/
-function send_android(msg, no_loading_icon){
-	console.log('==send_android(msg)==');
+/*네이티브로 메세지 전달*/
+function send_native(msg, no_loading_icon){
+	console.log('==send_native(msg)==/'+app_type);
 	console.log(msg);
 	if(!no_loading_icon){
 		jQuery.mobile.loading('show');
 	}
 	msg=JSON.stringify(msg);
-	window.android_os.setMessage(msg);
-	if(!android){
-		wait_websoket(socket, function(){socket.send(msg)});
+	
+	switch (app_type){
+		case 'android':
+			window.android_os.setMessage(msg);
+		break;
+		case 'ios':
+			window.location = "jscall://" + "setMessage//" + msg
+		break;
+		case 'web':
+			wait_websoket(socket, function(){socket.send(msg)});
+		break
 	}
-}/*send_android(msg)*/
+}/*send_native(msg)*/
 
 /*리얼타임 취소*/
 function cancel_real_data(){
 	console.log('==cancel_real_data()==');
-	window.android_os.ReqRealCancel('---');
-	
+	switch (app_type){
+		case 'android':
+			window.android_os.ReqRealCancel('---');
+		break;
+		case 'ios':
+			window.location = "jscall://" + "ReqRealCancel//" + "---";
+		break;
+		case 'web':
+			return false;
+		break
+	}
 }/*cancel_real_data()*/
 
 //로그인
 function before_login(msg){
 	console.log('==before_login==');
 	msg=JSON.stringify(msg);
-	window.android_os.ReqLogin(msg);
-	if(!android){
-		wait_websoket(socket, function(){socket.send(msg)});
+	
+	switch (app_type){
+		case 'android':
+			window.android_os.ReqLogin(msg);
+		break;
+		case 'ios':
+			window.location = "jscall://" + "ReqLogin//" + msg;
+		break;
+		case 'web':
+			wait_websoket(socket, function(){socket.send(msg)});
+		break
 	}
 }
 
@@ -232,7 +282,7 @@ function before_login(msg){
 function from_android(msg){
 	console.log('==form_android==');
 	/*테스트 코드 적용*/
-	if(!android){
+	if(app_type=='web'){
 		console.log('웹소켓 데이터 수신 : ['+msg.origin+':'+msg.timeStamp+']');
 		msg=msg.data
 	}
@@ -355,23 +405,41 @@ function ini_login(){
 	console.log('==ini_login==')
 	$( window ).resize(function(){jQuery('#LOGIN').toggleClass('active_input');}); 
 	
-	if(local.get('mts_id')){
-		jQuery('#LOGIN #login_id').val(local.get('mts_id'));
+	if(local.get('web_mts_LOGIN')){
+		var login_data=get_local_json('web_mts_LOGIN');
+		console.log(login_data);
+		jQuery('#LOGIN #login_id').val(login_data.id);
+		jQuery('#LOGIN #login_pw').val(login_data.pass);
 	}
 	
-	jQuery('#LOGIN').on('pagehide', function(){jQuery('#LOGIN').addClass('login_ok')});
-	jQuery('#app').on('tap','button#btn_history_back', function(){window.history.go(1);});
-	jQuery('#app').on('tap','button#btn_colose_app',function(){close_app();})
+	jQuery('#LOGIN').on('pagebeforeshow', function(){set_login_type()});
+	jQuery('#LOGIN').on('pagehide', function(){login_class()});
+	jQuery('#app').on('tap','#LOGIN button.btn_history_back', function(){window.history.go(1);});
+	jQuery('#app').on('tap','#LOGIN button.btn_colose_app',function(){close_app();})
+	jQuery('#app').on('tap','#CLOSE button.btn_history_back', function(){window.history.back();});
+	jQuery('#app').on('tap','#CLOSE button.btn_colose_app',function(){close_app();})
 	
-	jQuery('#LOGIN').on('pagebeforeshow', function(){jQuery('#LOGIN article[data-role="content"]').css('height',$(window).height());})
 	jQuery('#LOGIN article[data-role="content"]').css('height',$(window).height());
+	jQuery('#CLOSE article[data-role="content"]').css('height',$(window).height());
 	
 	jQuery('#app').on('change','#check_realtime',function(){toggle_real_time(this)});
 	jQuery('#app').on('submit','#login_form',function(){return ini_login_process(this)});
+	set_login_type()
 }
+
 	function close_app(){
 		console.log('==close_app()==')
-		window.android_os.closeApp('app_close');
+		switch (app_type){
+			case 'android':
+				window.android_os.closeApp('app_close');
+			break;
+			case 'ios':
+				window.location = "jscall://" + "closeApp//" + "msg";
+			break;
+			case 'web':
+				alert('app_close');
+			break
+		}
 	}//End of close_app()
 	
 	function toggle_real_time(input){
@@ -385,6 +453,18 @@ function ini_login(){
 			alert('기존 데이터만 수신합니다. \n실시간으로 변화되는 데이터는 표시되지 않습니다.');
 		}
 	}//End of toggle_real_time(input)
+
+	function set_login_type(){
+		jQuery('#LOGIN article[data-role="content"]').css('height',$(window).height());
+		var data=get_local_json('web_mts_SETTING');
+		if(data.login=='inner'){
+			jQuery('#LOGIN label[for="login_id"]').text('사원번호');
+			jQuery('#LOGIN input#login_id').attr('placeholder','사원번호를 입력하세요');
+		}else{
+			jQuery('#LOGIN label[for="login_id"]').text('아이디');
+			jQuery('#LOGIN input#login_id').attr('placeholder','아이디를 입력하세요');
+		}
+	}
 
 
 	function ini_login_process(form){
@@ -402,17 +482,37 @@ function ini_login(){
 		}
 		var save_id_check=jQuery('#LOGIN input#save_id_check').is(':checked');
 		if(save_id_check){
-			local.save({'mts_id':login_id})
+			var login_data={'id':login_id,'pass':login_pass};
+			var save_string=JSON.stringify(login_data);
+			var save_obj={'web_mts_LOGIN':save_string};
+			local.save(save_obj);
 		}else{
-			local.del('mts_id');
+			local.del('web_mts_LOGIN');
 		}
 		
-		var login_data={pageId:"#LOGIN",id:login_id,pass:login_pass,type:'login'}
+		var setting=get_local_json('web_mts_SETTING');
+		if(setting.login=='inner'){
+			//login_id='@'+login_id;
+			var login_type='S';
+		}else{
+			var login_type='C';
+		}
+		
+		var login_data={pageId:"#LOGIN",loginType:login_type,id:login_id,pass:login_pass,type:'login'}
+		console.log(login_data);
 		before_login(login_data);
 		//load_js('js/futures_data.js',ini_item_code);
 		return false;
 	}//End of login_process(form)
 
+	function login_class(){
+		var login_check=jQuery('#LOGIN').attr('data-login');
+		if(login_check=='true'){
+			jQuery('#LOGIN').addClass('login_ok');
+		}else{
+			jQuery('#LOGIN').removeClass('login_ok');
+		}
+	}
 
 		//저장된 거래소의 변경날짜 확인
 		function check_exchange(){
@@ -432,16 +532,18 @@ function ini_login(){
 		if(data.state=='false'){
 			alert(data.msg);
 			jQuery('#LOGIN').attr('data-ani','pause');
+			jQuery('#LOGIN').attr('data-login','false');
 		}else{
 			var key=mts_prefix+'_tel';
 			var tel_obj={};
 				tel_obj[key]=data.tel;
 			local.save(tel_obj);
+			jQuery('#LOGIN').attr('data-login','true');
 			var real_time=jQuery('#login_form').find('#check_realtime').is(':checked');
 			jQuery('#app').attr('data-realtime',real_time);
 			var check_exchange_data=check_exchange();
 			var login_data={pageId:"#LOGIN",exchage:check_exchange_data,type:'existing'}
-			send_android(login_data, true);
+			send_native(login_data, true);
 		}
 	}//End of login_process(data)
 
@@ -486,9 +588,7 @@ function ini_login(){
 					}//아이템 코드 반복
 				}//category 반복
 			}
-			
-			
-						
+							
 			ex_key=mts_prefix+'_'+key;
 			exchange_data[key]=exchange[key].caption;
 			ex_data=JSON.stringify(exchange[key]);
@@ -510,8 +610,57 @@ function ini_login(){
 		}
 		var navi_data={'pageId':navi_page};
 		navigation_page(navi_data,true);
-		//jQuery('#LOGIN').remove();s
 	}//End of ini_item_code()
+
+/*설정 페이지 초기화*/
+function ini_setting(){
+	jQuery('#SETTING').on('pagebeforeshow', function(){setting_check()});
+	jQuery('#SETTING').on('change','select#setting_login', function(){login_type_alret(this)});
+	jQuery('#SETTING').on('change','select#setting_theme', 
+							function(){
+								var theme=jQuery(this).val();
+								jQuery('#app').attr('data-theme',theme);
+							});
+	jQuery('#SETTING').on('tap','button#save_setting', function(){setting_save()});
+}//End of ini_setting()
+
+	/*기존 설정 표시*/
+	function setting_check(){
+		console.log('==setting_check()==');
+		var data=get_local_json('web_mts_SETTING');
+		console.log(data);
+		jQuery('#SETTING select#setting_login').val(data.login);
+		jQuery('#SETTING select#setting_theme').val(data.theme);
+		if(data.login=='inner'){
+			jQuery('#setting_item_login .setting_desc').text('사원번호로 로그인 합니다.');
+		}else{
+			jQuery('#setting_item_login .setting_desc').text('회원 아이디로 로그인 합니다.');
+		}
+	}
+	/*로그인 타입 변경 경고창*/
+	function login_type_alret(type){
+		var check=jQuery(type).val();
+		if(check=='inner'){
+			alert('[사원용]은 내부 업무용입니다. \n일반고객은 로그인 형식을 \n[고객용]으로 설정하시기 바랍니다.');
+			jQuery('#setting_item_login .setting_desc').text('사원번호로 로그인 합니다.');
+		}else{
+			jQuery('#setting_item_login .setting_desc').text('회원 아이디로 로그인 합니다.');
+		}
+	}//End of login_type_alret(type)
+	
+	function setting_save(){
+		console.log('==setting_save()==');
+		var setting_data={
+			'login': jQuery('#SETTING select#setting_login').val(),
+			'theme': jQuery('#SETTING select#setting_theme').val()
+		}
+		console.log(setting_data);
+		var save_string=JSON.stringify(setting_data);
+		var save_obj={'web_mts_SETTING':save_string};
+		local.save(save_obj);
+		alert('설정을 저장하였습니다.');
+		window.history.back();
+	}//End of setting_save();
 
 
 /*페이지 코드데이터 지정*/
@@ -527,6 +676,7 @@ function ini_page(triger, callback){
 	}
 	
 	var page_id=jQuery(triger).attr('href');
+	
 		
 	var code=jQuery(triger).attr('data-code');
 	var item_type=jQuery(triger).attr('data-type');
@@ -582,7 +732,7 @@ function ini_page(triger, callback){
 				var msg={pageId:page_id,itemCd:code,itemType:item_type,serverCode:code,type:'existing'};
 			break
 		}
-		send_android(msg);
+		send_native(msg);
 		return false;
 	}else{
 		callback(navi_data,true);
@@ -637,6 +787,9 @@ function ini_page(triger, callback){
 					shortcut.find('a[href="#ITEM_LIST"]:not([data-code])').addClass('act');
 				}
 			break;
+			case '#ITEM_CHART':
+				request_item_real_data('#ITEM_CHART');
+			break;
 			default:
 					shortcut.find('a[href="#ITEM_ASKING"][data-code="'+data.itemCd+'"]').addClass('act');
 			break;
@@ -676,6 +829,28 @@ function ini_page(triger, callback){
 			}
 		}
 	}//End of reset_page_attr();
+
+	function ini_page_show(page){
+		var page_id='#'+jQuery(page).attr('id');
+		console.log('==ini_page_show('+page_id+')==');
+		switch (page_id){
+			case '#ITEM_ASKING':
+				request_item_real_data()
+			break;
+			case '#ITEM_CONCLUDE':
+				request_item_real_data()
+			break; 
+			case '#ITEM_DAILY':
+				request_item_real_data()
+			break; 
+			case '#ITEM_CHART':
+				draw_chart();
+			break;
+		}		
+		jQuery.mobile.loading('hide');
+		show_layer_help_before('auto')
+	}//Emd of ini_page_show(page);
+
 
 
 /*종목선택 초기화*/
@@ -785,7 +960,6 @@ function ini_item_select(){
 	
 	function item_selected(btn){
 		console.log('==item_selected(btn)==');
-		console.log(btn);
 		var page_id=jQuery.mobile.activePage.attr('id');
 		console.log(page_id);
 		
@@ -793,44 +967,68 @@ function ini_item_select(){
 		var item_code=act_btn.val();
 		if(!item_code){var item_code=act_btn.attr('data-code');}
 		if(!item_code){return false;}
-		var item_type=jQuery('#ITEM_SELECT select.select_item_type').val();
 		var item_caption=act_btn.parents('tr').find('button.item_caption').text();
 		
 		switch ('#'+page_id){
 			case '#ITEM_SELECT': //선택페이지
+				var item_type=jQuery('#ITEM_SELECT select.select_item_type').val();
 				if(item_type=='futures'){
 					var page_id="#ITEM_ASKING";
 				}else{
 					var page_id="#ITEM_OPTION";
 				}
 				var msg={pageId:page_id,itemCd:item_code,itemType:item_type,serverCode:item_code,cnt:option_tr_cnt,type:'existing'};
-				send_android(msg);
+				send_native(msg);
 			break;
 			
 			case '#ITEM_LIST': //관심그룹 리스트 
-				var group_code=jQuery('#ITEM_LIST').attr('data-code');
-				console.log(group_code);
-				var group_data=get_local_json('group');
-				var group_name=group_data[group_code];
-				var item_data=get_local_json(group_code);
-				
-				item_data[item_code]={};
-				item_data[item_code].caption=item_caption;
-				item_data[item_code].itemType=item_type;
-				item_data[item_code].serverCode=item_code;
-				
-				alert('['+item_caption+']을\n['+group_name+'] 관심그룹에 등록했습니다.');
-				
-				var save_string=JSON.stringify(item_data);
-				var save_obj={};
-				save_obj[group_code]=save_string;
-				local.save(save_obj);
-				
+				var group_code=jQuery('#ITEM_LIST select.interest_select').val();
+				if(group_code==false){
+					alert('관심 그룹이 없습니다. \n 관심그룹을 생성하세요.')
+					return false;
+				}		
+				var item_type=jQuery('#dialog_item_select select.select_item_type').val();
+				if(item_type=='futures'){
+					var group_data=get_local_json('group');
+					var group_name=group_data[group_code];
+					var item_data=get_local_json(group_code);
+					
+					item_data[item_code]={};
+					item_data[item_code].caption=item_caption;
+					item_data[item_code].itemType=item_type;
+					item_data[item_code].serverCode=item_code;
+					
+					alert('['+item_caption+']을\n['+group_name+'] 관심그룹에 등록했습니다.');
+					
+					var save_string=JSON.stringify(item_data);
+					var save_obj={};
+					save_obj[group_code]=save_string;
+					local.save(save_obj);
+				}else{
+					var msg={pageId:'#ITEM_OPTION',itemCd:item_code,itemType:'option',serverCode:item_code,cnt:dialog_option_tr_cnt,type:'existing'};
+					send_native(msg);
+				}
 			break;
+			
+			default:
+				var item_type=jQuery('#'+page_id+' select.select_item_type').val();
+				console.log(item_type);
+				if(item_type=='futures'){
+					var page_id="#"+page_id;
+				}else{
+					var page_id="#ITEM_OPTION";
+				}
+				var msg={pageId:page_id,itemCd:item_code,itemType:item_type,serverCode:item_code,cnt:option_tr_cnt,type:'existing'};
+				send_native(msg);
+				jQuery(page_id+' .btn_dialog').removeClass('open');
+				jQuery(page_id+' .page_dialog').remove();
+			break;
+			
 		}
 	}//End of item_selected(btn)
+
 	
-/*종목검색 페이지 초기화*/
+/*종목검색 페이지 초기화
 function ini_item_search(){
 	console.log('==ini_item_search()==');
 	jQuery('#ITEM_SEARCH select.search_item_type').on('change',function(){search_item_type()});
@@ -998,7 +1196,7 @@ function ini_item_search(){
 				
 			}
 			console.log(send_msg);
-			send_android(send_msg);
+			send_native(send_msg);
 			jQuery('#item_search_div').addClass('complate');
 		}
 	}//End of search_result(catgory,code)
@@ -1212,8 +1410,11 @@ function ini_item_list(){
 		//관심종목 코드 삭제
 		var group_key=jQuery('#ITEM_LIST').attr('data-code')
 		var group_data=get_local_json(group_key);
+		console.log(group_data);
 		var code=card.attr('data-code');
 		delete group_data[code];
+		
+		console.log(group_data);
 		var save_string=JSON.stringify(group_data);
 		var save_obj={}
 		save_obj[group_key]=save_string;
@@ -1267,6 +1468,7 @@ function ini_item_list(){
 		var item_data={}
 		if(code=='false'){
 			jQuery('#no_group_select_desc').slideDown(300);
+			jQuery('#no_item_list_desc').slideUp(0);
 			return false;
 		}else{
 			jQuery('#no_group_select_desc').slideUp(300);
@@ -1284,7 +1486,9 @@ function ini_item_list(){
 			for(item_code in item_data){	
 				var check_code=item_code;
 				if(item_data[item_code].itemType=='option_item'){
-					check_code=item_code.substr(1,item_code.length);
+					var check_code_temp=item_code.substr(1,item_code.length);
+					var check_code_array=check_code_temp.split('_');
+					check_code=check_code_array[0]
 				}
 				var item_check=item_search(check_code);
 			
@@ -1306,8 +1510,12 @@ function ini_item_list(){
 				
 			}//End of for(item_code in item_data);
 			var send_msg={pageId:'#ITEM_LIST',type:'existing',data:data_body};
-			send_android(send_msg);
-			item_list_real_request();
+			send_native(send_msg);
+			/*
+			if(jQuery('#app').attr('data-real')=='true'){
+				item_list_real_request();
+			}
+			*/
 		}
 		
 		jQuery('#item_list_table_div').slideDown(300);
@@ -1315,6 +1523,9 @@ function ini_item_list(){
 	}//End of reset_item_list_table();
 	
 	function item_list_real_request(){
+		if(jQuery('#app').attr('data-real')!='true'){
+			return false;
+		}
 		var data_real=new Array();
 		var code=jQuery('#ITEM_LIST').attr('data-code');
 		var item_data=get_local_json(code);
@@ -1333,20 +1544,26 @@ function ini_item_list(){
 			}
 		}
 		var real_msg={pageId:'#ITEM_LIST',type:'real',data:data_real};
-		send_android(real_msg,true);
+		send_native(real_msg,true);
 	}//End of item_list_real_request();
 	
 	//아이템 리스트 항목 처리
 	function item_list_table(data){
+		console.log('==item_list_table(data)==');
 		var item_data=data.body;
 		var data_body=new Array();
 		for(var i=0;i<item_data.length;i++){
 			var item_tr=template_item_list(item_data[i]);
 			jQuery('#item_list_table tbody').append(item_tr).trigger('creat');
 		}
-		jQuery('#item_list_table').slideDown(0);
-		jQuery('#no_item_list_desc').slideUp(0);
-		
+		 if(item_data.length>0){
+			jQuery('#item_list_table').slideDown(300);
+			jQuery('#no_item_list_desc').slideUp(300);
+		 }else{
+		 	jQuery('#item_list_table').slideUp(300);
+			jQuery('#no_item_list_desc').slideDown(300);
+		 }
+		 item_list_real_request();
 	}//End of item_list_table(data)
 	
 	
@@ -1385,7 +1602,7 @@ function ini_item_list(){
 				}else{
 					send_msg={pageId:'#ITEM_LIST',itemCd:code,serverCode:item_serverCode,itemType:item_type,type:'more'}
 			}
-			send_android(send_msg);
+			send_native(send_msg);
 		}
 	
 	}//End of item_card_extend_before
@@ -1393,7 +1610,7 @@ function ini_item_list(){
 	function item_card_extend_data(data){
 		console.log('==item_card_extend_data(data)==');
 		console.log(data);
-		var card=jQuery('#ITEM_LIST tr#'+data.itemCd );
+		var card=jQuery('#ITEM_LIST tr[data-code="'+data.itemCd+'"]');
 		var menu=get_template('item_more_menu');
 			menu.find('a.item_more_link').attr('href','#ITEM_ASKING');
 			menu.find('a.item_more_link').html('시세');
@@ -1444,7 +1661,7 @@ function ini_item_list(){
 		}else{
 			send_msg={pageId:'#ITEM_LIST',itemCd:code,serverCode:item_serverCode,itemType:item_type,type:'more'}
 		}
-		send_android(send_msg);
+		send_native(send_msg);
 	}//End of item_panel_extend(item_label)
 	
 	function item_panel_extend_data(data){
@@ -1480,7 +1697,7 @@ function ini_item_list(){
 	
 	function item_list_real(data){
 		console.log('==item_list_real(data)==');
-		if(jQuery('#app').attr('real')!='true'){return false;}
+		//if(jQuery('#app').attr('real')!='true'){return false;}
 		var card=jQuery('#item_list_table tr[data-server_code="'+data.commen.serverCode+'"]');
 		var card_zdiv=card.attr('data-zdiv');
 		var card_cpos=card.attr('data-cpos');	
@@ -1516,18 +1733,10 @@ function ini_item_list(){
 
 /*아이템별 보기 초기화*/
 function ini_item(){
-	//jQuery('#ITEM_ASKING').on('pagebeforeshow',function(){ini_asking()});
+	//jQuery('#ITEM_CHART').on('pageshow',function(){draw_chart()});
+	//jQuery('#ITEM_ASKING, #ITEM_CONCLUDE, #ITEM_DAILY').on('pageshow',function(){request_item_real_data()});
 	
-	jQuery('#ITEM_ASKING').on('pageshow',function(){request_item_real_data()});
-	jQuery('#ITEM_CONCLUDE').on('pageshow',function(){request_item_real_data()});
-	jQuery('#ITEM_DAILY').on('pageshow',function(){request_item_real_data()});
-	jQuery('#ITEM_CHART').on('pageshow',function(){request_item_real_data();
-												   draw_chart()});
-	
-	jQuery('#ITEM_ASKING').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_ASKING')});
-	jQuery('#ITEM_CONCLUDE').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_CONCLUDE')});
-	jQuery('#ITEM_DAILY').on('pagebeforehide',function(){cancel_item_real_data('#ITEM_DAILY')});
-	jQuery('#ITEM_CHART').on('pagebeforehide',function(){send_android({pageId:'#CHART_CLOSE',type:'close'});});
+	jQuery('#ITEM_CHART').on('pagebeforehide',function(){send_native({pageId:'#CHART_CLOSE',type:'close'},true);});
 	
 	jQuery('#ITEM_CHART input[name="chart_set"]').on('change',function(){ini_chart_set(this);});
 	jQuery('#ITEM_CHART select#chart_set_min_number').on('tap',function(){
@@ -1546,21 +1755,15 @@ function ini_item(){
 					
 	jQuery('#ITEM_CHART #btn_chart_draw').on('tap',function(){draw_chart()});
 	
-	/*
-	jQuery('#app').on('tap','.btn_item_commen_info',function(){toggle_item_info();});
-	jQuery('#app').on('tap','.btn_item_commen_info_close',function(){toggle_item_info();});
-	*/
-	
-	
-	jQuery('#item_option_table').swipe({
-		/*
+	jQuery('#ITEM_OPTION article[data-role="content"]').swipe({
+		
 		swipeLeft:function(event, direction, distance, duration, fingerCount, fingerData){
 					option_table_swipe('put');
 		},
 		swipeRight:function(event, direction, distance, duration, fingerCount, fingerData){
 					option_table_swipe('call');
 		},
-		*/
+		
 		swipeUp:function(event, direction, distance, duration, fingerCount, fingerData){
 					option_price_more('down');
 		},
@@ -1580,7 +1783,7 @@ function ini_item(){
 		draw_chart()
 	}//End of ini_chart_set();
 	
-	function draw_chart(){
+	function draw_chart(setting){
 		console.log('==draw_chart()==');
 		var chart_type=jQuery('#ITEM_CHART input[name="chart_set"]:checked').val();
 		if(!chart_type){chart_type='min';}
@@ -1592,10 +1795,119 @@ function ini_item(){
 		var server_code=jQuery('#ITEM_CHART').attr('data-server_code');
 		var item_zdiv=jQuery(data.pageId).attr('data-zdiv');
 		var item_cpos=jQuery(data.pageId).attr('data-cpos');
+		var chart_setting=get_local_json('web_mts_CHART_STETTING');
+		if(obj.size(chart_setting)<1){
+			var moving_averrage_value=new Array();
+			moving_averrage_value[0]={value:5}
+			moving_averrage_value[1]={value:20}
+			moving_averrage_value[2]={value:60}
+			
+			/*
+			chart_setting={
+				'MA':{
+					'check':true,
+					'item':moving_averrage_value
+				},
+				'거래량':{'check':true},
+			}
+			*/
+			chart_setting={};
+			save_string=JSON.stringify(chart_setting);
+			save_obj={'web_mts_CHART_STETTING':save_string}
+			local.save(save_obj);
+		}
 		
-		var chart_data={pageId:'#ITEM_CHART',itemCd:code,itemType:item_type,serverCode:server_code,zdiv:item_zdiv,cpos:item_cpos,chartType:chart_type,chartValue:cahrt_value,chartHight:chart_Hight,type:'chart'};
-		send_android(chart_data,true);	
+		//차트 설정 있음
+		var chart_data={pageId:'#ITEM_CHART',itemCd:code,itemType:item_type,serverCode:server_code,zdiv:item_zdiv,cpos:item_cpos,chartType:chart_type,chartValue:cahrt_value,chartHight:chart_Hight,chartSetting:chart_setting,type:'chart'};
+		
+		console.log(setting);
+		if(setting==true){
+			chart_data.newDraw=false;
+		}else{
+			chart_data.newDraw=true;
+		}
+		send_native(chart_data,true);
+		
 	}//End of draw_chart()
+	
+	function set_chart_data(){
+		var moving_averrage_value=[];
+		var moving_averrage_value_item=jQuery('#setting_moving_averrage div.moveing_averrage_item input[type="number"]');
+		for(var i=0;i<moving_averrage_value_item.length;i++){
+			moving_averrage_value[i]={value:jQuery(moving_averrage_value_item[i]).val()}
+		}
+		
+		console.log(moving_averrage_value);
+		data={
+			//'transparent_cant':{'check':jQuery('#dialog_chart_setting #transparent_cant').is(':checked')},
+			//'log_chart':{'check':jQuery('#dialog_chart_setting #log_chart').is(':checked')},
+			'매물대':{
+				'check':jQuery('#dialog_chart_setting #put_bar').is(':checked'),
+				'value':jQuery('#dialog_chart_setting #put_bar_number').val()
+			},
+			'MA':{
+				'check':jQuery('#dialog_chart_setting #moving_averrage').is(':checked'),
+				'item':moving_averrage_value
+			},
+			'BollingerBand':{
+				'check':jQuery('#dialog_chart_setting #bollinger_band').is(':checked'),
+				'term':jQuery('#dialog_chart_setting #bollinger_band_term').val(),
+				'multiplier':jQuery('#dialog_chart_setting #bollinger_band_term').val()
+			},
+			'일목균형표':{
+				'check':jQuery('#dialog_chart_setting #day_barance').is(':checked'),
+				'transition':jQuery('#dialog_chart_setting #day_barance_transition').val(),
+				'base':jQuery('#dialog_chart_setting #day_barance_base').val(),
+				'before_2':jQuery('#dialog_chart_setting #day_barance_before_2').val()
+			},
+			'Envelope':{
+				'check':jQuery('#dialog_chart_setting #envelop').is(':checked'),
+				'term':jQuery('#dialog_chart_setting #envelop_term').val(),
+				'precent':jQuery('#dialog_chart_setting #envelop_precent').val()
+			},
+			'거래량':{'check':jQuery('#dialog_chart_setting #trading_volume').is(':checked')},
+			'OBV':{'check':jQuery('#dialog_chart_setting #obv').is(':checked')},
+			'MACD':{
+				'check':jQuery('#dialog_chart_setting #macd').is(':checked'),
+				'short':jQuery('#dialog_chart_setting #macd_short').val(),
+				'long':jQuery('#dialog_chart_setting #macd_long').val(),
+				'signal':jQuery('#dialog_chart_setting #macd_signal').val()
+				},
+			'StochasticFast':{
+				'check':jQuery('#dialog_chart_setting #stochastic_fast').is(':checked'),
+				'trem':jQuery('#dialog_chart_setting #stochastic_fast_trem').val(),
+				'd':jQuery('#dialog_chart_setting #stochastic_fast_d').val()
+			},
+			'StochasticSlow':{
+				'check':jQuery('#dialog_chart_setting #stochastic_slow').is(':checked'),
+				'trem':jQuery('#dialog_chart_setting #stochastic_slow_trem').val(),
+				'k':jQuery('#dialog_chart_setting #stochastic_slow_k').val(),
+				'd':jQuery('#dialog_chart_setting #stochastic_slow_d').val()
+			},
+			'RSI':{
+				'check':jQuery('#dialog_chart_setting #rsi').is(':checked'),
+				'term':jQuery('#dialog_chart_setting #rsi_term').val(),
+				'signal':jQuery('#dialog_chart_setting #rsi_signal').val()
+			},
+			'DMI':{
+				'check':jQuery('#dialog_chart_setting #dmi').is(':checked'),
+				'term':jQuery('#dialog_chart_setting #dmi_term').val()
+			},
+			'TRIX':{
+				'check':jQuery('#dialog_chart_setting #trix').is(':checked'),
+				'trem':jQuery('#dialog_chart_setting #trix_trem').val(),
+				'signal':jQuery('#dialog_chart_setting #trix_signal').val()
+			},
+			'CCI':{'check':jQuery('#dialog_chart_setting #cci').is(':checked')}
+		}
+		console.log(data);
+		save_string=JSON.stringify(data);
+		save_obj={'web_mts_CHART_STETTING':save_string}
+		local.save(save_obj);
+		alert('차트 설정을 저장하였습니다.');
+		
+		ini_dialog_chart(jQuery('#ITEM_CHART button[data-dialog="chart_setting"]' ));
+	}//End of set_chart_data()
 	
 	
 	/*아이템 상세 정보 보기*/	
@@ -1622,7 +1934,7 @@ function ini_item(){
 			jQuery('#'+page_id+' .item_desc_div').slideToggle(300);
 		}else{
 			var dec_msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:server_code,type:'more'};
-			send_android(dec_msg);
+			send_native(dec_msg);
 		}
 	}//End of toggle_item_info();
 	
@@ -1639,8 +1951,8 @@ function ini_item(){
 	
 	
 	//아이템별 실시간 요청
-	function request_item_real_data(){
-		console.log('==request_item_real_data==');
+	function request_item_real_data(active_id){
+		console.log('==request_item_real_data('+active_id+')==');
 		var real_check=jQuery('#app').attr('data-real');
 		console.log(real_check);
 		
@@ -1648,8 +1960,10 @@ function ini_item(){
 			console.log('리얼데이터 안받음..')
 			return false;
 		}
-		var active_id=jQuery.mobile.activePage.attr('id');
-			active_id='#'+active_id;	
+		if(!active_id){
+			active_id=jQuery.mobile.activePage.attr('id');
+			active_id='#'+active_id;
+		}
 		var quote_check=true;
 		var depth_check=false;	
 		switch (active_id){
@@ -1667,8 +1981,10 @@ function ini_item(){
 			var request_message={pageId:active_id,itemCd:code,itemType:item_type,serverCode:server_code,optionExe:exercise,quote:quote_check,depth:depth_check,optionType:option_type,type:'real'};
 		}else{
 			var request_message={pageId:active_id,itemCd:code,itemType:item_type,serverCode:code,quote:quote_check,depth:depth_check,type:'real'};
-		}		
-		send_android(request_message,true);
+		}
+		console.log(request_message);		
+		
+		send_native(request_message,true);
 	}//End of request_item_real_data(code)
 	
 	function cancel_item_real_data(page_id){
@@ -1728,8 +2044,9 @@ function ini_item(){
 		jQuery(active_id+' .item_commen_navi a').attr('data-type',commen.itemType);
 		
 		//옵션 행사가 링크
-		jQuery(active_id+' .item_commen_navi li.option_item_only a').attr('data-code',commen.itemCd);
-		jQuery(active_id+' .item_commen_navi li.option_item_only a').attr('data-server_code',commen.itemCd);
+		var option_code=commen.itemCd.split('_');
+		jQuery(active_id+' .item_commen_navi li.option_item_only a').attr('data-code',option_code[0]);
+		jQuery(active_id+' .item_commen_navi li.option_item_only a').attr('data-server_code',option_code[0]);
 		jQuery(active_id+' .item_commen_navi li.option_item_only a').attr('data-type','option');
 		
 		//공통기능
@@ -1738,14 +2055,14 @@ function ini_item(){
 		
 		//옵션 행사가 기능
 		if(active_id=='#ITEM_OPTION'){
-			var base_code=commen.itemCd.substr(1,commen.itemCd.length);
-			jQuery(active_id+' a.btn_base_futures').attr('data-code',base_code);
-			jQuery(active_id+' a.btn_base_futures').attr('data-server_code',base_code);
+			var base_code_temp=commen.itemCd.substr(1,commen.itemCd.length);
+			var base_code=base_code_temp.split('_');
+			
+			jQuery(active_id+' a.btn_base_futures').attr('data-code',base_code[0]);
+			jQuery(active_id+' a.btn_base_futures').attr('data-server_code',base_code[0]);
 			jQuery(active_id+' a.btn_base_futures').attr('data-type','futures') 
 		}
 		
-		
-	
 		
 		if(data.itemType=='option_item'){
 			if(obj.has_key(data,'optionType')){
@@ -1762,7 +2079,7 @@ function ini_item(){
 		}
 		
 		
-		jQuery(active_id+' .item_commen_div .itemCaption').html(item_caption);
+		jQuery(active_id+' .itemCaption').html(item_caption);
 		jQuery(active_id+' .itemCd').html(commen.itemCd);
 		jQuery(active_id+' .item_commen_div span.Curr').html(format_price(commen.LastPrice,price_option));
 		jQuery(active_id+' .item_commen_div span.Diff').html(format_price(Math.abs(Number(commen.Diff)),price_option));
@@ -1958,6 +2275,10 @@ function ini_item(){
 						conclud_tr_data.body[0].TotalVolume=data.commen.LastVolume;
 					conclude_table(conclud_tr_data);
 				break;
+				case 'ITEM_DAILY':
+					item_commen(data);
+					item_daily_real(data)
+				break;
 				default:
 					item_commen(data);
 				break;
@@ -1992,8 +2313,6 @@ function ini_item(){
 	}//End of ini_daily(data)
 		
 		function item_daily_real(data){
-			item_commen(data)
-	
 			var active_id=jQuery.mobile.activePage.attr('id');
 				active_id='#'+active_id;	
 			var zdiv=jQuery(active_id).attr('data-zdiv');
@@ -2019,6 +2338,7 @@ function ini_item(){
 				jQuery('#item_daily_table tr[data-date="'+check_date+'"] td.Low').html(format_price(daily_data.body[0].Low));
 				jQuery('#item_daily_table tr[data-date="'+check_date+'"] td.Diff span:first-child').html(format_price(daily_data.body[0].Diff));
 				jQuery('#item_daily_table tr[data-date="'+check_date+'"] td.Diff span.Rate').html(daily_data.body[0].Rate);
+				jQuery('#item_daily_table tr[data-date="'+check_date+'"] td.TotalVolume').html(jQuery.number(daily_data.body[0].TotalVolume));
 				
 			}else{
 				daily_table(daily_data);
@@ -2051,39 +2371,49 @@ function ini_item(){
 	//Option 페이지 초기화
 	function ini_option(data){
 		console.log('==ini_option(data)==');
-		item_commen(data); 
-		option_table(data);
+		var act_id=jQuery.mobile.activePage.attr('id');
+		if(act_id=='ITEM_LIST'){
+			if(data.type=='existing'){
+				dialog_item_option(data);
+			}
+			if(data.type=='more'){
+				dialog_option_table(data)
+			}
+		}else{
+			item_commen(data); 
+			option_table(data);
+		}
 	}//ini_option(data)
 	
 	
 	//option table 표시전환
 	function option_table_swipe(type){
 		console.log('==option_table_swipe('+type+')==')
-		var act_type=jQuery('#item_option_table').attr('data-display');
-		if(type=='call'){
-			if(act_type=='call'){return false;}
-			if(act_type=='both'){
-				jQuery('#item_option_table .call_opt').attr('colspan',3);
-				jQuery('#item_option_table').attr('data-display','call');
-			}
-			if(act_type=='put'){
-				jQuery('#item_option_table .put_opt').attr('colspan',2);
-				jQuery('#item_option_table .call_opt').attr('colspan',2);
-				jQuery('#item_option_table').attr('data-display','both');
-			}
+		var active_table=jQuery('#app .item_option_table[data-active="true"]')[0];
+		var active_id=jQuery(active_table).attr('id');
+		console.log(active_id);
+		
+		if(type=='call'&&active_id=='item_option_table_both'){
+			jQuery('#item_option_table_both').css('display','none').attr('data-active','false');
+			jQuery('#item_option_table_put').css('display','none').attr('data-active','false');
+			jQuery('#item_option_table_call').css('display','table').attr('data-active','true');
 		}
-		if(type=='put'){
-			if(act_type=='put'){return false;}
-			if(act_type=='both'){
-				jQuery('#item_option_table .put_opt').attr('colspan',3);
-				jQuery('#item_option_table').attr('data-display','put');
-			}
-			if(act_type=='call'){
-				jQuery('#item_option_table .put_opt').attr('colspan',2);
-				jQuery('#item_option_table .call_opt').attr('colspan',2);
-				jQuery('#item_option_table').attr('data-display','both');
-			}
+		if(type=='call'&&active_id=='item_option_table_put'){
+			jQuery('#item_option_table_both').css('display','table').attr('data-active','true');
+			jQuery('#item_option_table_put').css('display','none').attr('data-active','false');
+			jQuery('#item_option_table_call').css('display','none').attr('data-active','false');
 		}
+		if(type=='put'&&active_id=='item_option_table_both'){
+			jQuery('#item_option_table_both').css('display','none').attr('data-active','false');
+			jQuery('#item_option_table_put').css('display','table').attr('data-active','true');
+			jQuery('#item_option_table_call').css('display','none').attr('data-active','false');
+		}
+		if(type=='put'&&active_id=='item_option_table_call'){
+			jQuery('#item_option_table_both').css('display','table').attr('data-active','true');
+			jQuery('#item_option_table_put').css('display','none').attr('data-active','false');
+			jQuery('#item_option_table_call').css('display','none').attr('data-active','false');
+		}
+		
 	}//End of option_table_swipe(type)
 	
 	
@@ -2108,18 +2438,32 @@ function ini_item(){
 		}
 	}//ini_option(data)
 		
-	function option_price_more(dir){
-		console.log('==option_price_more('+dir+')==');
-		var item_code=jQuery('#ITEM_OPTION').attr('data-code');
-		var item_server_code=jQuery('#ITEM_OPTION').attr('data-server_code');
-		if(dir=='up'){
-			item_strk=Number(jQuery('#item_option_table tbody tr:first-child').attr('data-exercise'));
-		}else if(dir=='down'){
-			item_strk=Number(jQuery('#item_option_table tbody tr:last-child').attr('data-exercise'));
-		}
+	function option_price_more(dir,dialog){
+		console.log('==option_price_more('+dir+','+dialog+')==');
 		
-		more_msg={pageId:"#ITEM_OPTION",itemCd:item_code,itemType:"option",serverCode:item_server_code,strk:item_strk,direction:dir,cnt:option_tr_cnt,type:"more"};
-		send_android(more_msg);
+		if(dialog==true){
+			console.log('==리스트 옵션 테이블임..==');
+			var item_code=jQuery('#dialog_option_item_table').attr('data-code');
+			var item_server_code=jQuery('#dialog_option_item_table').attr('data-server_code');
+			if(dir=='up'){
+				item_strk=Number(jQuery('#dialog_option_item_table tbody tr:first-child').attr('data-exercise'));
+			}else if(dir=='down'){
+				item_strk=Number(jQuery('#dialog_option_item_table tbody tr:last-child').attr('data-exercise'));
+			}
+
+			more_msg={pageId:"#ITEM_OPTION",itemCd:item_code,itemType:"option",serverCode:item_server_code,strk:item_strk,direction:dir,cnt:dialog_option_tr_cnt,type:"more"};
+		}else{
+			var item_code=jQuery('#ITEM_OPTION').attr('data-code');
+			var item_server_code=jQuery('#ITEM_OPTION').attr('data-server_code');
+			if(dir=='up'){
+				item_strk=Number(jQuery('#item_option_table_both tbody tr:first-child').attr('data-exercise'));
+			}else if(dir=='down'){
+				item_strk=Number(jQuery('#item_option_table_both tbody tr:last-child').attr('data-exercise'));
+			}
+			
+			more_msg={pageId:"#ITEM_OPTION",itemCd:item_code,itemType:"option",serverCode:item_server_code,strk:item_strk,direction:dir,cnt:option_tr_cnt,type:"more"};
+		}
+		send_native(more_msg);
 	
 	}//End of option_price_more(dir)
 	
@@ -2152,9 +2496,10 @@ function ini_item(){
 			  tr_data.push([prc, tr_data_temp[prc]]);
 			}
 			tr_data.sort()
-			console.log(tr_data);
 			
-			jQuery('#item_option_table tbody tr').remove();
+			jQuery('#item_option_table_both tbody tr').remove();
+			jQuery('#item_option_table_call tbody tr').remove();
+			jQuery('#item_option_table_put tbody tr').remove();
 			
 			for(i=(tr_data.length-1);i>-1;i--){
 				var key=tr_data[i][0];
@@ -2166,7 +2511,11 @@ function ini_item(){
 					atmf_tr='class="tr_atmf"';
 				}
 				
-				jQuery('#item_option_table tbody').append('<tr '+atmf_tr+' data-call="'+call.State+'" data-put="'+put.State+'" data-exercise="'+key+'"><td class="call_data call_vol">'+jQuery.number(call.TotalVolume)+'</td><td class="call_data Diff">'+format_price(Math.abs(call.Diff),price_option)+'</td><td class="call_data price"><a href="#ITEM_ASKING" data-code="'+code+'"data-type="option_item" data-exercise="'+key+'" data-option_type="call" data-server_code="'+call.Code+'">'+format_price(call.Price,price_option)+'</a></td><th>'+format_price(key,price_option)+'</th><td  class="put_data  price"><a href="#ITEM_ASKING" data-code="'+code+'" data-type="option_item" data-exercise="'+key+'"  data-option_type="put" data-server_code="'+put.Code+'">'+format_price(put.Price,price_option)+'</a></td><td class="put_data Diff">'+format_price(Math.abs(put.Diff),price_option)+'</td><td class="put_data put_vol">'+jQuery.number(put.TotalVolume)+'</td></tr>').trigger('creat');
+				jQuery('#item_option_table_both tbody').append('<tr '+atmf_tr+' data-call="'+call.State+'" data-put="'+put.State+'" data-exercise="'+key+'"><td class="call_data Diff">'+format_price(Math.abs(call.Diff),price_option)+'</td><td class="call_data price"><a href="#ITEM_ASKING" data-code="'+code+'"data-type="option_item" data-exercise="'+key+'" data-option_type="call" data-server_code="'+call.Code+'">'+format_price(call.Price,price_option)+'</a></td><th>'+format_price(key,price_option)+'</th><td  class="put_data  price"><a href="#ITEM_ASKING" data-code="'+code+'" data-type="option_item" data-exercise="'+key+'"  data-option_type="put" data-server_code="'+put.Code+'">'+format_price(put.Price,price_option)+'</a></td><td class="put_data Diff">'+format_price(Math.abs(put.Diff),price_option)+'</td></tr>').trigger('creat');
+				
+				jQuery('#item_option_table_call tbody').append('<tr '+atmf_tr+' data-call="'+call.State+'" data-put="'+put.State+'" data-exercise="'+key+'"><td class="call_data call_vol">'+jQuery.number(call.TotalVolume)+'</td><td class="call_data Diff">'+format_price(Math.abs(call.Diff),price_option)+'</td><td class="call_data price"><a href="#ITEM_ASKING" data-code="'+code+'"data-type="option_item" data-exercise="'+key+'" data-option_type="call" data-server_code="'+call.Code+'">'+format_price(call.Price,price_option)+'</a></td><th>'+format_price(key,price_option)+'</th></tr>').trigger('creat');
+				
+				jQuery('#item_option_table_put tbody').append('<tr '+atmf_tr+' data-call="'+call.State+'" data-put="'+put.State+'" data-exercise="'+key+'"><th>'+format_price(key,price_option)+'</th><td  class="put_data  price"><a href="#ITEM_ASKING" data-code="'+code+'" data-type="option_item" data-exercise="'+key+'"  data-option_type="put" data-server_code="'+put.Code+'">'+format_price(put.Price,price_option)+'</a></td><td class="put_data Diff">'+format_price(Math.abs(put.Diff),price_option)+'</td><td class="put_data put_vol">'+jQuery.number(put.TotalVolume)+'</td></tr>').trigger('creat');
 				
 			}			
 			if(data.type=='existing'){
@@ -2263,7 +2612,7 @@ function ini_item(){
 		
 		var more_msg={pageId:page_id[list_type],itemType:list_type,subg:board_subg,gubn:board_gubn,seqn:board_seqn,kymd:board_kymd,khms:board_khms,nrec:10,type:"more"};
 		
-		send_android(more_msg);
+		send_native(more_msg);
 	}//End of board_more()
 
 
@@ -2326,14 +2675,14 @@ function ini_layer(){
 	function show_layer_help(type){
 		var page_id=jQuery.mobile.activePage.attr('id');
 		console.log('==show_hlep_layer('+page_id+')==');
-		var layer=template_layer_help(type);
+		var layer=template_layer_help(type);	
 		var content_div=layer.find('div.help_content');
 		for(i=0;i<content_div.length;i++){
 			jQuery(content_div[i]).attr('data-order',i)
 		}
-		layer.find('button.btn_layer_before').css('display','none');
-		
 		var layer_height=jQuery(window).height();
+		layer.css('height',layer_height);
+		layer.find('button.btn_layer_before').css('display','none');
 		
 		jQuery('#'+page_id).append(layer).trigger('create');
 		
@@ -2403,7 +2752,7 @@ function ini_layer(){
 		
 		send_msg={pageId:'#ITEM_CHART',itemCd:item_code,serverCode:server_code,itemType:item_type,chartType:chart_type,chartValue:chart_value,type:'chart'}
 		//console.log(send_msg);
-		send_android(send_msg);
+		send_native(send_msg);
 	}//End of send_chart_msg()
 	
 			
@@ -2495,12 +2844,12 @@ function ini_layer(){
 		var page_id=jQuery.mobile.activePage.attr('id');
 		
 		var msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:item_serverCode,type:'existing'};
-		send_android(msg);
+		send_native(msg);
 		
 		var real=jQuery('#app').attr('data-real');
 		if(real=='true'){
 			var msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:item_serverCode,type:'real'};
-			send_android(msg);
+			send_native(msg);
 		}
 		
 		item_layer_remove();
@@ -2522,24 +2871,15 @@ function ini_layer(){
 				jQuery('#ITEM_LIST').attr('data-code',group_code);
 				reset_item_list_table();
 			}else{
-				var group_li=template_dialog_group_li(group_code,group_name);
-				group_li+='<li class="no_item_desc" data-group="'+group_code+'">등록된 종목이 없습니다.</li>'
-				jQuery('#dialog_item_group #dialog_group_list').append(group_li);
+				jQuery('#dialog_item_group .no_group_desc').remove();
+				var group_ul=template_dialog_item_ul(group_code);
+				jQuery('#dialog_item_group div.dialog_group_content').append(group_ul);
 			}
 			jQuery('#layer_reg_group_name').val('');
 			item_layer_remove_before();
 		}else{
 			return false
 		}
-		/*
-		if(group_code){
-			var group_option=get_template('group_item_option');
-			jQuery(group_option[group_option.length-1]).attr('selected','selected');
-			jQuery('#layer_group select.select_box_group option').remove();
-			jQuery('#layer_group select.select_box_group').append(group_option).trigger('create');
-			jQuery('#layer_group_select_01-button span.select_box_group').html(group_name);	
-		}
-		*/
 	}//End of layer_group_reg()
 	
 	function layer_group_item_option_change(){
@@ -2569,7 +2909,6 @@ function ini_layer(){
 	/*관심그룹 등록*/
 	function save_group_item(group_code){
 		console.log('==save_group_item('+group_code+')==');
-		console.log(this);
 		
 		var item_code=jQuery.mobile.activePage.attr('data-code');
 		var item_caption=jQuery.mobile.activePage.attr('data-caption');
@@ -2719,13 +3058,13 @@ function ini_layer(){
 				
 				var msg={pageId:'#'+page_id,itemCd:search_code,itemType:item_type,serverCode:search_code,type:'existing'};
 				console.log(msg);
-				send_android(msg);
+				send_native(msg);
 			
 				var real=jQuery('#app').attr('data-real');
 				if(real=='true'){
 					var msg={pageId:'#'+page_id,itemCd:search_code,itemType:item_type,serverCode:search_code,type:'real'};
 					console.log(msg);
-					send_android(msg);
+					send_native(msg);
 				}
 				
 				item_layer_remove();
@@ -2738,8 +3077,12 @@ function ini_layer(){
 			}
 		}//End of layer_item_change();
 		
-/*dialog 초기화*/		
 function ini_dialog(){
+	jQuery('#app').on('tap','button.btn_dialog',function(){ini_popup(this);})
+}
+
+/*dialog 초기화*/	
+function ini_dialog_back(){
 	console.log('==ini_dialog==');
 	//종목검색 dialog
 	jQuery('#app').on('tap','button[data-dialog="item_select"]',function(){ini_dialog_item_select(this)});
@@ -2762,16 +3105,31 @@ function ini_dialog(){
 	jQuery('#app').on('tap','#dialog_item_group button.btn_reg_item',
 						function(){
 							var code=jQuery(this).attr('data-code');
+							console.log(code);
 							var result=save_group_item(code);
 							if(result){
 								alert('['+result.item_caption+']을\n['+result.group_name+'] 관심그룹에 등록했습니다.');
 								var item_li=template_dialog_item_li(code,result.item_code);
 								console.log(item_li);
+								var target_ul=jQuery('#dialog_item_group ul[data-group="'+code+'"]');
+								target_ul.find('li.no_item_desc').remove();
+								target_ul.append(item_li);
 							}else{
 								alert('이미 등록된 종목입니다.');
 							}
 						});
-	jQuery('#app').on('tap','#dialog_item_group button.btn_group_item',function(){alert('btn_group_item')});
+	jQuery('#app').on('tap','#dialog_item_group button.btn_group_item',
+					function(){
+						console.log(this);
+						var item_code=jQuery(this).attr('data-code');
+						var server_code=jQuery(this).attr('data-server_code');
+						var item_type=jQuery(this).attr('data-type');
+						var page_id=jQuery.mobile.activePage.attr('id');
+						var msg={'pageId':'#'+page_id,'itemCd':item_code,'serverCode':server_code,'itemType':item_type,'type':'existing'}
+						send_native(msg);
+						jQuery('#'+page_id+' .btn_dialog').removeClass('open');
+						jQuery('#'+page_id+' .page_dialog').remove();
+					});
 	jQuery('#app').on('tap','#dialog_item_group button.btn_del_item',
 					function(){
 						var code=jQuery(this).attr('data-code');
@@ -2784,6 +3142,69 @@ function ini_dialog(){
 						local.save(save_obj);
 						jQuery(this).parent('li').remove();
 					});
+					
+	//차트 설정 
+	jQuery('#app').on('tap','button[data-dialog="chart_setting"]',function(){ini_dialog_chart(this)});	
+	jQuery('#app').on('change','#dialog_chart_setting input[type="checkbox"]',
+						function(){
+							var check_id=jQuery(this).attr('id');
+							console.log(check_id);
+							if(jQuery(this).is(':checked')){
+								jQuery('#setting_'+check_id).slideDown(100).removeClass('hidden');
+								if(check_id=='moving_averrage'){
+									jQuery('#dialog_chart_setting button.btn_add_ma').slideDown(100).removeClass('hidden');
+								}
+							}else{
+								jQuery('#setting_'+check_id).slideUp(100);
+								if(check_id=='moving_averrage'){
+									jQuery('#dialog_chart_setting button.btn_add_ma').slideUp(100);
+								}
+								if(check_id=='moving_averrage'){
+									jQuery('#dialog_chart_setting button.btn_add_ma').slideUp(100).addClass('hidden');
+								}
+							}
+						});
+	jQuery('#app').on('tap','#btn_chart_setting_ok', function(){set_chart_data();});	
+	jQuery('#app').on('tap','#dialog_chart_setting button.btn_add_ma', function(){chart_add_ma_item();});
+	jQuery('#app').on('tap','#dialog_chart_setting button.btn_remove_ma', function(){chart_remove_ma_item(this);});	
+	jQuery('#app').on('tap','#dialog_item_select_option button.close_dialog',
+					function(){
+						console.log('==close_dialog==');
+						jQuery('#dialog_item_select_option').slideUp(300,function(){this.remove();})
+					});
+	jQuery('#app').on('tap','#dialog_option_item_table a[data-rel="dialog"]',
+					function(){
+						console.log(this);
+						var group_code=jQuery('#ITEM_LIST select.interest_select').val()
+						if(group_code==false){
+							alert('관심 그룹이 없습니다. \n 관심그룹을 생성하세요.')
+							return false;
+						}
+						var group_data=get_local_json('group');
+						var group_name=group_data[group_code];
+						var item_data=get_local_json(group_code);
+						var item_caption=jQuery('#dialog_item_select_option header h2 span').text();
+						var option_type=jQuery(this).attr('data-option_type');
+						var type_string={call:' C ',put:' p '}
+						var exercise=jQuery(this).attr('data-exercise');
+						item_caption=item_caption+type_string[option_type]+exercise;
+						
+						item_data[jQuery(this).attr('data-server_code')]={};
+						item_data[jQuery(this).attr('data-server_code')].caption=item_caption;
+						item_data[jQuery(this).attr('data-server_code')].itemType=jQuery(this).attr('data-type');
+						item_data[jQuery(this).attr('data-server_code')].serverCode=jQuery(this).attr('data-server_code');
+						item_data[jQuery(this).attr('data-server_code')].optionExe=jQuery(this).attr('data-exercise');
+						item_data[jQuery(this).attr('data-server_code')].optionType=jQuery(this).attr('data-option_type');
+						console.log(item_data);
+						alert('['+item_caption+']을\n['+group_name+'] 관심그룹에 등록했습니다.');
+						var save_string=JSON.stringify(item_data);
+						var save_obj={};
+						save_obj[group_code]=save_string;
+						local.save(save_obj);
+						
+						return false;
+					});								
+					
 }//End of ini_dialog()
 
 function ini_dialog_item_select(button){
@@ -2791,11 +3212,16 @@ function ini_dialog_item_select(button){
 	var page_id=jQuery.mobile.activePage.attr('id');
 	if(jQuery(button).hasClass('open')){
 		jQuery(button).removeClass('open');
+		jQuery('#dialog_item_select_option').remove();
 		jQuery('#dialog_item_select').slideUp(300,function(){this.remove(); reset_item_list_table();});
+		
 	}else{
+		jQuery('#'+page_id+' .btn_dialog').removeClass('open');
+		jQuery('#'+page_id+' .page_dialog').remove();
 		jQuery(button).addClass('open');		
 		var dialog_code=template_dialog_item_select();
 			dialog_code.css('height',dialog_height);
+			dialog_code.css('top',header_height);
 			dialog_code.find('article').css ('height',dialog_height);
 		var item_tr_html=item_tr('futures','currency');		
 		jQuery('#'+page_id).append(dialog_code).trigger('creat');
@@ -2814,33 +3240,105 @@ function ini_dialog_item_select(button){
 				
 		}//End of diglog_item_select();
 
+		function dialog_item_option(data){
+			console.log('==dialog_item_option(data)==')
+			var page_id=jQuery.mobile.activePage.attr('id');
+			var dialog_code=template_dialog_item_select_option(data);
+				dialog_code.css('height',dialog_height);
+				dialog_code.css('top',header_height);
+				dialog_code.find('article').css ('height',dialog_height);
+				jQuery('#'+page_id).append(dialog_code).trigger('creat');
+			dialog_option_table(data);	
+
+			jQuery('#dialog_item_select_option article').swipe({
+				swipeUp:function(event, direction, distance, duration, fingerCount, fingerData){
+							console.log('==swipUp==')
+							option_price_more('down',true);
+				},
+				swipeDown:function(event, direction, distance, duration, fingerCount, fingerData){
+							console.log('==swipDown==')
+							option_price_more('up',true);
+				}
+			});	
+
+			dialog_code.slideDown(300);
+			jQuery.mobile.loading('hide');
+		}//End of dialog_item_option();
+
+		function dialog_option_table(data){
+			console.log('==dialog_option_table()==');
+			console.log(data);
+			var table=jQuery('#dialog_option_item_table');
+			table.attr('data-code',data.itemCd);
+			table.attr('data-server_code',data.serverCode);
+			
+			var code=data.itemCd;
+			var tr_data_temp=data['body'];
+			var item_zdiv=data.zdiv;
+			var item_cpos=data.cpos;
+			var price_option={zdiv:item_zdiv,cpos:item_cpos}	
+			var tr_cnt=obj.size(tr_data_temp);
+			
+			if(tr_cnt<1){
+				alert('더 이상 행사가가 없습니다.');
+				jQuery.mobile.loading('hide');
+				return false;
+			}
+			
+			var tr_data=[];
+			for (var prc in tr_data_temp) {
+			  tr_data.push([prc, tr_data_temp[prc]]);
+			}
+			tr_data.sort()
+						
+			jQuery('#dialog_option_item_table tbody tr').remove();
+			
+			for(i=(tr_data.length-1);i>-1;i--){
+				var key=tr_data[i][0];
+				var call=tr_data[i][1]['Call'];
+				var put=tr_data[i][1]['Put'];
+				var atmf_tr=''
+				
+				if(call.ATMF==1){
+					atmf_tr='class="tr_atmf"';
+				}
+				
+			jQuery('#dialog_option_item_table tbody').append('<tr '+atmf_tr+' data-call="'+call.State+'" data-put="'+put.State+'" data-exercise="'+key+'"><td class="call_data Diff">'+format_price(Math.abs(call.Diff),price_option)+'</td><td class="call_data price"><a data-rel="dialog" data-code="'+code+'"data-type="option_item" data-exercise="'+key+'" data-option_type="call" data-server_code="'+call.Code+'">'+format_price(call.Price,price_option)+'</a></td><th>'+format_price(key,price_option)+'</th><td  class="put_data  price"><a data-rel="dialog" data-code="'+code+'" data-type="option_item" data-exercise="'+key+'"  data-option_type="put" data-server_code="'+put.Code+'">'+format_price(put.Price,price_option)+'</a></td><td class="put_data Diff">'+format_price(Math.abs(put.Diff),price_option)+'</td></tr>').trigger('creat');
+			}
+			jQuery.mobile.loading('hide');
+		}//End of dialog_option_table;
+
+
 function ini_dialog_item_info(button){
 	console.log('==ini_dialog_item_info(button)==');
+	
 	var page_id=jQuery.mobile.activePage.attr('id');
 	if(jQuery(button).hasClass('open')){
 		jQuery(button).removeClass('open');
 		jQuery('#dialog_item_info').slideUp(300,function(){this.remove();});
 	}else{
+		jQuery('#'+page_id+' .btn_dialog').removeClass('open');
+		jQuery('#'+page_id+' .page_dialog').remove();
 		var item_code=jQuery('#'+page_id).attr('data-code');
 		var item_type=jQuery('#'+page_id).attr('data-type');
 		
-		if(!item_code){item_code='ESZ14'};
-		if(!item_type){item_type='futures'};
-		
 		if(item_type.substr(0,1)=='o'){
-			item_code=item_code.substr(1,item_code.length);
+			item_code_temp=item_code.substr(1,item_code.length);
+			item_code_array=item_code_temp.split('_');
+			item_code=item_code_array[0]
 		}
 		var server_code=item_code.substr(0,item_code.length-3);
 		var dec_msg={pageId:'#'+page_id,itemCd:item_code,itemType:item_type,serverCode:server_code,type:'more'};
-		send_android(dec_msg);	
+		send_native(dec_msg);	
 		jQuery(button).addClass('open');
 	}
 }//End of ini_dialog_item_info(button)
 
 	function dialog_item_info(data){
 		var page_id=jQuery.mobile.activePage.attr('id');
-		var dialog_code=template_dialog_item_info(data);
+		var dialog_code=(data);
 			dialog_code.css('height',dialog_height);
+			dialog_code.css('top',header_height);
 			dialog_code.find('article').css ('height',dialog_height);
 			jQuery('#'+page_id).append(dialog_code).trigger('creat');
 		dialog_code.slideDown(300);
@@ -2852,16 +3350,78 @@ function ini_dialog_item_group(button){
 	var page_id=jQuery.mobile.activePage.attr('id');
 	if(jQuery(button).hasClass('open')){
 		jQuery(button).removeClass('open');
-		jQuery('#dialog_item_group').slideUp(300,function(){this.remove();});
+		jQuery('#dialog_item_group').slideUp(300,function(){this.remove(),draw_chart();});
 	}else{
+		
+		jQuery('#'+page_id+' .btn_dialog').removeClass('open');
+		jQuery('#'+page_id+' .page_dialog').remove();
 		var dialog_code=template_dialog_item_group();
 			dialog_code.css('height',dialog_height);
+			dialog_code.css('top',header_height);
 			dialog_code.find('article').css ('height',dialog_height);
 			jQuery('#'+page_id).append(dialog_code).trigger('creat');
 		dialog_code.slideDown(300);
 		jQuery(button).addClass('open');
 	}	
 }//End of ini_dialog_item_group(button)
+
+function ini_dialog_chart(button){
+	console.log('==ini_dialog_item_group(button)==');
+	var page_id=jQuery.mobile.activePage.attr('id');
+	if(jQuery(button).hasClass('open')){
+		jQuery(button).removeClass('open');
+		jQuery('#dialog_chart_setting').slideUp(300,function(){this.remove();});
+		draw_chart(true);
+	}else{
+		send_native({pageId:'#CHART_CLOSE',type:'hide'},true);
+		jQuery('#'+page_id+' .btn_dialog').removeClass('open');
+		jQuery('#'+page_id+' .page_dialog').remove();
+		var dialog_code=template_dialog_chart_setting();
+			dialog_code.css('height',dialog_height);
+			dialog_code.css('top',header_height);
+			dialog_code.find('article').css ('height',dialog_height);
+			jQuery('#'+page_id).append(dialog_code).trigger('creat');
+		dialog_code.slideDown(300);
+		jQuery(button).addClass('open');
+	}	
+}//End of ini_dialog_chart(button)
+
+/*이동 평균선입력 항목의 추가*/
+function chart_add_ma_item(){
+	console.log('==chart_add_ma_item()==')
+	var cnt=jQuery('#setting_moving_averrage div.moveing_averrage_item').length;
+	if(cnt>8){
+		alert('설정값은 9개까지 지원합니다.')
+		return false;
+	}
+	var ma_item=jQuery('<div class="moveing_averrage_item"><label for="moving_averrage_1">설정값 <span>1</span></label><input type="number" id="moving_averrage_1"><button type="button" class="btn_remove_ma">삭제</button></div>');
+	jQuery('#setting_moving_averrage').append(ma_item);	
+	ma_item_numbering();
+}
+		
+function chart_remove_ma_item(button){
+	var del_id=jQuery(button).attr('data-del');
+	console.log(del_id);
+	jQuery('#'+del_id).parent('div').slideUp(100).remove();
+	ma_item_numbering();
+	return false;
+}
+
+function ma_item_numbering(){
+	var ma_item=jQuery('#setting_moving_averrage div.moveing_averrage_item');
+	
+	for(i=0;i<ma_item.length;i++){
+		var teamp_item=jQuery(ma_item[i]);
+		var cnt=i+1;
+		teamp_id='moving_averrage_'+cnt;
+		teamp_item.find('label').attr('for',teamp_id);
+		teamp_item.find('input').attr('id',teamp_id);
+		teamp_item.find('label span').text(cnt);
+		teamp_item.find('button').attr('data-del',teamp_id);
+	}
+}
+
+		
 		
 		
 /*관심그룹 관련 초기화*/
@@ -3312,7 +3872,7 @@ function get_template(part){
 			return jQuery(content);
 		}else{
 			var tel_number=local.get(mts_prefix+'_tel')
-			return jQuery('<div class="footer_menu_area"><div class="btn_all_menu_div"><button type="button" class="btn_footer_menu">전체메뉴</button></div><div class="shortcut_menu_div" data-role="navbar"><ul class="shortcut_menu"><li><a href="#BOARD_LIST" data-code="1"  data-type="notice_list">공지사항</a></li><li><a href="#ITEM_SELECT">종목검색</a></li><li><a href="#ITEM_LIST">관심종목</a></li><li><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></li><li><a href="tel:'+tel_number+'">전화주문</a></li></ul></div><form id="footer_real_check" ><label for="footer_real_check">실시간 데이터</label><input name="footer_real_check" id="footer_real_check" type="checkbox"></form></div><div class="all_menu"><h1><a href="tel:'+tel_number+'">전화주문</a></h1><h1><a href="#ITEM_SELECT">종목검색</a></h1><h1><a href="#ITEM_LIST">관심종목</a></h1><h1><a href="#BOARD_LIST" data-code="1" data-type="notice_list">공지사항</a></h1><h1><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></h1><h1><a href="#HELP" data-code>도움말</a></h1></div>'); 	
+			return jQuery('<div class="footer_menu_area"><div class="btn_all_menu_div"><button type="button" class="btn_footer_menu">전체메뉴</button></div><div class="shortcut_menu_div" data-role="navbar"><ul class="shortcut_menu"><li><a href="#BOARD_LIST" data-code="1"  data-type="notice_list">공지사항</a></li><li><a href="#ITEM_SELECT">종목검색</a></li><li><a href="#ITEM_LIST">관심종목</a></li><li><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></li><li><a href="tel:'+tel_number+'">전화주문</a></li></ul></div><form id="footer_real_check" ><label for="footer_real_check">실시간 데이터</label><input name="footer_real_check" id="footer_real_check" type="checkbox"></form><div id="close_app_div"><a href="#LOGIN">종료</a></div></div><div class="all_menu"><h1><a href="tel:'+tel_number+'">전화주문</a></h1><h1><a href="#ITEM_SELECT">종목검색</a></h1><h1><a href="#ITEM_LIST">관심종목</a></h1><h1><a href="#BOARD_LIST" data-code="1" data-type="notice_list">공지사항</a></h1><h1><a href="#BOARD_LIST" data-code="2" data-type="board_list">뉴스</a></h1><h1><a href="#HELP" data-code>도움말</a></h1><h1><a href="#SETTING"  data-rel="dialog">설정</a></h1><h1><a href="#CLOSE"  data-rel="dialog">종료</a></h1></div>'); 	
 		}
 	}
 	
@@ -3408,7 +3968,7 @@ function get_template(part){
 			item_caption+=option_key[data.optionType]+'<span class="option_exe">'+data.optionExe+'<span>';
 		}
 		
-		return jQuery('<tr id="'+data.itemCd+'" class="'+tr_class+'" data-code="'+data.itemCd+'" data-type="'+data.itemType+'" data-server_code="'+data.serverCode+'" data-zdiv="'+data.zdiv+'" data-cpos="'+data.cpos+'" '+option_attr+'><td class="function"><button type="button" class="del_item">삭제</button><button type="button" class="cancel_item">취소</button></td><td class="itemType '+data.itemType+'">'+data.itemType+'</td><td class="itemCd">'+data.itemCd+item_caption+'</td><td class="curr">'+format_price(data.LastPrice,option)+'</td><td class="Diff_Ratio"><span class="Diff">'+format_price(data.Diff,option)+'</span><span class="UpDwnRatio">'+jQuery.number(data.Rate,2)+'</span></td><td class="vol"><div class="vol_chart_div"><div class="vol_chart_bar"></div><div class="vol_chart_vol" style="left:'+char_left+'%;width:'+char_size+'%;"></div></div><span class="Volume">'+jQuery.number(data.TotalVolume)+'</span></td><td class="item_more_info"></td></tr>');
+		return jQuery('<tr id="'+data.itemCd+'" class="'+tr_class+'" data-code="'+data.itemCd+'" data-type="'+data.itemType+'" data-server_code="'+data.serverCode+'" data-zdiv="'+data.zdiv+'" data-cpos="'+data.cpos+'" '+option_attr+'><td class="function"><button type="button" class="del_item">삭제</button><button type="button" class="cancel_item">취소</button></td><td class="itemType '+data.itemType+'">'+data.itemType+'</td><td class="itemCd"><span class="itemCd_span">'+data.itemCd+'</span>'+item_caption+'</td><td class="curr">'+format_price(data.LastPrice,option)+'</td><td class="Diff_Ratio"><span class="Diff">'+format_price(data.Diff,option)+'</span><span class="UpDwnRatio">'+jQuery.number(data.Rate,2)+'</span></td><td class="vol"><div class="vol_chart_div"><div class="vol_chart_bar"></div><div class="vol_chart_vol" style="left:'+char_left+'%;width:'+char_size+'%;"></div></div><span class="Volume">'+jQuery.number(data.TotalVolume)+'</span></td><td class="item_more_info"></td></tr>');
 	}
 	
 	var template_group_list=function(){
@@ -3613,41 +4173,41 @@ function get_template(part){
 	
 	var template_layer_help=function(){
 		var page_id='#'+jQuery.mobile.activePage.attr('id');
-		var layer_content='<div class="help_content act"><div class="help_back"><span>이전페이지로 돌아갑니다.</span></div><div class="help_all_menu"><span>전체메뉴를 표시합니다.</span></div><div class="help_footer_menu"><span>주요메뉴를 표시합니다.</span></div></div>';
+		var layer_content='<div class="help_content act"><div class="help_back"><span class="pointer"></span><span class="desc">이전페이지로 <br />돌아갑니다.</span></div><div class="help_all_menu"><span class="pointer"></span><span class="desc">전체메뉴를<br />표시합니다.</span></div><div class="help_footer_menu"><span class="pointer"></span><span class="desc">주요메뉴를 <br />표시합니다.</span></div></div>';
 		
 		switch (page_id){
 			case '#ITEM_SELECT':
-				layer_content+='<div class="help_content next"><div class="help_item_selec_type"><span>상품구분을 선택합니다.</span></div><div class="help_item_selec_category"><span>상품카테고리를 선택합니다.</span></div><div class="help_item_selec_btn_date"><span>화면에 표시되지 않은 월물을 선택합니다.</span></div></div>';
+				layer_content+='<div class="help_content next"><div class="help_item_selec_type"><span class="pointer"></span><span class="desc">상품구분을 선택합니다.</span></div><div class="help_item_selec_category"><span class="pointer"></span><span class="desc">상품카테고리를 선택합니다.</span></div><div class="help_item_selec_btn_date"><span class="pointer"></span><span class="desc">화면에 표시되지 않은<br />월물을 선택합니다.</span></div></div>';
 			break;
 			case '#ITEM_LIST':
-				layer_content+='<div class="help_content next"><div class="help_group_select"><span>관심종목 그룹을 선택합니다.</span></div><div class="help_group_type"><span>관심종목 표시형태를 선택합니다.</span></div></div>';
+				layer_content+='<div class="help_content next"><div class="help_group_select"><span class="pointer"></span><span class="desc">관심종목 그룹을<br /> 선택합니다.</span></div><div class="help_group_type"><span class="pointer"></span><span class="desc">관심종목 표시형태를<br /> 선택합니다.</span></div></div>';
 				
 				var type=jQuery('#ITEM_LIST #item_list_table').attr('data-type');
 				if(type=='card'){
-					layer_content+='<div class="help_content next" data-type="item_list_card"><div class="help_item_more"><span>종목카드를 터치하여 요약정보를 확인하고 상세페이지로 이동 할 수 있습니다.</span></div><div class="help_item_edit"><span>종목카드를 왼쪽으로 슬라이드 하면 종목을 편집 할 수 있습니다.</span></div></div>';
+					layer_content+='<div class="help_content next" data-type="item_list_card"><div class="help_item_more"><span class="pointer"></span><span class="desc">종목카드를 터치하여 요약정보를 확인하고<br /> 상세페이지로 이동 할 수 있습니다.</span></div><div class="help_item_edit"><span class="pointer"></span><span class="desc">종목카드를 왼쪽으로 슬라이드<br />하면 종목을 편집 할 수 있습니다.</span></div></div>';
 				}
 				if(type=="table"){
-					layer_content+='<div class="help_content next" data-type="item_list_table"><div class="help_item_more"><span>종목이름를 터치하여 요약정보를 확인하고 상세페이지로 이동 할 수 있습니다.</span></div><div class="help_item_edit"><span>종목카드를 왼쪽으로 슬라이드 하여 종목을 편집 할 수 있습니다. 오른쪽으로 슬라이드 하면 편집모드를 종료합니다.</span></div></div>';
+					layer_content+='<div class="help_content next" data-type="item_list_table"><div class="help_item_more"><span class="pointer"></span><span class="desc">종목이름를 터치하여 요약정보를 확인하고<br /> 상세페이지로 이동 할 수 있습니다.</span></div><div class="help_item_edit"><span class="pointer"></span><span class="desc">종목테이블을 왼쪽으로 슬라이드 하여 <br />종목을 편집 할 수 있습니다. <br /> 오른쪽으로 슬라이드 하면 <br />편집모드를 종료합니다.</span></div></div>';
 				}
 			break;
 			case '#ITEM_ASKING':
-				layer_content+='<div class="help_content next"><div class="help_item_commen"><span>현재 종목의 요약정보를 표시합니다.</span></div><div class="help_item_menu"><span>종목별 메뉴입니다. 현재 종목을 유지한체 화면을 이동합니다.</span></div></div><div class="help_content next"><div class="help_item_info"><span>현재 종목의 정보를 확인합니다.</span></div><div class="help_item_reg"><span>현재 종목을 관심종목으로 지정합니다.</span></div><div class="help_item_search"><span>현재 페이지에서 종목을 검색합니다.</span></div></div>';
+				layer_content+='<div class="help_content next"><div class="help_item_commen"><span class="pointer"></span><span class="desc">현재 종목의 요약정보를 표시합니다.</span></div><div class="help_item_menu"><span class="pointer"></span><span class="desc">종목별 메뉴입니다.<br /> 현재 종목을 유지한체 화면을 이동합니다.</span></div></div><div class="help_content next"><div class="help_item_info"><span class="pointer"></span><span class="desc">현재 종목 정보를 확인합니다.</span></div><div class="help_item_reg"><span class="pointer"></span><span class="desc">관심종목으로 지정합니다.</span></div><div class="help_item_search"><span class="pointer"></span><span class="desc">종목을 검색합니다.</span></div></div>';
 			break;
 			case '#ITEM_CONCLUDE':
-				layer_content+='<div class="help_content next"><div class="help_item_commen"><span>현재 종목의 요약정보를 표시합니다.</span></div><div class="help_item_menu"><span>종목별 메뉴입니다. 현재 종목을 유지한체 화면을 이동합니다.</span></div></div><div class="help_content next"><div class="help_item_info"><span>현재 종목의 정보를 확인합니다.</span></div><div class="help_item_reg"><span>현재 종목을 관심종목으로 지정합니다.</span></div><div class="help_item_search"><span>현재 페이지에서 종목을 검색합니다.</span></div></div>';
+				layer_content+='<div class="help_content next"><div class="help_item_commen"><span class="pointer"></span><span class="desc">현재 종목의 요약정보를 표시합니다.</span></div><div class="help_item_menu"><span class="pointer"></span><span class="desc">종목별 메뉴입니다.<br /> 현재 종목을 유지한체 화면을 이동합니다.</span></div></div><div class="help_content next"><div class="help_item_info"><span class="pointer"></span><span class="desc">현재 종목 정보를 확인합니다.</span></div><div class="help_item_reg"><span class="pointer"></span><span class="desc">관심종목으로 지정합니다.</span></div><div class="help_item_search"><span class="pointer"></span><span class="desc">종목을 검색합니다.</span></div></div>';
 			break;
 			case '#ITEM_DAILY':
-				layer_content+='<div class="help_content next"><div class="help_item_commen"><span>현재 종목의 요약정보를 표시합니다.</span></div><div class="help_item_menu"><span>종목별 메뉴입니다. 현재 종목을 유지한체 화면을 이동합니다.</span></div></div><div class="help_content next"><div class="help_item_info"><span>현재 종목의 정보를 확인합니다.</span></div><div class="help_item_reg"><span>현재 종목을 관심종목으로 지정합니다.</span></div><div class="help_item_search"><span>현재 페이지에서 종목을 검색합니다.</span></div></div>';
+				layer_content+='<div class="help_content next"><div class="help_item_commen"><span class="pointer"></span><span class="desc">현재 종목의 요약정보를 표시합니다.</span></div><div class="help_item_menu"><span class="pointer"></span><span class="desc">종목별 메뉴입니다.<br /> 현재 종목을 유지한체 화면을 이동합니다.</span></div></div><div class="help_content next"><div class="help_item_info"><span class="pointer"></span><span class="desc">현재 종목 정보를 확인합니다.</span></div><div class="help_item_reg"><span class="pointer"></span><span class="desc">관심종목으로 지정합니다.</span></div><div class="help_item_search"><span class="pointer"></span><span class="desc">종목을 검색합니다.</span></div></div>';
 			break;
 			case '#ITEM_OPTION':
-				layer_content+='<div class="help_content next"><div class="help_option_info"><span>기초자산 선물정보를 표시합니다.</span></div><div class="help_option_table"><span>좌, 우로 슬라이드 하여 콜상세 풋상세로 전환합니다.</span></div></div>';
+				layer_content+='<div class="help_content next"><div class="help_option_info"><span class="pointer"></span><span class="desc">기초자산 선물정보를 표시합니다.</span></div><div class="help_item_search"><span class="pointer"></span><span class="desc">종목을 검색합니다.</span></div><div class="help_option_table"><span class="pointer"></span><span class="desc">좌, 우로 슬라이드 하여 <br />콜상세 풋상세로 전환합니다.</span></div></div>';
 			break;
 		}
 		
 		var help_check=''
 		if(local.get('help_display')=='off'){help_check='checked="checked"'}
 		
-		layer_content+='<div class="help_content next" data-type="footer_menu"><div class="help_real"><span>실시간 데이터를 활성/비활성 합니다.</span></div><div class="help_drag"><span>각 메뉴는 드레그 하여 주요메뉴에 등록 할 수 있습니다.</span></div></div>';
+		layer_content+='<div class="help_content next" data-type="footer_menu"><div class="help_real"><span class="pointer"></span><span class="desc">실시간 데이터를 <br />활성/비활성 합니다.</span></div><div class="help_drag"><span class="pointer"></span><span class="desc">각 메뉴는 드레그 하여 <br />주요메뉴에 등록 할 수 있습니다.</span></div></div>';
 		
 		
 		
@@ -3714,10 +4274,10 @@ function get_template(part){
 			tr_class='down';
 		}
 		
-		return jQuery('<tr class="'+tr_class+'" data-date="'+date_sting+'"><td class="Date">'+date_sting+'</td><td class="Curr">'+format_price(data.Last)+'</td><td class="Diff"><span>'+format_price(Math.abs(data.Diff))+'</span><span class="Rate">'+jQuery.number(data.Rate,2)+'</span></td><td class="TotalVolume">'+data.TotalVolume+'</td></tr>');
+		return jQuery('<tr class="'+tr_class+'" data-date="'+date_sting+'"><td class="Date">'+date_sting+'</td><td class="Curr">'+format_price(data.Last)+'</td><td class="Diff"><span>'+format_price(Math.abs(data.Diff))+'</span><span class="Rate">'+jQuery.number(data.Rate,2)+'</span></td><td class="TotalVolume">'+jQuery.number(data.TotalVolume)+'</td></tr>');
 	}//End of template_daily_tr();
 	
-	var template_layer_chart=function(){
+	var template_layer_lose	=function(){
 		return jQuery('<div class="bg_layer"><section id="layer_chart" class="layer_section"><header><h1 class="chart_code">ESZ14<span class="chart_caption">CME S&quot;P 500 Min</span></h1><div data-role="controlgroup" data-type="horizontal"><input type="radio" id="chart_set_day" name="chart_set" value="day" checked="checked" /><label for="chart_set_day">일</label><input type="radio" id="chart_set_week" name="chart_set" value="week" /><label for="chart_set_week">주</label><input type="radio" id="chart_set_month" name="chart_set" value="month" /><label for="chart_set_month">월</label><input type="radio" id="chart_set_min" name="chart_set" value="min" /><label for="chart_set_min">분</label><div class="ui-btn" id="chart_min_div"><input type="number" id="chart_set_min_number" placeholder="분 입력" data-role="none" /></div><input type="radio" id="chart_set_tic" name="chart_set" value="tic" /><label for="chart_set_tic">틱</label><button type="button" id="btn_chart_set">확인</button></div></header><button type="button" class="btn_close_layer">닫기</button></section></div>');
 	}//End of template_layer_chart();
 	
@@ -3726,17 +4286,226 @@ function get_template(part){
 		return jQuery('<section id="dialog_item_select" class="page_dialog"><header><h2>종목검색</h2><div data-role="controlgroup" data-type="horizontal"><select class="select_item_type"><option value="futures">선물</option><option value="option">옵션</option></select><select class="select_category"><option value="currency">통화</option><option value="interest">채권</option><option value="index">지수</option><option value="commodity">농산물</option><option value="metals">금속</option><option value="energy">에너지</option></select></div></header><article><table id="dialog_item_select_table" class="table_type01"><tbody></tbody></table></article></section>');
 	}
 	
+	var template_dialog_item_select_option=function(data){
+		var caption=data.commen.itemCaption;
+		return jQuery('<section id="dialog_item_select_option" class="page_dialog"><header><h2><span>'+caption+'</span>행사가</h2><button class="close_dialog" type="button">닫기</button></header><article><table id="dialog_option_item_table" class="table_type01 item_option_table"><thead><tr><th class="call_opt call_data" colspan="2">콜옵션</th><th rowspan="2">행사가</th><th class="put_opt put_data" colspan="2">풋옵션</th></tr><tr><th class="call_data">대비</th><th class="call_data">현재가</th><th class="put_data">현재가</th><th  class="put_data">대비</th></tr></thead><tbody></tbody></table></article></section>');
+	}
+	
 	var template_dialog_item_info=function(data){
 		var content=template_item_info(data);
+		
 		return jQuery('<section id="dialog_item_info" class="page_dialog"><header><h2>종목정보</h2></header><article><dl class="item_desc_dl">'+content.html()+'</dl></article></section>');
 	}
 
+	var template_dialog_chart_setting=function(){
+		var setting_data=get_local_json('web_mts_CHART_STETTING');
+		console.log(setting_data);
+		
+		
+		var transparent_cant='<li><input type="checkbox" id="transparent_cant" /><label for="transparent_cant">투명캔트</label></li><li>';
+		
+		var log_chart='<input type="checkbox" id="log_chart" /><label for="log_chart">로그차트</label></li>';
+		
+		//매물대
+		var put_check="";
+		var put_value=""
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'매물대')){ 
+			if(setting_data.매물대.check){put_check='checked="checked"';
+				hidden_class='';
+				if(setting_data.매물대.value){put_value='value="'+setting_data.매물대.value+'"';}
+			}
+			
+		}
+		var put_bar='<li><input type="checkbox" id="put_bar" '+put_check+' /><label for="put_bar">매물대</label><div id="setting_put_bar" class="setting_chart_item'+hidden_class+'"><div><label for="put_bar_number">설정값</label><input type="number" id="put_bar_number" '+put_value+' /></div></div></li>'; 
+		
+		//이동평균선
+		var ma_check="";
+		var ma_item='<div class="moveing_averrage_item" data-cnt="1"><label for="moving_averrage_1">설정값 <span>1</span></label><input type="number" id="moving_averrage_1" /><button type="button" class="btn_remove_ma">삭제</button></div>'
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'MA')){ 
+			if(setting_data.MA.check){
+				ma_check='checked="checked"'
+				;hidden_class='';
+				ma_item='';
+				for(i=0;i<setting_data.MA.item.length;i++){
+					cnt=i+1;
+					ma_item+='<div class="moveing_averrage_item" data-cnt="'+cnt+'"><label for="moving_averrage_'+cnt+'">설정값 <span>'+cnt+'</span></label><input type="number" id="moving_averrage_'+cnt+'" value="'+setting_data.MA.item[i].value+'" /><button type="button" class="btn_remove_ma">삭제</button></div>';
+				}
+			}
+		}
+		
+		var moving_averrage='<li><input type="checkbox" id="moving_averrage" '+ma_check+' /><label for="moving_averrage">이동평균선</label><button type="button" class="btn_add_ma'+hidden_class+'">설정값 추가</button><div id="setting_moving_averrage" class="setting_chart_item'+hidden_class+'">'+ma_item+'</div></li>';
+		
+		
+		//블린저밴드
+		var boll_check="";
+		var boll_term="";
+		var boll_multi="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'BollingerBand')){
+			if(setting_data.BollingerBand.check){boll_check='checked="checked"';
+				hidden_class='';
+				if(setting_data.BollingerBand.term){boll_term='value="'+setting_data.BollingerBand.term+'"';}
+				if(setting_data.BollingerBand.multiplier){boll_multi='value="'+setting_data.BollingerBand.multiplier+'"';}
+			}
+		}
+		
+		var bollinger_band='<li><input type="checkbox" id="bollinger_band" '+boll_check+' /><label for="bollinger_band">볼린저밴드</label><div id="setting_bollinger_band" class="setting_chart_item'+hidden_class+'"><div><label for="bollinger_band_term">기간</label><input type="number" id="bollinger_band_term" '+boll_term+' /></div><div><label for="bollinger_band_multiplier">승수</label><input type="number" id="bollinger_band_multiplier" '+boll_multi+' /></div></div></li>';
+		
+		
+		//일목균형표
+		var day_check="";
+		var day_tr="";
+		var day_base="";
+		var day_after="";
+		var day_before_1="";
+		var day_before_2="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'일목균형표')){
+			if(setting_data.일목균형표.check){
+				day_check='checked="checked"';
+				if(setting_data.일목균형표.transition){day_tr='value="'+setting_data.일목균형표.transition+'"';}
+				if(setting_data.일목균형표.base){day_base='value="'+setting_data.일목균형표.base+'"';}
+				if(setting_data.일목균형표.before_2){day_before_2='value="'+setting_data.일목균형표.before_2+'"';}
+				hidden_class='';
+			}
+		}
+		
+		var day_barance='<li><input type="checkbox" id="day_barance" '+day_check+' /><label for="day_barance">일목균형표</label><div id="setting_day_barance" class="setting_chart_item'+hidden_class+'"><div><label for="day_barance_base">기준</label><input type="number" id="day_barance_base" '+day_base+' /></div><div><label for="day_barance_transition">전환</label><input type="number" id="day_barance_transition" '+day_tr+' /></div><div><label for="day_barance_before_2">선행2</label><input type="number" id="day_barance_before_2" '+day_before_2+' /></div></div></li>'
+		
+		//envelop
+		var en_check="";
+		var en_term="";
+		var en_precent="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'Envelope')){
+			if(setting_data.Envelope.check){
+				en_check='checked="checked"';
+				if(setting_data.Envelope.term){en_term='value="'+setting_data.Envelope.term+'"';}
+				if(setting_data.Envelope.precent){en_precent='value="'+setting_data.Envelope.precent+'"';}
+			hidden_class='';
+			}
+		}
+		var envelop='<li><input type="checkbox" id="envelop" '+en_check+' /><label for="envelop">Envelope</label><div id="setting_envelop" class="setting_chart_item'+hidden_class+'"><div><label for="envelop_term">기간</label><input type="number" id="envelop_term" '+en_term+' /></div><div><label for="envelop_precent">Percent</label><input type="number" id="envelop_precent" '+en_precent+' /></div></div></li>';
+		
+		
+		//trading_volume
+		var tv_check="";
+		if(obj.has_key(setting_data,'거래량')){
+			if(setting_data.거래량.check){tv_check='checked="checked"';}
+		}
+		var trading_volume='<li><input type="checkbox" id="trading_volume" '+tv_check+' /><label for="trading_volume">거래량</label></li>';
+		
+		
+		//obv
+		var obv='<li><input type="checkbox" id="obv" /><label for="obv">OBV</label></li>';
+		
+		//macd
+		var macd_check="";
+		var macd_long="";
+		var macd_short="";
+		var macd_signal="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'MACD')){
+			if(setting_data.MACD.check){
+				macd_check='checked="checked"';
+				if(setting_data.MACD.long){macd_long='value="'+setting_data.MACD.long+'"';}
+				if(setting_data.MACD.short){macd_short='value="'+setting_data.MACD.short+'"';}
+				if(setting_data.MACD.signal){macd_signal='value="'+setting_data.MACD.signal+'"';}
+				hidden_class='';
+			}
+		}
+		var macd='<li><input type="checkbox" id="macd" '+macd_check+' /><label for="macd">MACD</label><div id="setting_macd" class="setting_chart_item'+hidden_class+'"><div><label for="macd_short">단기</label><input type="number" id="macd_short" '+macd_short+' /></div><div><label for="macd_long">장기</label><input type="number" id="macd_long" '+macd_long+' /></div><div><label for="macd_signal">신호</label><input type="number" id="macd_signal" '+macd_signal+' /></div></div></li>';
+		
+		//stochastic_fast
+		var fast_check="";
+		var fast_trem="";
+		var fast_d="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'StochasticFast')){
+			if(setting_data.StochasticFast.check){
+				fast_check='checked="checked"';
+				if(setting_data.StochasticFast.d){fast_d='value="'+setting_data.StochasticFast.d+'"';}
+				if(setting_data.StochasticFast.trem){fast_trem='value="'+setting_data.StochasticFast.trem+'"';}
+				hidden_class='';
+			}	
+		}
+		var stochastic_fast='<li><input type="checkbox" id="stochastic_fast" '+fast_check+' /><label for="stochastic_fast">Stochastic Fast</label><div id="setting_stochastic_fast" class="setting_chart_item'+hidden_class+'"><div><label for="stochastic_fast_trem">기간</label><input type="number" id="stochastic_fast_trem" '+fast_trem+' /></div><div><label for="stochastic_fast_d">%D</label><input type="number" id="stochastic_fast_d" '+fast_d+' /></div></div></li>';
+		
+		//stochastic_slow
+		var slow_check="";
+		var slow_trem="";
+		var slow_k="";
+		var slow_d="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'StochasticSlow')){
+			if(setting_data.StochasticSlow.check){
+				slow_check='checked="checked"';
+				if(setting_data.StochasticSlow.trem){slow_trem='value="'+setting_data.StochasticSlow.trem+'"';}
+				if(setting_data.StochasticSlow.d){slow_d='value="'+setting_data.StochasticSlow.d+'"';}
+				if(setting_data.StochasticSlow.k){slow_k='value="'+setting_data.StochasticSlow.k+'"';}
+			hidden_class='';
+			}
+		}
+		var stochastic_slow='<li><input type="checkbox" id="stochastic_slow" '+slow_check+' /><label for="stochastic_slow">Stochastic Slow</label><div id="setting_stochastic_slow" class="setting_chart_item'+hidden_class+'"><div><label for="stochastic_slow_trem">기간</label><input type="number" id="stochastic_slow_trem" '+slow_trem+' /></div><div><label for="stochastic_slow_k">%K</label><input type="number" id="stochastic_slow_k" '+slow_k+' /></div><div><label for="stochastic_slow_d">%D</label><input type="number" id="stochastic_slow_d" '+slow_d+' /></div></div></li>';
+		
+		//rsi
+		var rsi_check="";
+		var rsi_term="";
+		var rsi_signal="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'RSI')){
+			if(setting_data.RSI.check){
+				rsi_check='checked="checked"';
+				if(setting_data.RSI.term){rsi_term='value="'+setting_data.RSI.term+'"';}
+				if(setting_data.RSI.signal){rsi_signal='value="'+setting_data.RSI.signal+'"';}
+				hidden_class='';
+			}
+		}
+
+		var rsi='<li><input type="checkbox" id="rsi" '+rsi_check+' /><label for="rsi">RSI</label><div id="setting_rsi" class="setting_chart_item'+hidden_class+'"><div><label for="rsi_term">기간</label><input type="number" id="rsi_term" '+rsi_term+' /></div><div><label for="rsi_signal">Signal</label><input type="number" id="rsi_signal" '+rsi_signal+' /></div></div></li>';
+		
+		//dmi
+		var dmi_check="";
+		var dmi_term="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'DMI')){
+			if(setting_data.DMI.check){
+				dmi_check='checked="checked"';
+				if(setting_data.DMI.term){dmi_term='value="'+setting_data.DMI.term+'"';}
+				hidden_class='';
+			}
+		}
+		
+		var dmi='<li><input type="checkbox" id="dmi" '+dmi_check+' /><label for="dmi">DMI</label><div id="setting_dmi" class="setting_chart_item'+hidden_class+'"><div><label for="dmi_term">기간</label><input type="number" id="dmi_term" '+dmi_term+' /></div></div></li>';
+		
+		//trix
+		var trix_check="";
+		var trix_trem="";
+		var trix_signal="";
+		var hidden_class=' hidden';
+		if(obj.has_key(setting_data,'TRIX')){
+			if(setting_data.TRIX.check){
+				trix_check='checked="checked"';
+				if(setting_data.TRIX.trem){trix_trem='value="'+setting_data.TRIX.trem+'"';}
+				if(setting_data.TRIX.signal){trix_signal='value="'+setting_data.TRIX.signal+'"';}
+				hidden_class='';
+			}
+		}
+		var trix='<li><input type="checkbox" id="trix" '+trix_check+' /><label for="trix">TRIX</label><div id="setting_trix" class="setting_chart_item'+hidden_class+'"><div><label for="trix_trem">기간</label><input type="number" id="trix_trem" '+trix_trem+' /></div><div><label for="trix_signal">Signal</label><input type="number" id="trix_signal" '+trix_signal+' /></div></div></li>';
+		
+		//cci
+		var cci='<li><input type="checkbox" id="cci" /><label for="cci">CCI</label></li>';
+		
+		return jQuery('<section id="dialog_chart_setting" class="page_dialog"><header><h2>차트설정</h2><button type="button" id="btn_chart_setting_ok">확인</button></header><article><ul>'+put_bar+moving_averrage+bollinger_band+day_barance+envelop+trading_volume+macd+stochastic_fast+stochastic_slow+rsi+dmi+trix+'</ul></article></section>');}
 
 
-	var template_dialog_group_li=function(code,name){
+
+	var template_dialog_group_title=function(code,name){
 		var btn_reg='<button type="button" class="btn_reg_item" data-code="'+code+'" data-role="none">현재 종목 등록</button>';
 		var btn_del='<button type="button" class="btn_del_group" data-code="'+code+'" data-role="none">그룹삭제</button>';
-		return '<li data-group="'+code+'" data-role="list-divider"><span class="group_name">'+name+'</span>'+btn_reg+btn_del+'</li>';
+		return '<h3 data-group="'+code+'"><span class="group_name">'+name+'</span>'+btn_reg+btn_del+'</h3>';
 	}//End of template_dialog_group_li();
 
 	var template_dialog_item_li=function(code,item_code){
@@ -3746,26 +4515,35 @@ function get_template(part){
 		return '<li data-group="'+code+'">'+btn_change+btn_del+'</li>';
 	}
 	
+	var template_dialog_item_ul=function(code){
+		var group_data=get_local_json('group');
+		
+		var group_title=template_dialog_group_title(code,group_data[code]);
+		var item_data=get_local_json(code);
+		var item_list_html='';
+		
+		for(item_code in item_data){
+			var item_li=template_dialog_item_li(code,item_code);
+			item_list_html+=item_li;
+		}
+		if(obj.size(item_data)<1){
+			item_list_html+='<li class="no_item_desc"  data-group="'+code+'">등록된 종목이 없습니다.</li>';
+		}
+		group_ul_html='<ul class="dialog_group_list" data-group="'+code+'" data-role="none">'+item_list_html+'</ul>';
+		var group_menu_html=group_title+group_ul_html;
+		return group_menu_html;
+	}
+	
 	var template_dialog_item_group=function(){		
 		//관심그룹 메뉴 생성
 			var group_data=get_local_json('group');
 			var group_menu_html='';
 			for(code in group_data){
-				var group_li=template_dialog_group_li(code,group_data[code]);
-				group_menu_html+=group_li;
-				var item_data=get_local_json(code);
-				var item_list_html='';
-				for(item_code in item_data){
-					var item_li=template_dialog_item_li(code,item_code);
-					group_menu_html+=item_li;
-				}
-				if(obj.size(item_data)<1){
-					group_menu_html+='<li class="no_item_desc"  data-group="'+code+'">등록된 종목이 없습니다.</li>';
-				}
+				group_menu_html+=template_dialog_item_ul(code);
 			}
 			
 			if(group_menu_html!=''){
-				group_menu_html='<div class="dialog_group_content"><ul id="dialog_group_list" data-role="none">'+group_menu_html+'</ul></div>';
+				group_menu_html='<div class="dialog_group_content">'+group_menu_html+'</div>';
 			
 			}else{
 				group_menu_html='<div class="dialog_group_content"><p class="no_group_desc">등록된 관심그룹과 종목이 없습니다.</p></div>'
@@ -3773,6 +4551,11 @@ function get_template(part){
 		
 		return jQuery('<section id="dialog_item_group" class="page_dialog"><header><h2>관심그룹</h2><button class="btn_make_group" type="button" data-role="none">그룹생성</button></header><article>'+group_menu_html+'</article></section>');
 	}//End of template_dialog_item_group();
+
+
+	var template_popup_item_info=function(data){
+		return jQuery('<section class="page_dialog dialog_item_info"  data-role="popup"><header><h2>종목정보</h2></header><article><dl class="item_desc_dl"></dl></article></section>');
+	}
 
 
 /*가격 수치 규격화*/

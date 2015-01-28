@@ -36,12 +36,12 @@
         recvd[i]=[[NSMutableData alloc] init];
     }
     
-    NSURL *url = [NSURL URLWithString:@"http://codetest.coforward.com/web_mts/prototype/index.html"];
+    //NSURL *url = [NSURL URLWithString:@"http://codetest.coforward.com/web_mts/prototype/index.html"];
     //NSURL *url = [NSURL URLWithString:@"http://m.naver.com"];
-    //NSString *indexFilePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"www"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    //NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
-    //NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
+    NSString *indexFilePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"www"];
+    //NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
+    NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
     
     webView.scrollView.bounces = NO;
 //    webView.scrollView.alwaysBounceHorizontal = NO;
@@ -286,8 +286,8 @@
         //UserId = @"opercut";
         //Password = @"pohaha28";
         
-        UserId = @"bbangms";
-        Password = @"m1475s";
+        //UserId = @"bbangms";
+        //Password = @"m1475s";
         [conn Connect:@"112.175.141.175" port:33101];
     }
 }
