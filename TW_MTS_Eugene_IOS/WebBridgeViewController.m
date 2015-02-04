@@ -14,7 +14,9 @@
 @synthesize chartV;
 
 - (void)viewDidLoad {
+    [self VersionConnect];
     [super viewDidLoad];
+    
     [self networkCheck];
     
     self.view.autoresizesSubviews = YES;
@@ -1046,6 +1048,62 @@
     NSString* sData = [[NSString alloc] initWithData:receivedata encoding:NSUTF8StringEncoding];
     [self csendWData:sData];
 }
+
+@synthesize version;
+
+- (void) VersionConnect {
+   // UCZProgressView *progressView = [[UCZProgressView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 568.0)];
+   // progressView.progress = 0.01;
+   // [self.view addSubview:progressView];
+    
+      version = [VersionCtrl defaultHUD];
+      version.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(10.0,400.0, 300.0, 0.0)];
+     // version.progressView.textColor = [UIColor colorWithRed:1.0 green:0.231 blue:0.188 alpha:1.0];
+     //  version.progressView.usesVibrancyEffect = NO;
+    //  version.progressView.showsText = YES;
+   // version.progressView.radius = 40.0;
+    
+    
+    
+
+    
+    
+    
+    
+  [version.progressView setProgressViewStyle:UIProgressViewStyleBar];
+   version.progressView.tintColor = [UIColor colorWithRed:0.0 green:122.0 / 255.0 blue:1.0 alpha:1.0];
+   
+ //   version.progressView.textLabel.hidden = NO;
+    
+      [self.view addSubview:version.progressView];
+  
+//    version.image = [UIImage imageNamed:@"rounded-checkmark.png"];
+//    version.topText = @"확인";
+//    version.bottomText = @"버전처리중입니다.(  0%)";
+//    version.activityIndicatorOn = YES;
+//   // [self setTimer];
+//    [version showInView:self.view];
+
+    //프로그레스바 생성 및 화면에 보여줌
+   // [version viewDidLoad];
+    //version = [VersionCtrl defaultHUD];
+
+//    version.progressAlert = [[UIAlertView alloc] initWithTitle:@"Please wait..."
+//                                                    message:@"파일 업로드 중입니다"
+//                                                   delegate:version cancelButtonTitle:nil
+//                                          otherButtonTitles:nil];
+//    version.progressAlert.tag = 12;
+//    version.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(30.0f, 80.0f, 225.0f, 90.0f)];
+//    [version.progressAlert addSubview:version.progressView];
+//    [version.progressView setProgressViewStyle:UIProgressViewStyleBar];
+//    [version.progressAlert show];
+  //  [version.progressView superview];
+    
+    
+
+}
+
+
 
 -(NSData *)gzipDecompress : (NSData *)data {
     

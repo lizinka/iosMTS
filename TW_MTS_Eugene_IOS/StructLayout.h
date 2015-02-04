@@ -147,6 +147,28 @@ typedef struct _LoginOUT
 	char gcnt[4];
 } LoginOUT;
 
+
+typedef struct _TVerCtrl_IN
+{
+    char file_path[64];
+    char file_name[128];
+
+} TVerCtrl_IN;
+
+typedef struct _TVerCtrl_OUT
+{
+
+    char ctlf;
+    char rscf;
+    char file_path[64];
+    char file_name[128];
+    char dlen[6];
+    char data[4000];
+} TVerCtrl_OUT;
+
+
+
+
 //계좌조회
 typedef struct _Xo015101_IN
 {

@@ -17,6 +17,7 @@
 #import <netinet/in.h>
 #import "Reachability.h"
 #import "ViewHUD.h"
+#import "VersionCtrl.h"
 
 #define MSGK_NPM 0x10  // normal presentation msg
 #define MSGK_PCA 0x71  // public certificate authority
@@ -74,6 +75,7 @@
 
 @property (strong, nonatomic) IBOutlet LGViewHUD *hud;
 
+@property (strong, nonatomic) IBOutlet VersionCtrl *version;
 -(void) LoadTrHashDatas:(int) nIndex;
 - (void)settimerHBeat;
 - (void)sendHBeatCheck;
