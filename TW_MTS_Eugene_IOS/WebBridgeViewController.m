@@ -14,7 +14,7 @@
 @synthesize chartV;
 
 - (void)viewDidLoad {
-    [self VersionConnect];
+    //[self VersionConnect];
     [super viewDidLoad];
     
     [self networkCheck];
