@@ -30,12 +30,7 @@ static VersionCtrl* defaultHUD = nil;
 
         
         
-        self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Please wait..."
-                                                        message:@"파일 다운로드 중입니다"
-                                                      delegate:self cancelButtonTitle:nil
-                                              otherButtonTitles:nil ];
-    
-       self.progressAlert.tag = 12;
+
    // UCZProgressView *progressView = [[UCZProgressView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 568.0)];
     //    self.progressView = [[UCZProgressView alloc] initWithFrame:CGRectMake(30.0f, 80.0f, 225.0f, 90.0f)];
     //    [self.progressAlert addSubview:self.progressView];
@@ -55,6 +50,7 @@ static VersionCtrl* defaultHUD = nil;
     
          newverfileStringlist =  [[NSMutableArray alloc] init];
          oldverfileStringlist =  [[NSMutableArray alloc] init];
+         requireStrlist =  [[NSMutableArray alloc] init];
         conn = [[SocketConnector alloc] initWithIF:self];
         if (conn == nil) {
             
@@ -86,8 +82,51 @@ static VersionCtrl* defaultHUD = nil;
 }
 
 - (void)RequestStart {
-    requireStrlist =  [[NSMutableArray alloc] init];
-    [self Request:1 gtr:@"GBMTS\0" tr:@"WyVerfile.txt\0"];
+    NSFileManager *fm;
+
+    fm = [NSFileManager defaultManager];
+
+    NSString *filePath, *verfileName;
+    
+    filePath = [NSString stringWithFormat:@"%@/%@", [self dataFilePath ],@"GBMTS"];
+    
+    
+    if ([fm changeCurrentDirectoryPath:filePath] == NO){
+        // 폴더 이동 못함
+        if ([fm createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:NULL] == NO){
+            //  newDir 폴더 생성 실패
+            NSLog(@"DirCreate Fail..");
+        } else {
+            // newDir 폴더 생성 성공
+            NSLog(@"DirCreate Success..");
+            [fm changeCurrentDirectoryPath:filePath] ;
+        }
+    } else {
+        // 폴더 이동함
+        
+    }
+    
+    
+    //    [fm changeCurrentDirectoryPath:[self dataFilePath ]];
+    verfileName =  @"WyVerfile.txt";//[NSString stringWithFormat:@"file%@%@", [self dataFilePath ], @"/WyVerfile_new.txt"];
+    
+    if ([fm fileExistsAtPath:verfileName] == YES) {
+        [self Request:1 gtr:@"GBMTS\0" tr:@"WyVerfile.txt\0"];
+    }else
+    {
+        self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Please wait..."
+                                                        message:@"필수파일 다운로드중입니다. 최초1회만 실행됩니다."
+                                                       delegate:self cancelButtonTitle:nil
+                                              otherButtonTitles:nil ];
+        
+        self.progressAlert.tag = 12;
+        [self.progressAlert show];
+        
+        [self Request:1 gtr:@"GBMTS\0" tr:@"www.zip\0"];
+    }
+ //   filePath =[NSString stringWithFormat:@"%@/%@%@", [self dataFilePath ], recvFilePath,@"/WyVerfile.txt"];
+    
+   // [self Request:1 gtr:@"GBMTS\0" tr:@"WyVerfile.txt\0"];
 }
 @import Foundation;
 
@@ -97,7 +136,7 @@ static VersionCtrl* defaultHUD = nil;
 
     if ([requireStrlist count] == 0)
     {
-                 
+        
         Customclose = false;
    //    [oldverfileStringlist initWithContentsOfFile:(NSString *)
         NSMutableData* myData ;
@@ -119,7 +158,7 @@ static VersionCtrl* defaultHUD = nil;
         [myData writeToFile:verdirfile options:NSDataWritingFileProtectionComplete error:nil];
       //  [self arrayWithData:(NSData *)]
        // [oldverfileStringlist writeToFile: verdirfile atomically:YES];
-        [ self unzipZipFile: @""];
+        
         [conn Disconnect];
       //  [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
         [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
@@ -356,7 +395,13 @@ static VersionCtrl* defaultHUD = nil;
                             verdirfile = filePath;
                          //   [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(TimerVerCtrl) userInfo:nil repeats:NO];
                                                      //   [self performSelector:@selector(TimerVerCtrl) withObject:@"1" afterDelay:1];
-                                [self.progressAlert show];
+                            self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Please wait..."
+                                                                            message:@"파일 다운로드 중입니다"
+                                                                           delegate:self cancelButtonTitle:nil
+                                                                  otherButtonTitles:nil ];
+                            
+                            self.progressAlert.tag = 12;
+                            [self.progressAlert show];
                         }
 
 
@@ -448,7 +493,14 @@ static VersionCtrl* defaultHUD = nil;
                     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(TimerVerCtrl) userInfo:nil repeats:NO];
                     
                 }
-                else
+                else if ([recvFileName isEqualToString:@"www.zip"])
+                {
+                    
+                    [ self unzipZipFile: @""];
+                    [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
+                    [self Request:1 gtr:@"GBMTS\0" tr:@"WyVerfile.txt\0"];
+                
+                }else
                 {
                     int iindex = [recvFileName rangeOfString:@".gz"].location;
                   //  [fm changeCurrentDirectoryPath:[self dataFilePath ]];
@@ -511,13 +563,14 @@ static VersionCtrl* defaultHUD = nil;
                       //  [self performSelector:@selector(TimerVerCtrl) withObject:@"1" afterDelay:1];
         }else
         {
-//                        if (![recvFileName hasPrefix:@"WyVerfile.txt"])
-                      //      {
+                        if ((![recvFileName hasPrefix:@"WyVerfile.txt"])&&(![recvFileName isEqualToString:@"www.zip"]))
+                        {
+                               [self Progressing];
                                 
-                        //    }
+                        }
                           //  recvFileData = [[NSString alloc] initWithBytes:&VerCtrlout.data length:datasize encoding:0x80000000 + kCFStringEncodingDOSKorean];
                           //  [FileData stringByAppendingString:recvFileData];
-            [self Progressing];
+            
                            [FileData appendData:originfiledata];
                         //    FileData := FileData + Copy(VerCtrlout.data, 1, datasize);
             
@@ -620,9 +673,9 @@ static VersionCtrl* defaultHUD = nil;
     unZipFileName = @"www.zip";
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
-    NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:@"/GBMTS/www/www.zip"];
+    NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:@"/GBMTS/www.zip"];
     
-    NSString *output =[documentsDirectory stringByAppendingPathComponent:@"/GBMTS/www"];// [documentsDirectory stringByAppendingPathComponent:@"unZipDirName"];
+    NSString *output =[documentsDirectory stringByAppendingPathComponent:@"/GBMTS"];// [documentsDirectory stringByAppendingPathComponent:@"unZipDirName"];
     NSFileManager *fm;
     fm = [NSFileManager defaultManager];
     ZipArchive* za = [[ZipArchive alloc] init];
