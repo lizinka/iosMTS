@@ -3,7 +3,7 @@
 <file name="jquery.flot.js" server="codetest.coforward.com" local="130509802022144348" remote="130557886200000000" Dst="0" />
 <file name="jquery.js" server="codetest.coforward.com" local="130509802022784443" remote="130557886200000000" Dst="0" />
 <file name="jquery.mobile-1.4.2.min.js" server="codetest.coforward.com" local="130509802023184389" remote="130557886200000000" Dst="0" />
-<file name="web_mts.js" server="codetest.coforward.com" local="130667252388814724" remote="130666928400000000" Dst="0" />
+<file name="web_mts.js" server="codetest.coforward.com" local="130675970539262000" remote="130675646400000000" Dst="0" />
 <file name="jquery.mobile-1.4.2.min.map" server="codetest.coforward.com" local="130509802023824388" remote="130557886200000000" Dst="0" />
 <file name="jquery_ui.js" server="codetest.coforward.com" local="130451364332466573" remote="130557886200000000" Dst="0" />
 <file name="jquery.ui.touch-punch.min.js" server="codetest.coforward.com" local="130529980379272196" remote="130557886200000000" Dst="0" />
@@ -14,6 +14,6 @@
 <file name="websocket.js" server="codetest.coforward.com" local="130592083256244010" remote="130591759800000000" Dst="0" />
 <file name="ui_test.js" server="codetest.coforward.com" local="130603176634136932" remote="130589875800000000" Dst="0" />
 <file name="jquery.mobile.lazyloader.min.js" server="codetest.coforward.com" local="130076572260000000" remote="130613293200000000" Dst="0" />
-<file name="jqm_setting.js" server="codetest.coforward.com" local="130633511507611508" remote="130636788000000000" Dst="0" />
+<file name="jqm_setting.js" server="codetest.coforward.com" local="130675855763899574" remote="130675531200000000" Dst="0" />
 <file name="web_mts.js.bak" server="codetest.coforward.com" local="130663852471492397" remote="130666743600000000" Dst="0" />
 </dwsync>

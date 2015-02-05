@@ -179,13 +179,15 @@ body[data-mode="test"] #console button{
 
 
 #LOGIN h1,#CLOSE h1{background:url(images/bg_logo.png) no-repeat center center; background-size:100%; width:70%;  text-indent:-10000px; margin:0 auto; height:70px; margin-top:40px; margin-bottom:10px; position:relative; z-index:100;}
+#LOGIN #app_ver{position:absolute; right:14%; top:90px; font-size:12px;}
+
 #LOGIN form{margin:0px 30px; position:relative; z-index:100;}
 
 #LOGIN form>div.login_input{height:40px;}
 #LOGIN form>div.login_input label{font-size:14px; font-weight:bold; display:inline-block; width:25%; height:30px; box-sizing:border-box; text-align:center; vertical-align:middle; line-height:30px; margin:0; padding:0;}
 
 #LOGIN .ui-input-text{border:none; background-color:transparent;box-shadow:none; width:65%; display:inline-block; box-sizing:border-box;}
-#LOGIN input[type="text"],#LOGIN input[type="password"]{font-size:14px;box-shadow:none;border:rgb(94,85,86) solid 2px;background-color:rgb(227,226,231); border-radius:10px; text-align:center; padding:0; height:30px; box-sizing:border-box;}
+#LOGIN input[type="text"],#LOGIN input[type="password"]{font-size:14px;box-shadow:none; border-radius:10px; background-color:rgb(227,226,231); text-align:center; padding:0; height:30px; box-sizing:border-box; box-shadow:rgba(0,0,0,0.5) 2px 2px 2px inset;}
 
 #LOGIN .login_check{text-align:center; margin:0 auto; margin-top:15px;}
 #LOGIN .login_check div.ui-checkbox{display: inline-block; width:48%; box-sizing:border-box;}
@@ -1084,10 +1086,11 @@ margin-right:2px; display:inline-block; content:""; vertical-align:middle;}
 #app footer .all_menu_group h1,#app footer .all_menu_group h2, #app footer .all_menu li{height:30px; line-height:30px;}
 #app footer .all_menu_group h1{background-color:rgb(160,152,155); color:#fff; text-shadow:none; padding:0px 20px;}
 #app footer .all_menu_group h2{padding:0 10px; margin-top:5px;}
-#app footer .all_menu_group li{margin-left:20px; font-size:14px;}
-#app footer .all_menu_group a{display:inline-block; height:30px; line-height:26px;color:rgb(51,51,51); vertical-align:bottom;color:#5e5556;}
+#app footer .all_menu_group li{margin-left:20px; font-size:12px;}
+#app footer .all_menu_group a{display:inline-block; height:30px; line-height:26px;color:rgb(51,51,51); color:#5e5556;}
+#app footer .all_menu_group a span.date{display:inline-block; height:30px; line-height:30px; margin:0 5px;}
 #app footer .all_menu_group a[href="#ITEM_LIST"]:before{background-image: url(images/ic_folder_b.svg);}
-#app footer .all_menu_group a:before{content:"";display:inline-block; margin-right:10px; width:30px; height:30px; background-repeat:no-repeat; background-size:24px; background-position:center center; vertical-align:middle;padding:0;}
+#app footer .all_menu_group a:before{content:"";display:inline-block; width:30px; height:30px; background-repeat:no-repeat; background-size:24px; background-position:center center; vertical-align:middle;padding:0;}
 #app footer .all_menu_group p{color:#5e5556; font-size:14px; line-height:30px; text-align:center;margin-top:10px;}
 #app footer .all_menu_group p:before{content:""; display:inline-block; width:24px;height:30px;background:url(images/icon_alret_b.png) left 3px  no-repeat; background-size:24px; line-height:30px; vertical-align:middle; margin-right:10px;}
 #app footer .all_menu_group span.option_type{display:inline-block; vertical-align:bottom; height:100%; line-height:34px; padding:0 3px;}

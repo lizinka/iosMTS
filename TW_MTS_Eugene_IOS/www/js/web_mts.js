@@ -8,6 +8,7 @@ var mts_prefix='web_mts'
 var item_catagory_caption={'currency':'통화','interest':'채권','index':'지수','commodity':'농산물','metals':'금속','energy':'에너지','single stock':'지수옵션','etc comodity':'기타 농산물', 'other':'기타'}
 var month_code={'01':'F','02':'G','03':'H','04':'J','05':'K','06':'M','07':'N','08':'Q','09':'U','10':'V','11':'X','12':'Z'};
 var month_number={'F':1,'G':2,'H':3,'J':4,'K':5,'M':6,'N':7,'Q':8,'U':9,'V':10,'X':11,'Z':12};
+var month_number_string={'F':'01','G':'02','H':'03','J':'04','K':'05','M':'06','N':'07','Q':'08','U':'09','V':'10','X':'11','Z':'12'};
 var app_type='web';
 var page_height='100%';
 var all_menu_height=500;
@@ -47,6 +48,19 @@ function ini_app(){
 	
 	if(app_type=='ios'){// 실생 환경이 ios인 경우
 		PixelRatio=1;
+		alert=function(msg){
+			var page_id=jQuery.mobile.activePage.attr('id');
+			msg_json={pageId:'#'+page_id,type:'alert',msg:msg}
+			var send_meg=JSON.stringify(msg_json);
+			window.location = "jscall://" + "reqAlert//" + send_meg;	
+		}
+		
+		confirm=function(msg){
+			var page_id=jQuery.mobile.activePage.attr('id');
+			msg_json={pageId:'#'+page_id,type:'confirm',msg:msg}
+			var send_meg=JSON.stringify(msg_json);
+			window.location = "jscall://" + "reqAlert//" + send_meg;	
+		}	
 	}//End of if(app_type=='ios')
 	
 		
@@ -707,10 +721,10 @@ function ini_page(triger, callback){
 				
 			break;
 			case 'board_list':
-				var msg={pageId:page_id,itemType:item_type,nrec:10,type:'existing'};
+				var msg={pageId:page_id,itemType:item_type,nrec:20,type:'existing'};
 			break;
 			case 'notice_list':
-				var msg={pageId:'#NOTICE_LIST',itemType:item_type,nrec:10,type:'existing'};
+				var msg={pageId:'#NOTICE_LIST',itemType:item_type,nrec:20,type:'existing'};
 			break;
 			
 			case 'board_view':
@@ -887,7 +901,7 @@ function ini_item_select(){
 	jQuery('#ITEM_SELECT').on('pagebeforeshow',function(){ini_select_item()});
 	jQuery('#ITEM_SELECT select.select_item_type').on('change',function(){ini_select_item()});
 	jQuery('#ITEM_SELECT select.select_category').on('change',function(){ini_select_item()});
-	jQuery('#app').on('tap','#item_select_table button, #dialog_item_select_table button',function(e){e.stopPropagation();e.stopImmediatePropagation();item_selected(this);});
+	jQuery('#app').on('tap','#item_select_table button, #dialog_item_select_table button',function(e){e.stopPropagation();e.stopImmediatePropagation();item_selected(this); return false;});
 	jQuery('#app').on('change','#item_select_table select, #dialog_item_select_table select',function(e){e.stopPropagation();e.stopImmediatePropagation();item_selected(this);});
 }//End of ini_item_select();
 	
@@ -1026,7 +1040,7 @@ function ini_item_select(){
 					item_data[item_code].itemType=item_type;
 					item_data[item_code].serverCode=item_code;
 					
-					alert('['+item_caption+']을\n['+group_name+'] 관심그룹에 등록했습니다.');
+					alert('['+item_caption+']을\n['+group_name+'] 관심그룹에 등록했습니다--.');
 					
 					var save_string=JSON.stringify(item_data);
 					var save_obj={};
@@ -2642,7 +2656,7 @@ function ini_item(){
 		var list_type=jQuery('#BOARD_LIST').attr('data-type');
 		var page_id={'board_list':'#BOARD_LIST','notice_list':'#NOTICE_LIST'};
 		
-		var more_msg={pageId:page_id[list_type],itemType:list_type,subg:board_subg,gubn:board_gubn,seqn:board_seqn,kymd:board_kymd,khms:board_khms,nrec:10,type:"more"};
+		var more_msg={pageId:page_id[list_type],itemType:list_type,subg:board_subg,gubn:board_gubn,seqn:board_seqn,kymd:board_kymd,khms:board_khms,nrec:20,type:"more"};
 		
 		send_native(more_msg);
 	}//End of board_more()
@@ -3365,7 +3379,7 @@ function ini_dialog_item_info(button){
 
 	function dialog_item_info(data){
 		var page_id=jQuery.mobile.activePage.attr('id');
-		var dialog_code=(data);
+		var dialog_code=template_dialog_item_info(data);
 			dialog_code.css('height',dialog_height);
 			dialog_code.css('top',header_height);
 			dialog_code.find('article').css ('height',dialog_height);
@@ -3700,7 +3714,10 @@ function ini_footer(){
 					var item_data=get_local_json(code);
 					var item_list_html='';
 					for(item_code in item_data){
-						item_list_html+='<li><a href="#ITEM_ASKING" data-code="'+item_code+'" data-server_code="'+item_data[item_code].serverCode+'" data-type="'+item_data[item_code].itemType+'">'+item_data[item_code].caption+'</a></li>';
+						var item_date=item_code_export(item_code)
+						var item_date_string=item_date.year_s+'/'+item_date.month_s;
+						
+						item_list_html+='<li><a href="#ITEM_ASKING" data-code="'+item_code+'" data-server_code="'+item_data[item_code].serverCode+'" data-type="'+item_data[item_code].itemType+'">'+item_data[item_code].caption+'<span class="date">'+item_date_string+'</span></a></li>';
 					}
 					if(obj.size(item_data)>0){
 						item_list_html='<ul>'+item_list_html+'</ul>';
@@ -3801,18 +3818,49 @@ function ini_footer(){
 *종목검색
 */
 //종목의 일자 반환
-function item_code_export(item_code){
+function item_code_export(code_data){
 	var return_data={};
-	var code=item_code.substr(0,(item_code.length-3));
+	var item_code_temp=code_data.split('_');
+	var item_code=item_code_temp[0];
+	var option_data=item_code_temp[1];
+	if(option_data){
+		var item_type='option';
+	}else{
+		var item_type='futures';
+	}
+	
+	if(item_type=='futures'){
+		var code=item_code.substr(0,(item_code.length-3));
+		var option_type=false;
+		var option_cost=false;
+	}else{
+		var code=item_code.substr(1,(item_code.length-4));
+		var option_type_check=option_data.substr(0,1);
+		var option_cost=option_data.substr(1,option_data.length);
+		if(option_type_check=='C'){
+			var option_type='call';
+		}else{
+			var option_type='put';
+		}
+	}
+	
 	var month_temp=item_code.substr((item_code.length-3),1);
 	var month=month_number[month_temp];
+	var s_month=month_number_string[month_temp];
+	
 	var year_temp=item_code.substr((item_code.length-2),2);
 	var year=Number('20'+year_temp);
 	var date_text=year+'년 '+month+'월';
 	
+	
+	return_data['type']=item_type;
 	return_data['code']=code;
 	return_data['year']=year;
 	return_data['month']=month;
+	return_data['year_s']=year_temp;
+	return_data['month_s']=s_month;
+	return_data['option_type']=option_type;
+	return_data['option_cost']=option_cost;
 	return return_data;
 }//End of item_code_export(item_code);
 
@@ -4539,7 +4587,10 @@ function get_template(part){
 
 	var template_dialog_item_li=function(code,item_code){
 	 var group=get_local_json(code);
-	 var btn_change='<button class="btn_group_item" data-code="'+item_code+'" data-server_code="'+group[item_code].serverCode+'" data-type="'+group[item_code].itemType+'" data-role="none">'+group[item_code].caption+'</button>';
+	 var item_date=item_code_export(item_code)
+	 var item_date_string=item_date.year_s+'/'+item_date.month_s;
+	 
+	 var btn_change='<button class="btn_group_item" data-code="'+item_code+'" data-server_code="'+group[item_code].serverCode+'" data-type="'+group[item_code].itemType+'" data-role="none">'+group[item_code].caption+' '+item_date_string+'</button>';
 	 var btn_del='<button type="button" class="btn_del_item" data-code="'+code+'" data-item="'+item_code+'" data-role="none"> 종목삭제</button>';		
 		return '<li data-group="'+code+'">'+btn_change+btn_del+'</li>';
 	}
