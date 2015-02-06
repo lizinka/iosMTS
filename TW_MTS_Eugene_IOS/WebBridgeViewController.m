@@ -1045,6 +1045,18 @@
    // progressView.progress = 0.01;
    // [self.view addSubview:progressView];
     
+   // NSString *indexFilePath = [NSString stringWithFormat:@"%@/%@", [self dataFilePath ],@"GBMTS/www/index.html"];
+    NSString *indexFilePath =  [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"www"];
+    //NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
+    NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
+    
+    webView.scrollView.bounces = NO;
+    //    webView.scrollView.alwaysBounceHorizontal = NO;
+    //    webView.scrollView.alwaysBounceVertical = NO;
+    [webView loadRequest:request];
+    
+    
     version = [VersionCtrl defaultHUD: delegate:self];
 
       version.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(10.0,400.0, 300.0, 0.0)];
@@ -1215,15 +1227,20 @@
     NSString *indexFilePath;
     if (nIndex == 0)
     {
-        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransData" ofType:@"dat"];
+     //   indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransData" ofType:@"dat"];
+        
+        indexFilePath = [NSString stringWithFormat:@"%@/%@", [self dataFilePath ],@"GBMTS/dat/MTSTrTransData.dat"];
     }
     else if (nIndex == 1)
     {
-        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransMore" ofType:@"dat"];
+     //   indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransMore" ofType:@"dat"];
+        indexFilePath = [NSString stringWithFormat:@"%@/%@", [self dataFilePath ],@"GBMTS/dat/MTSTrTransMore.dat"];
+        
     }
     else if (nIndex == 2)
     {
-        indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransReal" ofType:@"dat"];
+        //indexFilePath = [[NSBundle mainBundle] pathForResource:@"MTSTrTransReal" ofType:@"dat"];
+        indexFilePath = [NSString stringWithFormat:@"%@/%@", [self dataFilePath ],@"GBMTS/dat/MTSTrTransReal.dat"];
     }
     
     //NSMutableArray *arrayData = [NSMutableArray alloc];
