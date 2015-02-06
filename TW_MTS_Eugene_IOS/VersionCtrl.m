@@ -405,7 +405,7 @@ static VersionCtrl* defaultHUD = nil;
                          //   [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(TimerVerCtrl) userInfo:nil repeats:NO];
                                                      //   [self performSelector:@selector(TimerVerCtrl) withObject:@"1" afterDelay:1];
                             self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Please wait..."
-                                                                            message:@"파일 다운로드 중입니다"
+                                                                            message:@"변경파일 다운로드 중입니다"
                                                                            delegate:self cancelButtonTitle:nil
                                                                   otherButtonTitles:nil ];
                             
