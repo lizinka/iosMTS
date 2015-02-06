@@ -67,7 +67,7 @@
     NSTimer *_timer;
     int timecount;
     ChartViewController* chartV;
-}
+   }
 
 @property (nonatomic, strong) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) Global *global;
@@ -83,6 +83,8 @@
 - (void)ChartDestroy;
 -(void)ChartShow;
 -(void)ReqChartData:(NSMutableData*)data:(int)nPeriod;
+
+- (void)didFinishDrawingView;
 -(NSData *)gzipDecompress : (NSData *)data;
 
 @end

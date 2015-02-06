@@ -14,43 +14,32 @@
 @synthesize chartV;
 
 - (void)viewDidLoad {
-    //[self VersionConnect];
+    [self VersionConnect];
     [super viewDidLoad];
     
     [self networkCheck];
     
-    self.view.autoresizesSubviews = YES;
-    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    
-    global = [[Global alloc] initWithIF];
-    UserId = [[NSString alloc] init];
-    Password = [[NSString alloc] init];
-    LoginType = [[NSString alloc] init];
-    m_sReqData = [[NSString alloc] init];
-    trTransHashMap = [NSMutableDictionary dictionary];
-    trDataMoreHashMap = [NSMutableDictionary dictionary];
-    trTransHashMapReal = [NSMutableDictionary dictionary];
-    [self LoadTrHashDatas:0];
-    [self LoadTrHashDatas:1];
-    [self LoadTrHashDatas:2];
-    
-    for (int i = 0; i < 10; i++) {
-        recvd[i]=[[NSMutableData alloc] init];
-    }
-    
-    //NSURL *url = [NSURL URLWithString:@"http://codetest.coforward.com/web_mts/prototype/index.html"];
-    //NSURL *url = [NSURL URLWithString:@"http://m.naver.com"];
-    NSString *indexFilePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"www"];
-    //NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
-    NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
-    
-    webView.scrollView.bounces = NO;
-//    webView.scrollView.alwaysBounceHorizontal = NO;
-//    webView.scrollView.alwaysBounceVertical = NO;
-    [webView loadRequest:request];
-    //[webView setScalesPageToFit:YES];
+        //[webView setScalesPageToFit:YES];
 }
+
+- (NSString *)dataFilePath
+{
+    
+    // 읽고 쓰기 간으한 document디렉토리를 구한다.
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(
+                                                         
+                                                         NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    // 아이폰에서는 NSSearchPathForDirectoriesInDomains로 구한 정보가
+    
+    // 도큐먼트 디렉토리 오직 하나임.
+    
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return documentsDirectory;
+    
+}
+
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
@@ -1056,7 +1045,8 @@
    // progressView.progress = 0.01;
    // [self.view addSubview:progressView];
     
-      version = [VersionCtrl defaultHUD];
+    version = [VersionCtrl defaultHUD: delegate:self];
+
       version.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(10.0,400.0, 300.0, 0.0)];
      // version.progressView.textColor = [UIColor colorWithRed:1.0 green:0.231 blue:0.188 alpha:1.0];
      //  version.progressView.usesVibrancyEffect = NO;
@@ -1076,7 +1066,8 @@
  //   version.progressView.textLabel.hidden = NO;
     
       [self.view addSubview:version.progressView];
-  
+
+   
 //    version.image = [UIImage imageNamed:@"rounded-checkmark.png"];
 //    version.topText = @"확인";
 //    version.bottomText = @"버전처리중입니다.(  0%)";
@@ -1100,6 +1091,44 @@
   //  [version.progressView superview];
     
     
+
+}
+
+
+
+- (void)didFinishDrawingView
+{
+    self.view.autoresizesSubviews = YES;
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    
+    global = [[Global alloc] initWithIF];
+    UserId = [[NSString alloc] init];
+    Password = [[NSString alloc] init];
+    LoginType = [[NSString alloc] init];
+    m_sReqData = [[NSString alloc] init];
+    trTransHashMap = [NSMutableDictionary dictionary];
+    trDataMoreHashMap = [NSMutableDictionary dictionary];
+    trTransHashMapReal = [NSMutableDictionary dictionary];
+    [self LoadTrHashDatas:0];
+    [self LoadTrHashDatas:1];
+    [self LoadTrHashDatas:2];
+    
+    for (int i = 0; i < 10; i++) {
+        recvd[i]=[[NSMutableData alloc] init];
+    }
+    
+    //NSURL *url = [NSURL URLWithString:@"http://codetest.coforward.com/web_mts/prototype/index.html"];
+    //NSURL *url = [NSURL URLWithString:@"http://m.naver.com"];
+    NSString *indexFilePath = [NSString stringWithFormat:@"%@/%@", [self dataFilePath ],@"GBMTS/www/index.html"];
+    //[[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"www"];
+    //NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURL *indexUrl = [NSURL fileURLWithPath:indexFilePath];
+    NSURLRequest *request = [NSURLRequest requestWithURL:indexUrl];
+    
+    webView.scrollView.bounces = NO;
+    //    webView.scrollView.alwaysBounceHorizontal = NO;
+    //    webView.scrollView.alwaysBounceVertical = NO;
+    [webView loadRequest:request];
 
 }
 

@@ -19,7 +19,7 @@
 
 
 
-
+id delegate;
 
 /**
  A HUD that mimics the native one used in iOS (when you press volume up or down
@@ -47,11 +47,11 @@
     NSMutableArray * newverfileStringlist, *oldverfileStringlist, *requireStrlist;
     NSURL *filePathURL;
     NSString *verdirfile;
-    
+    id delegate;
     UILabel *processing;
 }
 
-+(VersionCtrl*) defaultHUD;
++(VersionCtrl*) defaultHUD: delegate:(id)aDelegate;
 
 
 @property (nonatomic, retain) UIProgressView *progressView;

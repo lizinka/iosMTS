@@ -11,7 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NSData+IDZGunzip.h"
 #import "ZipArchive.h"
-
+#import "WebBridgeViewController.h"
 
 static VersionCtrl* defaultHUD = nil;
 
@@ -24,8 +24,9 @@ static VersionCtrl* defaultHUD = nil;
 
 
 
-
-- (id)initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame delegate:(id)aDelegate {
+    //  [super initWithFrame:frame];
+    delegate = aDelegate;
     
 
         
@@ -162,7 +163,15 @@ static VersionCtrl* defaultHUD = nil;
         [conn Disconnect];
       //  [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
         [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
-        [self.progressView setHidden:TRUE];
+     //   [(WebBridgeViewController*)self.progressView.superview didFinishDrawingView];
+//        if ([delegate respondsToSelector:@selector(didFinishDrawingView)])
+//          [delegate performSelector:@selector(@"didFinishDrawingView")];
+        [delegate performSelector:NSSelectorFromString(@"didFinishDrawingView") ];
+    //    [self.progressView.superview performSelector:@selector(didFinishDrawingView)];
+     //   [delegate didFinishDrawingView:(VersionCtrl*) self];
+        // [(webView*) self.progressView.superview dlelelelele];
+        [self.progressView removeFromSuperview];
+       // [self.parentViewController init];
         //[self dismissViewControllerAnimated:YES completion:nil];
         return;
          
@@ -247,9 +256,9 @@ static VersionCtrl* defaultHUD = nil;
 
 }
 
-+(VersionCtrl*) defaultHUD {
++(VersionCtrl*) defaultHUD : delegate:(id)sdelegate{
     if (defaultHUD==nil)
-        defaultHUD=[[VersionCtrl alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+        defaultHUD=[[VersionCtrl alloc] initWithFrame:CGRectMake(0, 0, 200, 200)  delegate:sdelegate];
    return defaultHUD;
 }
 
