@@ -62,6 +62,7 @@
     uint16_t rwmid[10];
     NSMutableData *recvd[10];
     NSString *m_sReqData;
+    NSString *m_sAlertData;
     int m_nChartHeight;
     bool m_bisReconnMode;
     NSTimer *_timer;

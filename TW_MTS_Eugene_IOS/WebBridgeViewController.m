@@ -291,6 +291,43 @@
     }
 }
 
+-(void) ReqAlert:(NSString*)arg
+{
+    NSError* error;
+    m_sAlertData = arg;
+    NSDictionary* json = [NSJSONSerialization JSONObjectWithData:[arg dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+    
+    if (json == nil) {
+        return;
+    }
+    
+    if (error) {
+        NSLog(@"error : %@", error.localizedDescription);
+        return;
+    }
+    
+    NSString *sType = [json objectForKey:@"type"];
+    NSString *sMsg = [json objectForKey:@"msg"];
+    
+    UIAlertView *AlertDialog = nil;
+    if ([sType isEqualToString:@"confirm"]) {
+        AlertDialog = [[UIAlertView alloc] initWithTitle:@"제일로 M"
+                                                 message:sMsg
+                                                delegate:self cancelButtonTitle:@"취소"
+                                       otherButtonTitles:@"확인" ];
+    }
+    else {
+        AlertDialog = [[UIAlertView alloc] initWithTitle:@"제일로 M"
+                                                 message:sMsg
+                                                delegate:self cancelButtonTitle:nil
+                                       otherButtonTitles:@"확인" ];
+    }
+    
+    AlertDialog.tag = 11;
+    
+    [AlertDialog show];
+}
+
 -(void) ReqRealCancel:(NSString*)arg
 {
     [self Request:5 gtr:@"mobile" tr:@"m9999"];
@@ -1118,6 +1155,7 @@
     Password = [[NSString alloc] init];
     LoginType = [[NSString alloc] init];
     m_sReqData = [[NSString alloc] init];
+    m_sAlertData = [[NSString alloc] init];
     trTransHashMap = [NSMutableDictionary dictionary];
     trDataMoreHashMap = [NSMutableDictionary dictionary];
     trTransHashMapReal = [NSMutableDictionary dictionary];
@@ -1486,46 +1524,79 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    // 사용자가 Yes를 선택한 경우
-    if (buttonIndex == 1) {
+    if (alertView.tag == 11 || alertView.tag == 12) {
         
-        NetworkStatus netStatus = [internetReach currentReachabilityStatus];
-        
-       
-        switch (netStatus)
-        {
-            case NotReachable:
-                                //재접속 연결을 하고 있는 상태라면 그냥 Return
-                hud = [LGViewHUD defaultHUD];
-                hud.image = [UIImage imageNamed:@"rounded-checkmark.png"];
-                hud.topText = @"확인";
-                hud.bottomText = @"네트워크 재접속 중입니다.(6)";
-                hud.activityIndicatorOn = YES;
-                [self setTimer];
-                [hud showInView:self.view];
-                break;
-            case ReachableViaWiFi:
-                [self setReconnSocket];
-                [hud removeFromSuperview];
-                break;
-            case ReachableViaWWAN:
-                [self setReconnSocket];
-                [hud removeFromSuperview];
-                break;
-                
-            default:
-                [self setReconnSocket];
-                [hud removeFromSuperview];
-                break;
+        if (m_sAlertData == nil || [m_sAlertData isEqualToString:@""]) {
+            return;
         }
-
+        NSError* error;
+        NSDictionary* json = [NSJSONSerialization JSONObjectWithData:[m_sAlertData dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
         
+        if (json == nil) {
+            return;
+        }
         
-
+        if (error) {
+            NSLog(@"error : %@", error.localizedDescription);
+            return;
+        }
+        
+        NSMutableDictionary* json2 = [json mutableCopy];
+        
+        [json2 removeObjectForKey:@"msg"];
+        
+        //YES선택한 경우
+        if(buttonIndex == 1) {
+            [json2 setValue:@"true" forKey:@"state"];
+        }
+        //No선택한 경우
+        else if(buttonIndex == 2) {
+            [json2 setValue:@"false" forKey:@"state"];
+        }
+        
+        NSData* kData = [NSJSONSerialization dataWithJSONObject:json2 options:NSJSONWritingPrettyPrinted error:nil];
+        NSString* kJson = [[NSString alloc] initWithData:kData encoding:NSUTF8StringEncoding];
+        [self csendWData:kJson];
     }
     else
     {
-        exit(0);
+        // 사용자가 Yes를 선택한 경우
+        if (buttonIndex == 1) {
+            
+            NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+            
+           
+            switch (netStatus)
+            {
+                case NotReachable:
+                                    //재접속 연결을 하고 있는 상태라면 그냥 Return
+                    hud = [LGViewHUD defaultHUD];
+                    hud.image = [UIImage imageNamed:@"rounded-checkmark.png"];
+                    hud.topText = @"확인";
+                    hud.bottomText = @"네트워크 재접속 중입니다.(6)";
+                    hud.activityIndicatorOn = YES;
+                    [self setTimer];
+                    [hud showInView:self.view];
+                    break;
+                case ReachableViaWiFi:
+                    [self setReconnSocket];
+                    [hud removeFromSuperview];
+                    break;
+                case ReachableViaWWAN:
+                    [self setReconnSocket];
+                    [hud removeFromSuperview];
+                    break;
+                    
+                default:
+                    [self setReconnSocket];
+                    [hud removeFromSuperview];
+                    break;
+            }
+        }
+        else
+        {
+            exit(0);
+        }
     }
 }
 
