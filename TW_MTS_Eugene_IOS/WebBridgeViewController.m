@@ -291,7 +291,7 @@
     }
 }
 
--(void) ReqAlert:(NSString*)arg
+-(void) reqAlert:(NSString*)arg
 {
     NSError* error;
     m_sAlertData = arg;
@@ -313,14 +313,14 @@
     if ([sType isEqualToString:@"confirm"]) {
         AlertDialog = [[UIAlertView alloc] initWithTitle:@"제일로 M"
                                                  message:sMsg
-                                                delegate:self cancelButtonTitle:@"취소"
-                                       otherButtonTitles:@"확인" ];
+                                                delegate:self cancelButtonTitle:@"확인"
+                                       otherButtonTitles:@"취소", nil ];
     }
     else {
         AlertDialog = [[UIAlertView alloc] initWithTitle:@"제일로 M"
                                                  message:sMsg
-                                                delegate:self cancelButtonTitle:nil
-                                       otherButtonTitles:@"확인" ];
+                                                delegate:self cancelButtonTitle:@"확인"
+                                       otherButtonTitles:nil ];
     }
     
     AlertDialog.tag = 11;
@@ -1095,8 +1095,13 @@
     
     
     version = [VersionCtrl defaultHUD: delegate:self];
-
-      version.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(10.0,400.0, 300.0, 0.0)];
+    
+    CGRect nRt = [[UIScreen mainScreen] bounds];
+    nRt.origin.x = 10;
+    nRt.size.width -= 10;
+    nRt.origin.y = nRt.origin.y + nRt.size.height -  140;
+    nRt.size.height = 0;
+      version.progressView = [[UIProgressView alloc] initWithFrame:nRt];
      // version.progressView.textColor = [UIColor colorWithRed:1.0 green:0.231 blue:0.188 alpha:1.0];
      //  version.progressView.usesVibrancyEffect = NO;
     //  version.progressView.showsText = YES;
@@ -1524,7 +1529,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    if (alertView.tag == 11 || alertView.tag == 12) {
+    if (alertView.tag == 11) {
         
         if (m_sAlertData == nil || [m_sAlertData isEqualToString:@""]) {
             return;
@@ -1546,11 +1551,11 @@
         [json2 removeObjectForKey:@"msg"];
         
         //YES선택한 경우
-        if(buttonIndex == 1) {
+        if(buttonIndex == 0) {
             [json2 setValue:@"true" forKey:@"state"];
         }
         //No선택한 경우
-        else if(buttonIndex == 2) {
+        else if(buttonIndex == 1) {
             [json2 setValue:@"false" forKey:@"state"];
         }
         
