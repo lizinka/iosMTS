@@ -26,6 +26,25 @@
 </head>
 <!-- ver New -->
 <body id="app" data-real="true" data-theme="red">
+<!--
+<section id="NOTIFICATION" data-role="page">
+	<header data-role="header" data-position="fixed" data-tap-toggle="false">
+    	<a data-rel="back">이전</a>
+        <h1>DEV</h1>
+    </header>
+    <article data-role="content">
+        <select id="notification_select">
+        	<option value="alert">alert</option>
+            <option value="confirm">confirm</option>
+        </select>
+        <input type="text" id="notification_text" placeholder="알림 창의 메세지" />
+        <button id="btn_notification_test">Test Not</button>
+        <p id="preview_notification_data">--</p>
+    </article>
+    <footer data-role="footer">
+    	
+    </footer>
+</section><!-- End of #DEV -->
 
 <!--
 <div id="console">
@@ -40,7 +59,7 @@
     	<ul data-role="listview">
             <li><a href="#DEV"><span>0-01</span>개발자모드</a></li>
             <li><a href="#TEST"><span>0-02</span>통신테스트</a></li>
-            <li><a href="#NOTIFICATION"</li><span>0-03</span>알림 창</a></li>
+            <li><a href="#NOTIFICATION"><span>0-03</span>알림 창</a></li>
             <li><a href="#LOGIN"><span>a-01</span>로그인페이지</a></li>
             <li><a href="#ITEM_SEARCH"><span>b</span>종목검색</a></li>
             <li><a href="#ITEM_SELECT"><span>b-01</span>종목선택</a></li>
@@ -59,8 +78,7 @@
             <li><a href="#BOARD_VIEW" data-code="" data-type="board_view"><span>g-02</span>투자정보 - 게시물보기</a></li>
             <li><a href="#SCHEDULE"><span>g-03</span>투자정보 - 해외일정</a></li>
             <li><a href="#FOOTER_MENU"><span>h-01</span>공통 - 전체메뉴표시</a></li>
-            <li><a href="#LOADING"</li><span>h-02</span>공통 - LOADIONG</a></li>
-          
+            <li><a href="#LOADING"</li><span>h-02</span>공통 - LOADIONG</a></li> 
         </ul>
     </article>
     <footer data-role="footer">
@@ -106,8 +124,6 @@
                 <option value="close">종료</option>
             </select>
         </div>
-        
-        
         <div data-role="controlgroup" data-type="horizontal">
     		<input type="text" id="test_item" data-wrapper-class="controlgroup-textinput ui-btn" placeholder="data-code" />
             <button type="button" id="btn_test">전송</button>
@@ -123,7 +139,7 @@
         <div class="wave wave_03"></div>
         <div class="wave wave_04"></div>	
         <h1>유진투자선물</h1>
-        <span id="app_ver"></span>
+        <span id="app_ver" class="verson_text"></span>
         
         <form id="login_form" name="login_form" action="#" method="post">
         	<div class="login_input">	
@@ -223,7 +239,7 @@
         
         <div id="verson_text_div" class="setting_item">
         	<label>버전</label>
-            <span></span>
+            <span class="verson_text"></span>
         </div>
     </article>
 </section>
@@ -278,96 +294,6 @@
     <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer>
 </section><!-- End of #ITEM_SEARCH -->
 
-
-<!--
-<section id="ITEM_SEARCH" data-role="page" data-type="futures">
-	<header data-role="header" data-position="fixed" data-tap-toggle="false">
-    	<a data-rel="back">뒤로</a>
-        <h1>종목 검색</h1><button type="button" class="btn_footer_menu ui-btn-right ui-btn ui-btn-inline">전체메뉴</button>
-    	
-        <div id="search_type_div">
-        	<h2>검색 범위</h2>
-        	<div data-role="controlgroup" data-type="horizontal">
-                <select class="search_item_type">
-                    <option value="futures">선물</option>
-                    <option value="option">옵션</option>
-                </select>
-                <select class="search_exchange">
-                    <option value="false">거래소선택</option>
-                </select>
-            </div>
-        </div>
-        
-    </header>
-    <article data-role="content">
-        <!--
-        <div id="search_desc" class="desc_div">
-        	검색 범위를 지정하세요.
-        </div>
-        
-        <div id="item_search_div">
-        	<h1>종목 아이템 선택</h1>
-        	<div class="search_step step_01">
-            	<h2>구분</h2>
-                <ul>
-                	<li id="item_category_currency">
-                    	<input type="radio" name="item_search_step01" id="step01_01" value="currency" /><label for="step01_01">통화</label>
-                    </li>
-                    <li id="item_category_interest">
-                    	<input type="radio" name="item_search_step01" id="step01_02" value="interest" /><label for="step01_02">채권</label>
-                    </li>
-                    <li id="item_category_index">
-                    	<input type="radio" name="item_search_step01" id="step01_03" value="index" /><label for="step01_03">지수</label>
-                    </li>
-                    <li id="item_category_commodity">
-                    	<input type="radio" name="item_search_step01" id="step01_04" value="commodity" /><label for="step01_04">농산물</label>
-                    </li>
-                    <li id="item_category_metals">
-                    	<input type="radio" name="item_search_step01" id="step01_05" value="metals" /><label for="step01_05">금속</label>
-                    </li>
-                    <li id="item_category_energy">
-                    	<input type="radio" name="item_search_step01" id="step01_06" value="energy" /><label for="step01_06">에너지</label>
-                    </li>
-                    <li id="item_category_single_stock">
-                    	<input type="radio" name="item_search_step01" id="step01_07" value="single_stock" /><label for="step01_07">지수옵션</label>
-                    </li>
-                    <li id="item_etc_comodity">
-                    	<input type="radio" name="item_search_step01" id="step01_08" value="etc_comodity" /><label for="step01_08">기타농산물</label>
-                    </li>
-                    <li id="item_other">
-                    	<input type="radio" name="item_search_step01" id="step01_09" value="item_other" /><label for="step01_09">기타</label>
-                    </li>
-                </ul>
-            </div><!-- End of .step01 
-            <div class="search_step step_02">
-            	<h2>상품</h2>
-                <ul></ul>
-            </div>
-            <div class="search_step step_03">
-            	<h2>월물</h2>
-                <ul></ul>
-            </div> 
-        </div><!-- End of #item_search_div 
-                
-        <article id="search_result_article">
-        	<table class="item_list_holder" data-type="card">
-                <tbody>
-                </tbody>
-            </table>
-        	
-            <div id="search_menu" data-role="navbar">
-                <ul>
-                	<li><a class="search_result_link" href="">시세보기</a></li>
-                    <li><button type="button"  class="btn_layer_interest">관심그룹</button></li>
-                    <li><a class="search_result_tel" href="">전화주문</a></li>
-                </ul>
-            </div>    
-        </article><!-- End of #search_result_article 
-    
-    </article><!-- End of [data-role="content"]
-    
-    <footer data-role="footer" data-position="fixed" data-tap-toggle="false"></footer><!-- End of [data-role="footer"
-</section><!-- End of #ITEM_SEARCH -->
 
 <section id="ITEM_LIST" data-role="page">
 	<div id="item_list_panel" data-role="panel">
@@ -1134,27 +1060,6 @@
     <footer data-role="footer">
     	
     </footer>
-</section><!-- End of #DEV -->
-
-<section id="NOTIFICATION" data-role="page">
-	<header data-role="header" data-position="fixed" data-tap-toggle="false">
-    	<a data-rel="back">이전</a>
-        <h1>DEV</h1>
-    </header>
-    <article data-role="content">
-        <select id="notification_select">
-        	<option value="confirm">confirm</option>
-            <option value="alert">alert</option>
-        </select>
-        <input type="text" id="notification_text" placeholder="알림 창의 메세지" />
-        <button id="btn_notification_test">Test Not</button>
-        <p id="preview_notification_data">--</p>
-    </article>
-    <footer data-role="footer">
-    	
-    </footer>
-</section><!-- End of #DEV -->
-
- 
+</section><!-- End of #DEV --> 
 </body>
 </html>

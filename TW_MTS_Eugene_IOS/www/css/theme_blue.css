@@ -9,6 +9,10 @@
 #app[data-theme="blue"] #board_list .board_tite span.category,
 #app[data-theme="blue"] footer .shortcut_menu_div{background-color:#139991;}
 
+/*active add*/
+#app[data-theme="blue"] #item_select_table div button:hover,
+#app[data-theme="blue"] #dialog_item_select_table div button:hover{background-color:#139991;}
+
 /*강조색*/
 #app[data-theme="blue"] header a[data-rel="back"]:after,
 #app[data-theme="blue"] #SETTING button#save_setting,
@@ -20,13 +24,21 @@
 #app[data-theme="blue"] #dialog_item_group h3 button,
 #app[data-theme="blue"] #dialog_item_group li button.btn_del_item,
 #app[data-theme="blue"] #dialog_chart_setting ul button,
-#app[data-theme="blue"] header a[data-rel="back"]:active,
-#app[data-theme="blue"] header button.btn_header_right:active{background-color:#0A4C49;}
+#app[data-theme="blue"] footer.open .btn_all_menu_div button{background-color:#0A4C49;}
+
+/*active add*/
+#app[data-theme="blue"] header a[data-rel="back"]:hover:after, 
+#app[data-theme="blue"] #SETTING button#save_setting:hover{background-color:#139991;}
 
 /*정보창*/
 #app[data-theme="blue"] .page_dialog header,
 #app[data-theme="blue"] header button.btn_dialog.open{background-color:#1A4C4A;}
 #app[data-theme="blue"] .page_dialog{border-color:#1A4C4A;}
+
+/*active add*/
+#app[data-theme="blue"] footer .all_menu_group a:hover,
+#app[data-theme="blue"] #board_list .board_tite a:hover .title,
+#app[data-theme="blue"] #dialog_item_group li button.btn_group_item:hover{color:#139991;}
 
 /* 종목별 메뉴
 #app .item_commen_navi li a.active{background-color:rgb(94,85,86);}
@@ -36,7 +48,7 @@
 
 
 /*전체메뉴 영역*/
-#app[data-theme="blue"] footer .footer_menu_area .ui-checkbox,
+#app[data-theme="blue"] footer .ui-checkbox,
 #app[data-theme="blue"] footer .all_menu_group h1,
 #app[data-theme="blue"] footer .all_menu>h1 a{background-color:#6FD4CF;}
 #app[data-theme="blue"] footer .all_menu_group{border-color:#6FD4CF;}

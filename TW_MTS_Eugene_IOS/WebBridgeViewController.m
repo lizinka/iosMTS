@@ -48,16 +48,21 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-        NSURL *url = request.URL;
-        [[UIApplication sharedApplication] openURL:url];
-        
-        return NO;
-    }
-    
     NSString *requestURL = [[request URL] absoluteString];
     NSString *decoded = [requestURL stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"decoded string :\n%@", decoded);
+    
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        if ([decoded hasPrefix:@"tel:"]) {
+            if ([LoginType isEqualToString:@"S"]) {
+                return NO;
+            }
+        }
+        
+        NSURL *url = request.URL;
+        [[UIApplication sharedApplication] openURL:url];
+        return NO;
+    }
     
     if([decoded hasPrefix:@"jscall:"]){
         NSArray *components = [decoded componentsSeparatedByString:@"//"];
